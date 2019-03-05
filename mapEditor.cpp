@@ -24,12 +24,13 @@ HRESULT mapEditor::init()
 	_tileNumY = DEFAULT_MAP_SIZE_Y;
 	
 	//그릴영역 기초설정
-	mapTileInit();
+	mapInit();
 	//옵젝영역 기초설정
-	objTileInit();
+	objInit();
 	//샘플영역 기초설정
-	sampleTileInit();
-
+	sampleInit();
+	//기능버튼 기초설정
+	buttonInit();
 	
 
 
@@ -107,7 +108,7 @@ void mapEditor::imageInit()
 	IMAGEMANAGER->addFrameImage("btn_Load", L"images/mapTool/button/btn_Load.png", 80, 60, 1, 2);
 }
 
-void mapEditor::mapTileInit()
+void mapEditor::mapInit()
 {
 	//그릴영역 기초설정
 	_draw_Area_Rc = { 0,0, WINSIZEX - TILESIZE, WINSIZEY - TILESIZE };
@@ -132,8 +133,8 @@ void mapEditor::setNewMapTile(tile * tile, int idX, int idY)
 	tile->setIdx(tmpIdx);
 
 	tagTileSet tmpTileSet;
-	tmpTileSet.attribute = TILE_GROUND; //이것도 일단 갈수있는걸로하고 나중에 이프문으로..
-	tile->setIsAvailMove(true);		//이것도 일단 갈수있는걸로하고 attr에따라 설정하자.
+	tmpTileSet.attribute = TILE_GROUND;
+	tile->setIsAvailMove(true);
 	if (idX % 2 == 0)
 	{
 		if (idY % 2 == 0)
@@ -171,7 +172,7 @@ void mapEditor::setNewMapTile(tile * tile, int idX, int idY)
 	tile->setTileSet(tmpTileSet);
 }
 
-void mapEditor::objTileInit()
+void mapEditor::objInit()
 {
 	_vvObj.clear();
 	for (int i = 0; i < _tileNumY; i++)
@@ -210,7 +211,7 @@ void mapEditor::setNewObjTile(tile * tile, int idX, int idY)
 	tile->setTileSet(tmpTileSet);
 }
 
-void mapEditor::sampleTileInit()
+void mapEditor::sampleInit()
 {
 	//샘플영역 기초설정
 	_isShow_Sample = false;
@@ -228,44 +229,10 @@ void mapEditor::sampleTileInit()
 	//_corsor_Sample_Select[1].y = 0;
 	_corsor_Sample_Select.x = 1;
 	_corsor_Sample_Select.y = 0;
-	//카테고리 버튼들 초기화
-	for (int i = 0; i < 5; i++)
-	{
-		_category[i].pos = { _sample_Area_Pos.x - TILESIZE + i * 110, _sample_Area_Pos.y - TILESIZE };
 
-		_category[i].rc = { (float)_category[i].pos.x,
-							(float)_category[i].pos.y,
-							(float)_category[i].pos.x + 80,
-							(float)_category[i].pos.y + 30 };
-		switch (i)
-		{
-		case 0:
-			_category[i].img = IMAGEMANAGER->findImage("btn_Tile");
-			break;
-		case 1:
-			_category[i].img = IMAGEMANAGER->findImage("btn_Object");
-			break;
-		case 2:
-			_category[i].img = IMAGEMANAGER->findImage("btn_Item");
-			break;
-		case 3:
-			_category[i].img = IMAGEMANAGER->findImage("btn_Enemy");
-			break;
-		case 4:
-			_category[i].img = IMAGEMANAGER->findImage("btn_Etc");
-			break;
-		}
-		_category[i].img->SetFrameX(0);
-		_category[i].img->SetFrameY(0);
-		if (i == 0)
-		{
-			_category[i].img->SetFrameY(1);
-		}
-	}
-
-	for (int i = 0; i < _currentImg->GetMaxFrameY(); i++)
+	for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
 	{
-		for (int j = 0; j < _currentImg->GetMaxFrameX(); j++)
+		for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
 		{
 			delete _sampleTile[i][j];
 			_sampleTile[i][j] = new tile;
@@ -359,6 +326,55 @@ void mapEditor::setNewSampleTile(tile * tile, int idX, int idY)
 	tile->setTileSet(tmpTileSet);
 }
 
+void mapEditor::buttonInit()
+{
+	//===========================================
+	//			카테고리 버튼 초기화
+	//===========================================
+	for (int i = 0; i < 5; i++)
+	{
+		_category[i].pos = { _sample_Area_Pos.x - TILESIZE + i * 110, _sample_Area_Pos.y - TILESIZE };
+
+		_category[i].rc = { (float)_category[i].pos.x,
+							(float)_category[i].pos.y,
+							(float)_category[i].pos.x + 80,
+							(float)_category[i].pos.y + 30 };
+		switch (i)
+		{
+		case 0:
+			_category[i].img = IMAGEMANAGER->findImage("btn_Tile");
+			break;
+		case 1:
+			_category[i].img = IMAGEMANAGER->findImage("btn_Object");
+			break;
+		case 2:
+			_category[i].img = IMAGEMANAGER->findImage("btn_Item");
+			break;
+		case 3:
+			_category[i].img = IMAGEMANAGER->findImage("btn_Enemy");
+			break;
+		case 4:
+			_category[i].img = IMAGEMANAGER->findImage("btn_Etc");
+			break;
+		}
+		_category[i].img->SetFrameX(0);
+		_category[i].img->SetFrameY(0);
+		if (i == 0)
+		{
+			_category[i].img->SetFrameY(1);
+		}
+	}
+	//===========================================
+	//			사이즈변경 버튼 초기화
+	//===========================================
+	_sizeArrow[0].pos.x = _sample_Area_Rc.left;
+	_sizeArrow[0].pos.y = _sample_Area_Rc.bottom - 200;
+	_sizeArrow[0].rc = {	(float)_sizeArrow[0].pos.x,
+							(float)_sizeArrow[0].pos.y,
+							(float)_sizeArrow[0].pos.x + 80,
+							(float)_sizeArrow[0].pos.y + 30 };
+}
+
 //update----------------------------------------------------------------------------------------------------------------------
 
 void mapEditor::sampleFunc()
@@ -374,9 +390,9 @@ void mapEditor::sampleFunc()
 	{
 		//샘플타일전체 영역 내에서 빈공간이 아닌 샘플타일들 영역이면 렉트가 안움직여야함.
 		_isCollision_SampleTile = false;	//계속 펄스로 만들어주고
-		for (int i = 0; i < _currentImg->GetMaxFrameY(); i++)
+		for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
 		{
-			for (int j = 0; j < _currentImg->GetMaxFrameX(); j++)
+			for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
 			{
 				//이미지가 있는 영역에 마우스 커서가 올려져있으면 
 				if (PtInRect(&rectMake(_sampleTile[i][j]->getRc()), pointMake(_ptMouse)) && _sampleTile[i][j]->getImg() != nullptr)
@@ -385,7 +401,7 @@ void mapEditor::sampleFunc()
 					_isCollision_SampleTile = true;
 
 					// + 해당 샘플을 커서에 담음.
-					sampleDragFcunc(j, i); 
+					sampleSelect(j, i); 
 
 					break;
 				}
@@ -429,13 +445,13 @@ void mapEditor::sampleFunc()
 						break;
 					}
 					//이미지 변경했으니 이미지 재적용
-					for (int i = 0; i < _currentImg->GetMaxFrameY(); i++)
+					for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
 					{
-						for (int j = 0; j < _currentImg->GetMaxFrameX(); j++)
+						for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
 						{
 							delete _sampleTile[i][j];
 							_sampleTile[i][j] = new tile;
-							changeSampleTile(_sampleTile[i][j], j, i);
+							changeCategory(_sampleTile[i][j], j, i);
 						}
 					}
 
@@ -479,9 +495,9 @@ void mapEditor::sampleFunc()
 											(float)_category[i].pos.y + 30 };
 					}
 
-					for (int i = 0; i < _currentImg->GetMaxFrameY(); i++)
+					for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
 					{
-						for (int j = 0; j < _currentImg->GetMaxFrameX(); j++)
+						for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
 						{
 							_sampleTile[i][j]->setIdx({ j,i });
 
@@ -507,7 +523,7 @@ void mapEditor::sampleFunc()
 	}
 }
 
-void mapEditor::sampleDragFcunc(int idX, int idY)
+void mapEditor::sampleSelect(int idX, int idY)
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
@@ -527,7 +543,7 @@ void mapEditor::sampleDragFcunc(int idX, int idY)
 	//}
 }
 
-void mapEditor::changeSampleTile(tile* tile, int idX, int idY)
+void mapEditor::changeCategory(tile* tile, int idX, int idY)
 {
 	POINT tmpIdx = { idX, idY };
 	tagTileSet tmpTileSet;
@@ -734,7 +750,6 @@ void mapEditor::cameraFunc()
 
 void mapEditor::mapDragDraw()
 {
-	//드래그한거 칠하기
 	if (PtInRect(&rectMake(_sample_Area_Rc), pointMake(_ptMouse)))
 	{
 		_isCollision_Sample_Area_Rc = true;
@@ -885,6 +900,22 @@ void mapEditor::mapSizeChange()
 	}
 }
 
+void mapEditor::save()
+{
+	if (_isShow_Sample)
+	{
+
+	}
+}
+
+void mapEditor::load()
+{
+	if (_isShow_Sample)
+	{
+
+	}
+}
+
 void mapEditor::setMapTile(tile* tile, int idX, int idY)
 {
 	if (_sampleTile[idY][idX]->getImg() == nullptr) return;
@@ -976,14 +1007,14 @@ void mapEditor::objectTileRender()
 void mapEditor::sampleTileRender()
 {
 	D2DMANAGER->fillRectangle(RGB(85,85,85), _sample_Area_Rc, 0.7);
-	for (int i = 0; i < _currentImg->GetMaxFrameY(); i++)
+	for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
 	{
-		for (int j = 0; j < _currentImg->GetMaxFrameX(); j++)
+		for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
 		{
-			//if (_sampleTile[i][j]->getImg() == nullptr)
-			//{
-			//	D2DMANAGER->drawRectangle(_sampleTile[i][j]->getRc());
-			//}
+			if (_sampleTile[i][j]->getImg() == nullptr)
+			{
+				D2DMANAGER->drawRectangle(_sampleTile[i][j]->getRc());
+			}
 			if (_sampleTile[i][j]->getImg() != nullptr)
 			{
 				_sampleTile[i][j]->getImg()->frameRender(_sampleTile[i][j]->getRc().left, _sampleTile[i][j]->getRc().top,
@@ -1002,6 +1033,12 @@ void mapEditor::buttonRender()
 	{
 		_category[i].img->frameRender(_category[i].rc.left, _category[i].rc.top, _category[i].img->GetFrameX(), _category[i].img->GetFrameY());
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		//사이즈 버튼 넣음
+	}
+	D2DMANAGER->drawRectangle(_sizeArrow[0].rc);
 }
 
 void mapEditor::linePreview()
