@@ -50,7 +50,10 @@ private:
 	bool _isCollision_SampleTile;	//샘플타일이랑 충돌중인여부 확인용 -> 드래그에 필요
 	D2D_RECT_F _sample_Area_Rc;
 	tile* _sampleTile[12][9];
-	tagMaptool_Btn _category[5];
+	tagMaptool_Btn _category[5];	// [0] == tile || [1] == obj	|| [2] == item || [3] == Enemy || [4] == etc
+	tagMaptool_Btn _size[4];		// [0] == x Up || [1] == x Down || [2] == y Up || [3] == y Down
+	tagMaptool_Btn _save;
+	tagMaptool_Btn _load;
 
 	//마우스로 샘플 찝자
 	//POINT _corsor_Sample_Select[2];		//[0] == 시작점 // [1] == 끝점  ---------> 드래그
@@ -97,7 +100,7 @@ public:
 	void setMapTile(tile* tile, int idX, int idY);
 	void setMapObject(tile* tile, int idX, int idY);
 	void mapDragDraw();
-
+	void mapSizeChange();
 	//render----------------------------------------------------------------------------------------------------------------------
 	
 	void mapTileRender();

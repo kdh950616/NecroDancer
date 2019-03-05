@@ -877,6 +877,14 @@ void mapEditor::mapDragDraw()
 	
 }
 
+void mapEditor::mapSizeChange()
+{
+	if (_isShow_Sample)
+	{
+
+	}
+}
+
 void mapEditor::setMapTile(tile* tile, int idX, int idY)
 {
 	if (_sampleTile[idY][idX]->getImg() == nullptr) return;
