@@ -10,6 +10,8 @@ struct tagTileSet
 	int frameX;			//프레임X
 	int frameY;			//프레임Y
 	int attribute;		//속성
+	//string imgKey;
+	int imgNum;
 };
 
 enum CTRL
@@ -21,3 +23,12 @@ enum CTRL
 	CTRL_END		//끗을 알림.
 };
 
+enum tagPage
+{
+	PAGE_TILE,	//타일 그리기 모드
+	PAGE_WALL,	//오브젝트 그리기 모드
+	PAGE_ITEM,
+	PAGE_ENEMY,
+	PAGE_ETC,
+	PAGE_NONE		//끗
+};

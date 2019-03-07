@@ -22,6 +22,47 @@ void tile::release()
 
 void tile::update()
 {
+	if (getAttribute() == TILE_GROUND)
+	{
+		if (getFrameX() == 1)
+		{
+			setFrameX(4);
+			return;
+		}
+		else if (getFrameX() == 4)
+		{
+			setFrameX(1);
+			return;
+		}
+	}
+	else if (getAttribute() == TILE_BOSS_GROUND)
+	{
+		if (getFrameX() == 1)
+		{
+			setFrameX(4);
+			return;
+		}
+		else if (getFrameX() == 4)
+		{
+			setFrameX(1);
+			return;
+		}
+	}
+	else if (getAttribute() == TILE_WATER)
+	{
+		//만약 시야거리에 잇다면
+		if (getFrameY() == 4)
+		{
+			setFrameY(5);
+			return;
+		}
+		else if (getFrameY() == 5)
+		{
+			setFrameY(4);
+			return;
+		}
+		//시야 거리내에 없다면 5 ~ 6으로 순환
+	}
 }
 
 void tile::render()

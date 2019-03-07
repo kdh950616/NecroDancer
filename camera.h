@@ -14,7 +14,7 @@ private:
 	int _shakeValue;
 
 private:
-	const int CAMERA_SPEED = 2;
+	const int CAMERA_SPEED = 5;
 public:
 	camera();
 	~camera();
@@ -26,6 +26,7 @@ public:
 	POINTFLOAT getPos() { return _pos; }
 	float getPosX() { return _pos.x; }
 	float getPosY() { return _pos.y; }
+	int getCameraSpeed() { return CAMERA_SPEED; }
 
 	void setPosX(float posX) { _pos.x = posX; }
 	void setPosY(float posY) { _pos.y = posY; }

@@ -5,7 +5,9 @@
 enum TILE_ATTR
 {
 	TILE_NONE,
-	TILE_GROUND,
+	TILE_GROUND = 10,
+	TILE_BOSS_GROUND,
+	TILE_SHOP,
 	TILE_WATER,
 	TILE_UNLOCK_FLOOR,
 	TILE_LOCK_FLOOR,
@@ -44,7 +46,6 @@ private:
 	int _hScore;
 	int _fScore;
 
-
 public:
 	tile();
 	~tile();
@@ -65,6 +66,8 @@ public:
 	int					getFrameX()			{ return _tile.frameX; }		
 	int					getFrameY()			{ return _tile.frameY; }		
 	int					getAttribute()		{ return _tile.attribute; }		
+	//string				getImgKey()		{ return _tile.imgKey; }
+	int				getImgNum() { return _tile.imgNum; }
 
 	bool				getIsAvailMove()	{ return _isAvailMove; }
 
@@ -81,9 +84,10 @@ public:
 	void setFrameX		(int frameX)		{ _tile.frameX = frameX; }
 	void setFrameY		(int frameY)		{ _tile.frameY = frameY; }
 	void setAttribute	(int attribute)		{ _tile.attribute = attribute; }
+	//void setImgKey		(string imgKey)		{ _tile.imgKey = imgKey; }
+	void setImgNum(int imageNum) { _tile.imgNum = imageNum; }
 
-	void setIsAvailMove(bool isAvailMove) { _isAvailMove = isAvailMove; }
-
+	void setIsAvailMove(bool isAvailMove)	{ _isAvailMove = isAvailMove; }
 
 	void setParent		(tile* parent)		{ _parent = parent; }
 	void setGScore		(int gScore)		{ _gScore = gScore; }
@@ -91,5 +95,9 @@ public:
 	void setFScore		(int fScore)		{ _fScore = fScore; }
 
 	void setTileSet			(tagTileSet tileSet){ _tile = tileSet; }
+
+	//=============================
+	//			즉석 추가
+	//=============================
 };
 
