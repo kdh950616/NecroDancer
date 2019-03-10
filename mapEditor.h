@@ -3,25 +3,6 @@
 #include "tile.h"
 #pragma warning(disable: 4996)
 
-enum tagImgNum
-{
-	IMG_NONE,
-	IMG_TILE,
-	IMG_WALL,
-	IMG_ITEM,
-	IMG_ENEMY,
-	IMG_ETC
-};
-
-enum tagArrow
-{
-	ARROW_X_DOWN,
-	ARROW_X_UP,
-	ARROW_Y_DOWN,
-	ARROW_Y_UP,
-	ARROW_END
-};
-
 struct tagMaptool_Btn
 {
 	image* img;
@@ -81,7 +62,7 @@ private:
 	//				카테고리
 	//====================================
 	tagMaptool_Btn _btn_Category[5];			// [0] == tile || [1] == obj	|| [2] == item || [3] == Enemy || [4] == etc
-	tagMaptool_Btn _btn_CategoryArrow[2];
+	tagMaptool_Btn _btn_Page[2];		// [0] == <-   || [1] == ->
 	//====================================
 	//				사이즈
 	//====================================
@@ -110,10 +91,6 @@ private:
 	//====================================
 	//		타일 랜덤깔기용 변수
 	//====================================
-	int _plus;
-	int _minus;
-	bool _isPlusNone;
-	bool _isMinusNone;
 	
 	
 	
@@ -144,14 +121,19 @@ public:
 	
 	//update----------------------------------------------------------------------------------------------------------------------
 		void cameraFunc();
-	
+		void blinkMapTileFunc();
+		void corsorMapIdxCal();
+
 		//샘플
 		void sampleFunc();
-		void changeCategory(tile* tile, int idX, int idY);	//샘플 타일 만들어주는 함쑤		
 		void sampleSelect(int idX, int idY);
 		void setMapTile(tile* tile, int idX, int idY);
 		void setMapObject(tile* tile, int idX, int idY);
 		
+		//카테고리
+		void categoryFunc();
+		void changeCategory(tile* tile, int idX, int idY);	//샘플 타일 만들어주는 함쑤		
+
 		//맵
 		void mapDragDraw();
 		
@@ -200,7 +182,7 @@ public:
 	//=================================================
 	//						관
 	//=================================================
-	void mapSave();
-	void mapLoad();
+	//void mapSave();
+	//void mapLoad();
 };
 

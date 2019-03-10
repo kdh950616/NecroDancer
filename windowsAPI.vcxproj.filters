@@ -186,6 +186,12 @@
     <ClInclude Include="mapEditor.h">
       <Filter>PlayGround\mapTool</Filter>
     </ClInclude>
+    <ClInclude Include="mapLoader.h">
+      <Filter>PlayGround\mapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="testScene.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -283,6 +289,12 @@
     </ClCompile>
     <ClCompile Include="mapEditor.cpp">
       <Filter>PlayGround\mapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapLoader.cpp">
+      <Filter>PlayGround\mapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="testScene.cpp">
+      <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

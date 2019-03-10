@@ -27,12 +27,12 @@ void tile::update()
 		if (getFrameX() == 1)
 		{
 			setFrameX(4);
-			return;
+			//return;
 		}
 		else if (getFrameX() == 4)
 		{
 			setFrameX(1);
-			return;
+			//return;
 		}
 	}
 	else if (getAttribute() == TILE_BOSS_GROUND)
@@ -40,12 +40,12 @@ void tile::update()
 		if (getFrameX() == 1)
 		{
 			setFrameX(4);
-			return;
+			//return;
 		}
 		else if (getFrameX() == 4)
 		{
 			setFrameX(1);
-			return;
+			//return;
 		}
 	}
 	else if (getAttribute() == TILE_WATER)
@@ -54,12 +54,12 @@ void tile::update()
 		if (getFrameY() == 4)
 		{
 			setFrameY(5);
-			return;
+			//return;
 		}
 		else if (getFrameY() == 5)
 		{
 			setFrameY(4);
-			return;
+			//return;
 		}
 		//시야 거리내에 없다면 5 ~ 6으로 순환
 	}

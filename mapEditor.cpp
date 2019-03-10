@@ -47,61 +47,8 @@ void mapEditor::release()
 
 void mapEditor::update()
 {
-	//현재 맵의 무슨타일에 있는지 인덱스 저장용
-	if (KEYMANAGER->isOnceKeyDown(VK_F1))
-	{
-		_isTestGoldBonus == false ? _isTestGoldBonus = true : _isTestGoldBonus = false;
-		if (!_isTestGoldBonus)
-		{
-			_testGoldBonus = 0;
-		}
-	}
-	_count++;
-	if (_count > 50)
-	{
-		if (_isTestGoldBonus)
-		{
-			if (_testGoldBonus == 0)
-			{
-				_testGoldBonus = 1;
-			}
-			else if (_testGoldBonus == 1)
-			{
-				_testGoldBonus = 2;
-			}
-			else if (_testGoldBonus == 2)
-			{
-				_testGoldBonus = 1;
-			}
-		}
-		for (int i = 0; i < _tileSizeY; i++)
-		{
-			for (int j = 0; j < _tileSizeX; j++)
-			{
-				_vvMap[i][j]->update();
-			}
-		}
-		_count = 0;
-		if (_isChanged)
-		{
-			_isChanged = false;
-		}
-		else if (!_isChanged)
-		{
-			_isChanged = true;
-		}
-	}
-
-	_corsor_Map_Idx = { (int)(_ptMouse.x + CAMERA->getPosX()) / TILESIZE  , (int)(_ptMouse.y + CAMERA->getPosY()) / TILESIZE };
-	
-	if (_corsor_Map_Idx.x >= _vvMap[0].size() - 1)
-	{
-		_corsor_Map_Idx.x = _vvMap[0].size() - 1;
-	}
-	if (_corsor_Map_Idx.y >= _vvMap.size() - 1)
-	{
-			_corsor_Map_Idx.y = _vvMap.size() - 1;
-	}	
+	blinkMapTileFunc();
+	corsorMapIdxCal();
 
 	if (_isShow_Sample)
 	{
@@ -111,6 +58,7 @@ void mapEditor::update()
 		mapIdxChange();
 		eraseMode();
 		objEraseMode();
+		categoryFunc();
 
 	}
 
@@ -147,6 +95,12 @@ void mapEditor::imageInit()
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
 
+	//적 이미지
+	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("enemy2", L"images/mapTool/mob2.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("enemy3", L"images/mapTool/mob3.png", 432, 576, 3, 4);
+	IMAGEMANAGER->addFrameImage("enemy4", L"images/mapTool/mob4.png", 432, 576, 3, 6);
+
 	//버튼 이미지
 
 	//==========================
@@ -157,6 +111,8 @@ void mapEditor::imageInit()
 	IMAGEMANAGER->addFrameImage("btn_Item", L"images/mapTool/button/btn_Item.png", 80, 60, 1, 2);
 	IMAGEMANAGER->addFrameImage("btn_Enemy", L"images/mapTool/button/btn_Enemy.png", 80, 60, 1, 2);
 	IMAGEMANAGER->addFrameImage("btn_Etc", L"images/mapTool/button/btn_Etc.png", 80, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage("btn_Next", L"images/mapTool/button/btn_Next.png", 30, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage("btn_Prev", L"images/mapTool/button/btn_Prev.png", 30, 60, 1, 2);
 	//==========================
 	//			버튼
 	//==========================
@@ -457,6 +413,22 @@ void mapEditor::buttonInit()
 			_btn_Category[i].frame.y = 1;
 		}
 	}
+
+	_btn_Page[0].pos = { _sample_Area_Pos.x - TILESIZE + 10, _sample_Area_Pos.y + 550 };
+	_btn_Page[0].rc = {	(float)_btn_Page[0].pos.x,
+									(float)_btn_Page[0].pos.y,
+									(float)_btn_Page[0].pos.x + 30,
+									(float)_btn_Page[0].pos.y + 30 };
+	_btn_Page[0].img = IMAGEMANAGER->findImage("btn_Prev");
+	_btn_Page[0].frame = { 0,0 };
+
+	_btn_Page[1].pos = { _sample_Area_Pos.x - TILESIZE + 50, _sample_Area_Pos.y + 550 };
+	_btn_Page[1].rc = {	(float)_btn_Page[1].pos.x,
+									(float)_btn_Page[1].pos.y,
+									(float)_btn_Page[1].pos.x + 30,
+									(float)_btn_Page[1].pos.y + 30 };
+	_btn_Page[1].img = IMAGEMANAGER->findImage("btn_Next");
+	_btn_Page[1].frame = { 0,0 };
 	//===========================================
 	//				사이즈 버튼 초기화
 	//===========================================
@@ -565,8 +537,71 @@ void mapEditor::cameraFunc()
 		CAMERA->setPosY(CAMERA->getPosY() + CAMERA->getCameraSpeed());
 	}
 }
+
+void mapEditor::blinkMapTileFunc()
+{
+	//현재 맵의 무슨타일에 있는지 인덱스 저장용
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		_isTestGoldBonus == false ? _isTestGoldBonus = true : _isTestGoldBonus = false;
+		if (!_isTestGoldBonus)
+		{
+			_testGoldBonus = 0;
+		}
+	}
+	_count++;
+	if (_count > 50)
+	{
+		if (_isTestGoldBonus)
+		{
+			if (_testGoldBonus == 0)
+			{
+				_testGoldBonus = 1;
+			}
+			else if (_testGoldBonus == 1)
+			{
+				_testGoldBonus = 2;
+			}
+			else if (_testGoldBonus == 2)
+			{
+				_testGoldBonus = 1;
+			}
+		}
+		for (int i = 0; i < _tileSizeY; i++)
+		{
+			for (int j = 0; j < _tileSizeX; j++)
+			{
+				_vvMap[i][j]->update();
+			}
+		}
+		_count = 0;
+		if (_isChanged)
+		{
+			_isChanged = false;
+		}
+		else if (!_isChanged)
+		{
+			_isChanged = true;
+		}
+	}
+}
+
+void mapEditor::corsorMapIdxCal()
+{
+	_corsor_Map_Idx = { (int)(_ptMouse.x + CAMERA->getPosX()) / TILESIZE  , (int)(_ptMouse.y + CAMERA->getPosY()) / TILESIZE };
+
+	if (_corsor_Map_Idx.x >= _vvMap[0].size() - 1)
+	{
+		_corsor_Map_Idx.x = _vvMap[0].size() - 1;
+	}
+	if (_corsor_Map_Idx.y >= _vvMap.size() - 1)
+	{
+		_corsor_Map_Idx.y = _vvMap.size() - 1;
+	}
+}
 	
 	//샘플
+
 void mapEditor::sampleFunc()
 {
 	//텝키로 샘플타일 보이기 || 안보이기 전환
@@ -594,77 +629,6 @@ void mapEditor::sampleFunc()
 					sampleSelect(j, i); 
 
 					break;
-				}
-			}
-		}
-		//카테고리 변경 기능
-		//카테고리 갯수만큼 포문
-		for (int i = PAGE_TILE; i < PAGE_NONE; i++)
-		{
-			//카테고리 렉트와 충돌중이고
-			if (PtInRect(&rectMake(_btn_Category[i].rc), pointMake(_ptMouse)))
-			{
-				//클릭을 했으면
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-				{
-					_btn_Category[_currentPage].frame.y = 0;
-
-					//해당거에 맞는 값으로 현재 페이지 변경
-					_currentPage = (tagPage)i;
-
-					_btn_Category[_currentPage].frame.y = 1;
-					//누른 카테고리에 맞게 이미지도 변경해줌.
-					switch (_currentPage)
-					{
-					case 0:
-						_currentImgNum = IMG_TILE;
-						_corsor_Sample_Select.y *= 2;
-						break;
-					case 1:
-						_currentImgNum = IMG_WALL;
-						_corsor_Sample_Select.y /= 2;
-						break;
-					case 2:
-						_currentImgNum = IMG_ITEM;
-						break;
-					case 3:
-						_currentImgNum = IMG_ENEMY;
-						break;
-					case 4:
-						_currentImgNum = IMG_ETC;
-						break;
-					}
-
-					switch (_currentImgNum)
-					{
-						case IMG_TILE:
-							_currentImg = IMAGEMANAGER->findImage("tile");
-						break;
-						case IMG_WALL:
-							_currentImg = IMAGEMANAGER->findImage("wall");
-						break;
-						case IMG_ITEM:
-							_currentImg = IMAGEMANAGER->findImage("item");
-						break;
-						case IMG_ENEMY:
-							_currentImg = IMAGEMANAGER->findImage("enemy");
-						break;
-						case IMG_ETC:
-							_currentImg = IMAGEMANAGER->findImage("etc");
-						break;
-					}
-
-					//이미지 변경했으니 이미지 재적용
-					for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
-					{
-						for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
-						{
-							delete _sampleTile[i][j];
-							_sampleTile[i][j] = new tile;
-							changeCategory(_sampleTile[i][j], j, i);
-						}
-					}
-
 				}
 			}
 		}
@@ -723,6 +687,16 @@ void mapEditor::sampleFunc()
 										(float)_btn_Category[i].pos.x + 80,
 										(float)_btn_Category[i].pos.y + 30 };
 				}
+				_btn_Page[0].pos = { _sample_Area_Pos.x - TILESIZE + 10, _sample_Area_Pos.y + 550 };
+				_btn_Page[0].rc = { (float)_btn_Page[0].pos.x,
+												(float)_btn_Page[0].pos.y,
+												(float)_btn_Page[0].pos.x + 30,
+												(float)_btn_Page[0].pos.y + 30 };
+				_btn_Page[1].pos = { _sample_Area_Pos.x - TILESIZE + 50, _sample_Area_Pos.y + 550 };
+				_btn_Page[1].rc = { (float)_btn_Page[1].pos.x,
+												(float)_btn_Page[1].pos.y,
+												(float)_btn_Page[1].pos.x + 30,
+												(float)_btn_Page[1].pos.y + 30 };
 				//=====================================
 				//			사이즈 버튼 움직임
 				//=====================================
@@ -796,195 +770,6 @@ void mapEditor::sampleFunc()
 	{
 		//샘플 보기모드가 아니라면 샘플타일과 충돌 false
 		_isCollision_SampleTile = false;
-	}
-}
-
-void mapEditor::changeCategory(tile* tile, int idX, int idY)
-{
-	POINT tmpIdx = { idX, idY };
-	tagTileSet tmpTileSet;
-
-	switch (_currentPage)
-	{
-	case PAGE_TILE:
-		tile->setIdx(tmpIdx);
-
-		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 4 || idY == 8))
-		{
-			tmpTileSet.imgNum = _currentImgNum;
-			tmpTileSet.img = _currentImg;
-			tmpTileSet.frameX = idX;
-			tmpTileSet.frameY = idY;
-			switch (idX)
-			{
-			case 1:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = TILE_GROUND;
-					tile->setIsAvailMove(true);
-					break;
-				case 4:
-					tmpTileSet.attribute = TILE_GROUND;
-					tile->setIsAvailMove(true);
-					break;
-				case 8:
-					tmpTileSet.attribute = TILE_UNLOCK_FLOOR;
-					tile->setIsAvailMove(true);
-					break;
-				}
-				break;
-			case 4:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = TILE_GROUND;
-					tile->setIsAvailMove(true);
-					break;
-				case 4:
-					tmpTileSet.attribute = TILE_GROUND;
-					tile->setIsAvailMove(true);
-					break;
-				case 8:
-					tmpTileSet.attribute = TILE_LOCK_FLOOR;
-					tile->setIsAvailMove(true);
-					break;
-				}
-				break;
-			case 7:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = TILE_GROUND;
-					tile->setIsAvailMove(true);
-					break;
-				case 4:
-					tmpTileSet.attribute = TILE_WATER;
-					tile->setIsAvailMove(true);
-					break;
-				case 8:
-					tmpTileSet.attribute = TILE_BOSS_FLOOR;
-					tile->setIsAvailMove(true);
-					break;
-				}
-				break;
-			}
-		}
-		else
-		{
-			tmpTileSet.imgNum = IMG_NONE;
-			tmpTileSet.img = nullptr;
-			tmpTileSet.frameX = NULL;
-			tmpTileSet.frameY = NULL;
-			tmpTileSet.attribute = TILE_NONE;		//이거 해야댐 -> 이프문으로... 물, 계단 등등
-			tile->setIsAvailMove(true);		//이것도 일단 갈수있는걸로하고 나중에 이프문으로..
-		}
-		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
-		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
-		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
-							(float)tmpTileSet.pos.y,
-							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
-							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
-
-		tile->setTileSet(tmpTileSet);
-
-		break;
-	case PAGE_WALL:
-		tile->setIdx(tmpIdx);
-
-
-		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 2 || idY == 4))
-		{
-			tmpTileSet.imgNum = _currentImgNum;
-			tmpTileSet.img = _currentImg;
-			tmpTileSet.frameX = idX;
-			tmpTileSet.frameY = idY;
-			switch (idX)
-			{
-			case 1:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = OBJ_WALL1;
-					tile->setIsAvailMove(false);
-					break;
-				case 2:
-					tmpTileSet.attribute = OBJ_WALL_GOLD;
-					tile->setIsAvailMove(false);
-					break;
-				case 4:
-					tmpTileSet.attribute = OBJ_DOOR_FRONT;
-					tile->setIsAvailMove(false);
-					break;
-				}
-				break;
-			case 4:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = OBJ_WALL2;
-					tile->setIsAvailMove(false);
-					break;
-				case 2:
-					tmpTileSet.attribute = OBJ_WALL_BOSS;
-					tile->setIsAvailMove(false);
-					break;
-				case 4:
-					tmpTileSet.attribute = OBJ_DOOR_SIDE;
-					tile->setIsAvailMove(false);
-					break;
-				}
-				break;
-			case 7:
-				switch (idY)
-				{
-				case 0:
-					tmpTileSet.attribute = OBJ_WALL3;
-					tile->setIsAvailMove(false);
-					break;
-				case 2:
-					tmpTileSet.attribute = OBJ_WALL_END;
-					tile->setIsAvailMove(false);
-					break;
-				case 4:
-					tmpTileSet.attribute = OBJ_NONE;
-					tile->setIsAvailMove(true);
-					tmpTileSet.imgNum = IMG_NONE;
-					tmpTileSet.img = nullptr;
-					tmpTileSet.frameX = NULL;
-					tmpTileSet.frameY = NULL;
-					break;
-				}
-				break;
-			}
-		}
-		else
-		{
-			tmpTileSet.attribute = OBJ_NONE;
-			tile->setIsAvailMove(true);
-			tmpTileSet.imgNum = IMG_NONE;
-			tmpTileSet.img = nullptr;
-			tmpTileSet.frameX = NULL;
-			tmpTileSet.frameY = NULL;
-		}
-		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
-		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
-		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
-							(float)tmpTileSet.pos.y,
-							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
-							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
-
-		tile->setTileSet(tmpTileSet);
-
-		break;
-	case PAGE_ITEM:
-		break;
-	case PAGE_ENEMY:
-		break;
-	case PAGE_ETC:
-		break;
-	case PAGE_NONE:
-		break;
 	}
 }
 
@@ -1157,6 +942,851 @@ void mapEditor::setMapObject(tile * tile, int idX, int idY)
 	tile->setImg(_sampleTile[idY][idX]->getImg());
 }
 
+	//카테고리
+
+void mapEditor::categoryFunc()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		//카테고리 렉트와 충돌중이고
+		if (PtInRect(&rectMake(_btn_Category[i].rc), pointMake(_ptMouse)))
+		{
+			//클릭을 했으면
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//현재 샘플로 선택해논 값을 원래의 갯수인 xMap == 9 yMap == 12로 비율에맞춰 곱해놓고
+				switch (_currentImgNum)
+				{
+				case IMG_TILE:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 1;
+					break;
+				case IMG_WALL:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 2;
+					break;
+				case IMG_ITEM:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 1;
+					break;
+				case IMG_ENEMY1:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 1;
+					break;
+				case IMG_ENEMY2:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 1;
+					break;
+				case IMG_ENEMY3:
+					_corsor_Sample_Select.x *= 3;
+					_corsor_Sample_Select.y *= 3;
+					break;
+				case IMG_ENEMY4:
+					_corsor_Sample_Select.x *= 3;
+					_corsor_Sample_Select.y *= 2;
+					break;
+				case IMG_ETC:
+					_corsor_Sample_Select.x *= 1;
+					_corsor_Sample_Select.y *= 1;
+					break;
+				}
+
+				_btn_Category[_currentPage].frame.y = 0;
+				//해당거에 맞는 값으로 현재 페이지 변경
+				_currentPage = (tagPage)i;
+
+				_btn_Category[_currentPage].frame.y = 1;
+
+				//누른 카테고리에 맞게 이미지도 변경해줌.
+				switch (_currentPage)
+				{
+				case PAGE_TILE:
+					_currentImgNum = IMG_TILE;
+					break;
+				case PAGE_WALL:
+					_currentImgNum = IMG_WALL;
+					break;
+				case PAGE_ITEM:
+					_currentImgNum = IMG_ITEM;
+					break;
+				case PAGE_ENEMY:
+					_currentImgNum = IMG_ENEMY1;
+					break;
+				case PAGE_ETC:
+					_currentImgNum = IMG_ETC;
+					break;
+				}
+
+				switch (_currentImgNum)
+				{
+				case IMG_TILE:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 1;
+					_currentPage = PAGE_TILE;
+					_currentImg = IMAGEMANAGER->findImage("tile");
+					break;
+				case IMG_WALL:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 2;
+					_currentPage = PAGE_WALL;
+					_currentImg = IMAGEMANAGER->findImage("wall");
+					break;
+				case IMG_ITEM:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 1;
+					_currentPage = PAGE_ITEM;
+					_currentImg = IMAGEMANAGER->findImage("item");
+					break;
+				case IMG_ENEMY1:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 1;
+					_currentPage = PAGE_ENEMY;
+					_currentImg = IMAGEMANAGER->findImage("enemy1");
+					break;
+				case IMG_ENEMY2:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 1;
+					_currentPage = PAGE_ENEMY;
+					_currentImg = IMAGEMANAGER->findImage("enemy2");
+					break;
+				case IMG_ENEMY3:
+					_corsor_Sample_Select.x /= 3;
+					_corsor_Sample_Select.y /= 3;
+					_currentPage = PAGE_ENEMY;
+					_currentImg = IMAGEMANAGER->findImage("enemy3");
+					break;
+				case IMG_ENEMY4:
+					_corsor_Sample_Select.x /= 3;
+					_corsor_Sample_Select.y /= 2;
+					_currentPage = PAGE_ENEMY;
+					_currentImg = IMAGEMANAGER->findImage("enemy4");
+					break;
+				case IMG_ETC:
+					_corsor_Sample_Select.x /= 1;
+					_corsor_Sample_Select.y /= 1;
+					_currentPage = PAGE_ETC;
+					_currentImg = IMAGEMANAGER->findImage("etc");
+					break;
+				}
+
+				//이미지 변경했으니 이미지 재적용
+				for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
+				{
+					for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
+					{
+						delete _sampleTile[i][j];
+						_sampleTile[i][j] = new tile;
+						changeCategory(_sampleTile[i][j], j, i);
+					}
+				}
+			}
+		}
+	}
+	//prev버튼 눌럿을떄
+	if (PtInRect(&rectMake(_btn_Page[0].rc), pointMake(_ptMouse)))
+	{
+		_btn_Page[0].frame.y = 1;
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			//현재 샘플로 선택해논 값을 원래의 갯수인 xMap == 9 yMap == 12로 비율에맞춰 곱해놓고
+			switch (_currentImgNum)
+			{
+			case IMG_TILE:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_WALL:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 2;
+				break;
+			case IMG_ITEM:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY1:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY2:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY3:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY4:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ETC:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			}
+
+			int calImgNum;
+			calImgNum = (int)_currentImgNum;
+			calImgNum -= 1;
+			if (calImgNum == IMG_NONE)
+			{
+				calImgNum = IMG_END - 1;
+			}
+			else if (calImgNum == IMG_END)
+			{
+				calImgNum = IMG_NONE + 1;
+			}
+			_currentImgNum = (tagImgNum)calImgNum;
+
+
+			_btn_Category[_currentPage].frame.y = 0;
+
+			switch (_currentImgNum)
+			{
+			case IMG_TILE:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_TILE;
+				_currentImg = IMAGEMANAGER->findImage("tile");
+				break;
+			case IMG_WALL:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 2;
+				_currentPage = PAGE_WALL;
+				_currentImg = IMAGEMANAGER->findImage("wall");
+				break;
+			case IMG_ITEM:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ITEM;
+				_currentImg = IMAGEMANAGER->findImage("item");
+				//임시로 에너미 가게했음
+				break;
+			case IMG_ENEMY1:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy1");
+				break;
+			case IMG_ENEMY2:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy2");
+				break;
+			case IMG_ENEMY3:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy3");
+				break;
+			case IMG_ENEMY4:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy4");
+				break;
+			case IMG_ETC:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ETC;
+				_currentImg = IMAGEMANAGER->findImage("etc");
+				break;
+			}
+			_btn_Category[_currentPage].frame.y = 1;
+
+			//이미지 변경했으니 이미지 재적용
+			for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
+			{
+				for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
+				{
+					delete _sampleTile[i][j];
+					_sampleTile[i][j] = new tile;
+					changeCategory(_sampleTile[i][j], j, i);
+				}
+			}
+		}
+	}
+	else
+	{
+		_btn_Page[0].frame.y = 0;
+	}
+
+	//next버튼 눌럿을떄
+	if (PtInRect(&rectMake(_btn_Page[1].rc), pointMake(_ptMouse)))
+	{
+		_btn_Page[1].frame.y = 1;
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			//현재 샘플로 선택해논 값을 원래의 갯수인 xMap == 9 yMap == 12로 비율에맞춰 곱해놓고
+			switch (_currentImgNum)
+			{
+			case IMG_TILE:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_WALL:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 2;
+				break;
+			case IMG_ITEM:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY1:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY2:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY3:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ENEMY4:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ETC:
+				_corsor_Sample_Select.x *= 1;
+				_corsor_Sample_Select.y *= 1;
+				break;
+			}
+
+			int calImgNum;
+			calImgNum = (int)_currentImgNum;
+			calImgNum += 1;
+			if (calImgNum == IMG_NONE)
+			{
+				calImgNum = IMG_END - 1;
+			}
+			else if (calImgNum == IMG_END)
+			{
+				calImgNum = IMG_NONE + 1;
+			}
+			_currentImgNum = (tagImgNum)calImgNum;
+
+
+			_btn_Category[_currentPage].frame.y = 0;
+
+			switch (_currentImgNum)
+			{
+			case IMG_TILE:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_TILE;
+				_currentImg = IMAGEMANAGER->findImage("tile");
+				break;
+			case IMG_WALL:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 2;
+				_currentPage = PAGE_WALL;
+				_currentImg = IMAGEMANAGER->findImage("wall");
+				break;
+			case IMG_ITEM:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ITEM;
+				_currentImg = IMAGEMANAGER->findImage("item");
+				//임시로 에너미 가게했음
+				break;
+			case IMG_ENEMY1:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy1");
+				break;
+			case IMG_ENEMY2:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy2");
+				break;
+			case IMG_ENEMY3:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy3");
+				break;
+			case IMG_ENEMY4:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ENEMY;
+				_currentImg = IMAGEMANAGER->findImage("enemy4");
+				break;
+			case IMG_ETC:
+				_corsor_Sample_Select.x /= 1;
+				_corsor_Sample_Select.y /= 1;
+				_currentPage = PAGE_ETC;
+				_currentImg = IMAGEMANAGER->findImage("etc");
+				break;
+			}
+			_btn_Category[_currentPage].frame.y = 1;
+
+			//이미지 변경했으니 이미지 재적용
+			for (int i = 0; i <= _currentImg->GetMaxFrameY(); i++)
+			{
+				for (int j = 0; j <= _currentImg->GetMaxFrameX(); j++)
+				{
+					delete _sampleTile[i][j];
+					_sampleTile[i][j] = new tile;
+					changeCategory(_sampleTile[i][j], j, i);
+				}
+			}
+		}
+	}
+	else
+	{
+		_btn_Page[1].frame.y = 0;
+	}
+
+}
+
+void mapEditor::changeCategory(tile* tile, int idX, int idY)
+{
+	POINT tmpIdx = { idX, idY };
+	tagTileSet tmpTileSet;
+
+	switch (_currentImgNum)
+	{
+	case IMG_TILE:
+		tile->setIdx(tmpIdx);
+
+		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 4 || idY == 8))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 1:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = TILE_GROUND;
+					tile->setIsAvailMove(true);
+					break;
+				case 4:
+					tmpTileSet.attribute = TILE_BOSS_GROUND;
+					tile->setIsAvailMove(true);
+					break;
+				case 8:
+					tmpTileSet.attribute = TILE_UNLOCK_FLOOR;
+					tile->setIsAvailMove(true);
+					break;
+				}
+				break;
+			case 4:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = TILE_GROUND;
+					tile->setIsAvailMove(true);
+					break;
+				case 4:
+					tmpTileSet.attribute = TILE_BOSS_GROUND;
+					tile->setIsAvailMove(true);
+					break;
+				case 8:
+					tmpTileSet.attribute = TILE_LOCK_FLOOR;
+					tile->setIsAvailMove(true);
+					break;
+				}
+				break;
+			case 7:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = TILE_SHOP;
+					tile->setIsAvailMove(true);
+					break;
+				case 4:
+					tmpTileSet.attribute = TILE_WATER;
+					tile->setIsAvailMove(true);
+					break;
+				case 8:
+					tmpTileSet.attribute = TILE_BOSS_FLOOR;
+					tile->setIsAvailMove(true);
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+			tmpTileSet.attribute = TILE_NONE;		//이거 해야댐 -> 이프문으로... 물, 계단 등등
+			tile->setIsAvailMove(true);		//이것도 일단 갈수있는걸로하고 나중에 이프문으로..
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+
+		break;
+	case IMG_WALL:
+		tile->setIdx(tmpIdx);
+
+
+		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 2 || idY == 4))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 1:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = OBJ_WALL1;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = OBJ_WALL_GOLD;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = OBJ_DOOR_FRONT;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 4:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = OBJ_WALL2;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = OBJ_WALL_BOSS;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = OBJ_DOOR_SIDE;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 7:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = OBJ_WALL3;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = OBJ_WALL_END;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = OBJ_NONE;
+					tile->setIsAvailMove(true);
+					tmpTileSet.imgNum = IMG_NONE;
+					tmpTileSet.img = nullptr;
+					tmpTileSet.frameX = NULL;
+					tmpTileSet.frameY = NULL;
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+
+		break;
+	case IMG_ITEM:
+		tile->setIdx(tmpIdx);
+		break;
+	case IMG_ENEMY1:
+		tile->setIdx(tmpIdx);
+
+		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 4 || idY == 8))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 1:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY1_1_1;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = ENEMY1_2_1;
+					tile->setIsAvailMove(false);
+					break;
+				case 8:
+					tmpTileSet.attribute = ENEMY1_3_1;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 4:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY1_1_2;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = ENEMY1_2_2;
+					tile->setIsAvailMove(false);
+					break;
+				case 8:
+					tmpTileSet.attribute = ENEMY1_3_2;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 7:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = OBJ_NONE;
+					tile->setIsAvailMove(true);
+					tmpTileSet.imgNum = IMG_NONE;
+					tmpTileSet.img = nullptr;
+					tmpTileSet.frameX = NULL;
+					tmpTileSet.frameY = NULL;
+					break;
+				case 4:
+					tmpTileSet.attribute = ENEMY1_2_3;
+					tile->setIsAvailMove(false);
+					break;
+				case 8:
+					tmpTileSet.attribute = ENEMY1_3_3;
+					tile->setIsAvailMove(true);
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+		break;
+	case IMG_ENEMY2:
+		tile->setIdx(tmpIdx);
+
+		if ((idX == 1 || idX == 4) && (idY == 0 || idY == 4))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 1:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY2_1_1;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = ENEMY2_2_1;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 4:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY1_1_2;
+					tile->setIsAvailMove(false);
+					break;
+				case 4:
+					tmpTileSet.attribute = ENEMY1_2_2;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+		break;
+	case IMG_ENEMY3:
+		tile->setIdx(tmpIdx);
+
+		if (idY == 0)
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 0:
+				tmpTileSet.attribute = ENEMY3_1_1;
+				tile->setIsAvailMove(false);
+				break;
+			case 1:
+				tmpTileSet.attribute = ENEMY3_1_2;
+				tile->setIsAvailMove(false);
+				break;
+			case 2:
+				tmpTileSet.attribute = ENEMY3_1_3;
+				tile->setIsAvailMove(false);
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+		break;
+	case IMG_ENEMY4:
+		tile->setIdx(tmpIdx);
+
+		if ((idX == 0 || idX == 1 || idX == 2) && (idY == 0 || idY == 2))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idX)
+			{
+			case 0:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY4_1_1;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = ENEMY4_2_1;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 1:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY4_1_2;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = ENEMY4_2_2;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			case 2:
+				switch (idY)
+				{
+				case 0:
+					tmpTileSet.attribute = ENEMY4_1_3;
+					tile->setIsAvailMove(false);
+					break;
+				case 2:
+					tmpTileSet.attribute = ENEMY4_2_3;
+					tile->setIsAvailMove(false);
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+		break;
+	case IMG_ETC:
+		tile->setIdx(tmpIdx);
+		break;
+	}
+}
+
 	//맵
 
 void mapEditor::mapDragDraw()
@@ -1235,17 +1865,53 @@ void mapEditor::mapDragDraw()
 								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 							break;
 							case PAGE_ITEM:
-
+								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 							break;
 							case PAGE_ENEMY:
-
+								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 							break;
 							case PAGE_ETC:
-
+								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 							break;
 
 						}
 					}
+				}
+			}
+		}
+		else if (KEYMANAGER->isStayKeyDown(VK_RBUTTON) && _draw_Area_Rc.left < _ptMouse.x && _ptMouse.x < _draw_Area_Rc.right &&
+			_draw_Area_Rc.top < _ptMouse.y && _ptMouse.y < _draw_Area_Rc.bottom)
+		{
+			if (_isErase)
+			{
+				erase(_vvMap[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]);
+			}
+			//오브젝트지우개 모드면
+			else if (_isObjErase)
+			{
+				objErase(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]);
+			}
+			//이외
+			else
+			{
+				switch (_currentPage)
+				{
+				case PAGE_TILE:
+					setMapTile(_vvMap[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					break;
+				case PAGE_WALL:
+					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					break;
+				case PAGE_ITEM:
+					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					break;
+				case PAGE_ENEMY:
+					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					break;
+				case PAGE_ETC:
+					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					break;
+
 				}
 			}
 		}
@@ -1480,6 +2146,7 @@ void mapEditor::mapLoadBtn()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			loadMap();
+			_isChanged = true;
 		}
 	}
 	else
@@ -1685,9 +2352,18 @@ void mapEditor::loadMap()
 				case IMG_ITEM:
 					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("item"));
 				break;
-				case IMG_ENEMY:
-					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy"));
+				case IMG_ENEMY1:
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy1"));
 				break;
+				case IMG_ENEMY2:
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy2"));
+					break;
+				case IMG_ENEMY3:
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy3"));
+					break;
+				case IMG_ENEMY4:
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
+					break;
 				case IMG_ETC:
 					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
 				break;
@@ -1739,8 +2415,17 @@ void mapEditor::loadMap()
 			case IMG_ITEM:
 				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("item"));
 				break;
-			case IMG_ENEMY:
-				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy"));
+			case IMG_ENEMY1:
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy1"));
+				break;
+			case IMG_ENEMY2:
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy2"));
+				break;
+			case IMG_ENEMY3:
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy3"));
+				break;
+			case IMG_ENEMY4:
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 				break;
 			case IMG_ETC:
 				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
@@ -2025,7 +2710,12 @@ void mapEditor::buttonRender()
 	for (int i = 0; i < 5; i++)
 	{
 		_btn_Category[i].img->frameRender(_btn_Category[i].rc.left, _btn_Category[i].rc.top, _btn_Category[i].frame.x, _btn_Category[i].frame.y);
+		if (i < 2)
+		{
+			_btn_Page[i].img->frameRender(_btn_Page[i].rc.left, _btn_Page[i].rc.top, _btn_Page[i].frame.x, _btn_Page[i].frame.y);
+		}
 	}
+
 	//===========================================
 	//					맵사이즈버튼
 	//===========================================
@@ -2133,7 +2823,9 @@ void mapEditor::linePreview()
 	}
 
 	_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->frameRender(_ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE, _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameX(), _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameY());
-	//D2DMANAGER->drawRectangle(0x00ffff,_ptMouse.x + TILESIZE, _ptMouse.x + TILESIZE, _ptMouse.)
+	D2DMANAGER->drawRectangle(0xffff00, _ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE,
+		_ptMouse.x + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameWidth(),
+		_ptMouse.y + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameHeight());
 }
 
 void mapEditor::testText()
@@ -2182,397 +2874,398 @@ void mapEditor::testText()
 //=================================================
 //						관
 //=================================================
+//토큰 세이브 & 로드
 
-void mapEditor::mapSave()
-{
-	HANDLE file;
-	DWORD write;
-
-	//itoa(대상, 어디에저장?, 몇진수?)
-	//strcat_s(대상, sizeof(대상), 붙일것.) 대상 뒤에 '\0'에 뒤에 붙이기
-
-	char fileName[20] = "map";
-	char idx[5] = {};
-	itoa(_mapNum, idx, 10);
-	strcat_s(fileName, sizeof(fileName), idx);
-	strcat_s(fileName, sizeof(fileName), ".map");
-
-	char save[5000000] = {};
-	char token[100000] = {};
-	char tmp[1000] = {};
-
-	itoa(_tileSizeX, tmp, 10);
-	strcat_s(save, sizeof(save), tmp);
-	strcat_s(save, sizeof(save), "]");
-
-	itoa(_tileSizeY, tmp, 10);
-	strcat_s(save, sizeof(save), tmp);
-	strcat_s(save, sizeof(save), "]");
-
-
-	for (int i = 0; i < _tileSizeY; i++)
-	{
-		for (int j = 0; j < _tileSizeX; j++)
-		{
-			//====================================
-			//			타일 정보들 저장
-			//====================================
-			{
-				//인덱스
-				itoa((_vvMap[i][j]->getIdx().x), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa((_vvMap[i][j]->getIdx().y), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//pos
-				itoa((_vvMap[i][j]->getPos().x), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa((_vvMap[i][j]->getPos().y), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//rect
-				itoa(_vvMap[i][j]->getRc().left, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvMap[i][j]->getRc().top, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvMap[i][j]->getRc().right, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvMap[i][j]->getRc().bottom, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//frame
-				itoa(_vvMap[i][j]->getFrameX(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvMap[i][j]->getFrameY(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//Attribute
-				itoa(_vvMap[i][j]->getAttribute(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//isAvailMove
-				itoa(_vvMap[i][j]->getIsAvailMove(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//imgKey
-			//	strcat_s(token, sizeof(token), _vvMap[i][j]->getImgKey().c_str());
-			//	strcat_s(token, sizeof(token), "/");
-
-				//imgNum
-			}
-
-			//====================================
-			//			오브젝트 정보들 저장
-			//====================================
-			{
-				//인덱스
-				itoa(_vvObj[i][j]->getIdx().x, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getIdx().y, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//pos
-				itoa(_vvObj[i][j]->getPos().x, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getPos().y, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//rect
-				itoa(_vvObj[i][j]->getRc().left, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getRc().top, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getRc().right, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getRc().bottom, tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//frame
-				itoa(_vvObj[i][j]->getFrameX(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-				itoa(_vvObj[i][j]->getFrameY(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//Attribute
-				itoa(_vvObj[i][j]->getAttribute(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//isAvlilMove
-				itoa(_vvObj[i][j]->getIsAvailMove(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);
-				strcat_s(token, sizeof(token), "/");
-
-				//imgKey
-				//strcat_s(token, sizeof(token), _vvObj[i][j]->getImgKey().c_str());
-				//strcat_s(token, sizeof(token), "/");
-
-				//imgNum
-			}
-
-			//--------- 위에서 자른거 묶고 token에 null 넣어주기--------
-			strcat_s(save, sizeof(save), token);
-			for (int k = 0; k < 10000; k++)
-			{
-				token[k] = '\0';
-			}
-		}
-	}
-
-	file = CreateFile(fileName, GENERIC_WRITE, NULL, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	WriteFile(file, save, sizeof(save), &write, NULL);
-	CloseHandle(file);
-}
-
-void mapEditor::mapLoad()
-{
-	//로드에서 안된다 이말이야
-	//세이브 순서보고 로드 순서 봐보자.
-	for (int i = 0; i < _tileSizeY; i++)
-	{
-		for (int j = 0; j < _tileSizeX; j++)
-		{
-			delete _vvMap[i][j];
-			delete _vvObj[i][j];
-			_vvMap[i][j] = nullptr;
-			_vvObj[i][j] = nullptr;
-		}
-		_vvMap[i].clear();
-		_vvObj[i].clear();
-	}
-	_vvMap.clear();
-	_vvObj.clear();
-
-	//잘린것 = strtok_s(무엇을/ seperator/ 남은거 저장)
-	//strtok_s 가 실행될대마다 원본의 seperator부분을 null로 만듬.
-	//연속해서 사용시 token = strtok_s(원본, seperator, & context)는 한번만사용,
-	//		이후엔 token = strtor_s(NULL, seperator, & context)로 계속 진행한다.
-	// char* token, context에 주의
-
-	HANDLE file;
-	DWORD read;
-
-	char load[5000000] = {};
-	char* token;	//1번 잘려진 문자열의 주소
-	char* context;	//2번 잘려진 문자열의 주소
-
-	char tmp[10] = {};
-	const char* seperator = "/";	// 구분자
-	char fileName[20] = "map";
-	int tmpInt;
-
-	//로드할 파일이름
-	itoa(_mapNum, tmp, 10);
-	strcat_s(fileName, sizeof(fileName), tmp);
-	strcat_s(fileName, sizeof(fileName), ".map");
-
-	file = CreateFile(fileName, GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ReadFile(file, load, sizeof(load), &read, NULL);
-	CloseHandle(file);
-
-	// 여기까지 load에대한 데이터 입력받은 상태 
-
-	//맵 크기 가져오자
-	token = strtok_s(load, "]", &context);
-	tmpInt = atoi(token);
-	_tileSizeX = tmpInt;
-	token = strtok_s(NULL, "]", &context);
-	tmpInt = atoi(token);
-	_tileSizeY = tmpInt;
-
-	tile* tmpTileMap;
-	tile* tmpTileObj;
-	for (int i = 0; i < _tileSizeY; i++)
-	{
-		vLine vLineMap;
-		vLineMap.clear();
-		vLine vLineObj;
-		vLineObj.clear();
-		for (int j = 0; j < _tileSizeX; j++)
-		{
-
-
-			POINT tmpIdx;
-			POINT tmpPos;
-			D2D_RECT_F tmpRc;
-			//====================================
-			//		타일 정보들 불러오기
-			//====================================
-			{
-				tmpTileMap = new tile;
-
-				//idx
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpIdx.x = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpIdx.y = tmpInt;
-				tmpTileMap->setIdx(tmpIdx);
-
-				//pos
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpPos.x = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpPos.y = tmpInt;
-				tmpTileMap->setPos(tmpPos);
-
-				//rect
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.left = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.top = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.right = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.bottom = tmpInt;
-				tmpTileMap->setRc(tmpRc);
-
-				//frame
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileMap->setFrameX(tmpInt);
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileMap->setFrameY(tmpInt);
-
-				//attribute
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileMap->setAttribute(tmpInt);
-
-				//isAvailMove
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileMap->setIsAvailMove(tmpInt);
-
-				//imgKey
-				//token = strtok_s(NULL, "/", &context);
-				//tmpTileMap->setImgKey((string)token);			
-				//
-				//tmpTileMap->setImg(nullptr);
-				//
-				//	if (tmpTileMap->getImgKey() != "null")
-				//{
-				//	image* tempImg = IMAGEMANAGER->findImage(tmpTileMap->getImgKey());
-				//	tmpTileMap->setImg(tempImg);
-				//
-				//	tmpTileMap->getImg()->SetFrameX(tmpTileMap->getFrameX());
-				//	tmpTileMap->getImg()->SetFrameY(tmpTileMap->getFrameY());
-				//}
-
-				//imgNum
-			}
-			//====================================
-			//		오브젝트 정보들 불러오기
-			//====================================
-			{
-				tmpTileObj = new tile;
-				//idx
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpIdx.x = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpIdx.y = tmpInt;
-				tmpTileObj->setIdx(tmpIdx);
-
-				//pos
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpPos.x = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpPos.y = tmpInt;
-				tmpTileObj->setPos(tmpPos);
-
-				//rect
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.left = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.top = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.right = tmpInt;
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpRc.bottom = tmpInt;
-				tmpTileObj->setRc(tmpRc);
-
-				//frame
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileMap->setFrameX(tmpInt);
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileObj->setFrameY(tmpInt);
-
-				//attribute
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileObj->setAttribute(tmpInt);
-
-				//isAvailMove
-				token = strtok_s(NULL, "/", &context);
-				tmpInt = atoi(token);
-				tmpTileObj->setIsAvailMove(tmpInt);
-
-				//imgKey
-				//token = strtok_s(NULL, "/", &context);
-				//tmpTileObj->setImgKey((string)token);
-				//
-				//tmpTileObj->setImg(nullptr);
-				//
-				//if(tmpTileObj->getImgKey() != "null")
-				//{
-				//	image* tempImg = IMAGEMANAGER->findImage(tmpTileObj->getImgKey());
-				//	tmpTileObj->setImg(tempImg);
-				//	tmpTileObj->getImg()->SetFrameX(tmpTileMap->getFrameX());
-				//	tmpTileObj->getImg()->SetFrameY(tmpTileMap->getFrameY());
-				//}
-
-				//imgNum
-			}
-			vLineMap.push_back(tmpTileMap);
-			vLineObj.push_back(tmpTileObj);
-		}
-		_vvMap.push_back(vLineMap);
-		_vvObj.push_back(vLineObj);
-	}
-	_corsor_Map_Idx = _vvMap[0][0]->getIdx();
-	imageInit();
-}
+//void mapEditor::mapSave()
+//{
+//	HANDLE file;
+//	DWORD write;
+//
+//	//itoa(대상, 어디에저장?, 몇진수?)
+//	//strcat_s(대상, sizeof(대상), 붙일것.) 대상 뒤에 '\0'에 뒤에 붙이기
+//
+//	char fileName[20] = "map";
+//	char idx[5] = {};
+//	itoa(_mapNum, idx, 10);
+//	strcat_s(fileName, sizeof(fileName), idx);
+//	strcat_s(fileName, sizeof(fileName), ".map");
+//
+//	char save[5000000] = {};
+//	char token[100000] = {};
+//	char tmp[1000] = {};
+//
+//	itoa(_tileSizeX, tmp, 10);
+//	strcat_s(save, sizeof(save), tmp);
+//	strcat_s(save, sizeof(save), "]");
+//
+//	itoa(_tileSizeY, tmp, 10);
+//	strcat_s(save, sizeof(save), tmp);
+//	strcat_s(save, sizeof(save), "]");
+//
+//
+//	for (int i = 0; i < _tileSizeY; i++)
+//	{
+//		for (int j = 0; j < _tileSizeX; j++)
+//		{
+//			//====================================
+//			//			타일 정보들 저장
+//			//====================================
+//			{
+//				//인덱스
+//				itoa((_vvMap[i][j]->getIdx().x), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa((_vvMap[i][j]->getIdx().y), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//pos
+//				itoa((_vvMap[i][j]->getPos().x), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa((_vvMap[i][j]->getPos().y), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//rect
+//				itoa(_vvMap[i][j]->getRc().left, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvMap[i][j]->getRc().top, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvMap[i][j]->getRc().right, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvMap[i][j]->getRc().bottom, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//frame
+//				itoa(_vvMap[i][j]->getFrameX(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvMap[i][j]->getFrameY(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//Attribute
+//				itoa(_vvMap[i][j]->getAttribute(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//isAvailMove
+//				itoa(_vvMap[i][j]->getIsAvailMove(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//imgKey
+//			//	strcat_s(token, sizeof(token), _vvMap[i][j]->getImgKey().c_str());
+//			//	strcat_s(token, sizeof(token), "/");
+//
+//				//imgNum
+//			}
+//
+//			//====================================
+//			//			오브젝트 정보들 저장
+//			//====================================
+//			{
+//				//인덱스
+//				itoa(_vvObj[i][j]->getIdx().x, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getIdx().y, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//pos
+//				itoa(_vvObj[i][j]->getPos().x, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getPos().y, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//rect
+//				itoa(_vvObj[i][j]->getRc().left, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getRc().top, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getRc().right, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getRc().bottom, tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//frame
+//				itoa(_vvObj[i][j]->getFrameX(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//				itoa(_vvObj[i][j]->getFrameY(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//Attribute
+//				itoa(_vvObj[i][j]->getAttribute(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//isAvlilMove
+//				itoa(_vvObj[i][j]->getIsAvailMove(), tmp, 10);
+//				strcat_s(token, sizeof(token), tmp);
+//				strcat_s(token, sizeof(token), "/");
+//
+//				//imgKey
+//				//strcat_s(token, sizeof(token), _vvObj[i][j]->getImgKey().c_str());
+//				//strcat_s(token, sizeof(token), "/");
+//
+//				//imgNum
+//			}
+//
+//			//--------- 위에서 자른거 묶고 token에 null 넣어주기--------
+//			strcat_s(save, sizeof(save), token);
+//			for (int k = 0; k < 10000; k++)
+//			{
+//				token[k] = '\0';
+//			}
+//		}
+//	}
+//
+//	file = CreateFile(fileName, GENERIC_WRITE, NULL, NULL,
+//		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+//
+//	WriteFile(file, save, sizeof(save), &write, NULL);
+//	CloseHandle(file);
+//}
+//토큰 로드
+//void mapEditor::mapLoad()
+//{
+//	//로드에서 안된다 이말이야
+//	//세이브 순서보고 로드 순서 봐보자.
+//	for (int i = 0; i < _tileSizeY; i++)
+//	{
+//		for (int j = 0; j < _tileSizeX; j++)
+//		{
+//			delete _vvMap[i][j];
+//			delete _vvObj[i][j];
+//			_vvMap[i][j] = nullptr;
+//			_vvObj[i][j] = nullptr;
+//		}
+//		_vvMap[i].clear();
+//		_vvObj[i].clear();
+//	}
+//	_vvMap.clear();
+//	_vvObj.clear();
+//
+//	//잘린것 = strtok_s(무엇을/ seperator/ 남은거 저장)
+//	//strtok_s 가 실행될대마다 원본의 seperator부분을 null로 만듬.
+//	//연속해서 사용시 token = strtok_s(원본, seperator, & context)는 한번만사용,
+//	//		이후엔 token = strtor_s(NULL, seperator, & context)로 계속 진행한다.
+//	// char* token, context에 주의
+//
+//	HANDLE file;
+//	DWORD read;
+//
+//	char load[5000000] = {};
+//	char* token;	//1번 잘려진 문자열의 주소
+//	char* context;	//2번 잘려진 문자열의 주소
+//
+//	char tmp[10] = {};
+//	const char* seperator = "/";	// 구분자
+//	char fileName[20] = "map";
+//	int tmpInt;
+//
+//	//로드할 파일이름
+//	itoa(_mapNum, tmp, 10);
+//	strcat_s(fileName, sizeof(fileName), tmp);
+//	strcat_s(fileName, sizeof(fileName), ".map");
+//
+//	file = CreateFile(fileName, GENERIC_READ, NULL, NULL,
+//		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//
+//	ReadFile(file, load, sizeof(load), &read, NULL);
+//	CloseHandle(file);
+//
+//	// 여기까지 load에대한 데이터 입력받은 상태 
+//
+//	//맵 크기 가져오자
+//	token = strtok_s(load, "]", &context);
+//	tmpInt = atoi(token);
+//	_tileSizeX = tmpInt;
+//	token = strtok_s(NULL, "]", &context);
+//	tmpInt = atoi(token);
+//	_tileSizeY = tmpInt;
+//
+//	tile* tmpTileMap;
+//	tile* tmpTileObj;
+//	for (int i = 0; i < _tileSizeY; i++)
+//	{
+//		vLine vLineMap;
+//		vLineMap.clear();
+//		vLine vLineObj;
+//		vLineObj.clear();
+//		for (int j = 0; j < _tileSizeX; j++)
+//		{
+//
+//
+//			POINT tmpIdx;
+//			POINT tmpPos;
+//			D2D_RECT_F tmpRc;
+//			//====================================
+//			//		타일 정보들 불러오기
+//			//====================================
+//			{
+//				tmpTileMap = new tile;
+//
+//				//idx
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpIdx.x = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpIdx.y = tmpInt;
+//				tmpTileMap->setIdx(tmpIdx);
+//
+//				//pos
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpPos.x = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpPos.y = tmpInt;
+//				tmpTileMap->setPos(tmpPos);
+//
+//				//rect
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.left = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.top = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.right = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.bottom = tmpInt;
+//				tmpTileMap->setRc(tmpRc);
+//
+//				//frame
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileMap->setFrameX(tmpInt);
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileMap->setFrameY(tmpInt);
+//
+//				//attribute
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileMap->setAttribute(tmpInt);
+//
+//				//isAvailMove
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileMap->setIsAvailMove(tmpInt);
+//
+//				//imgKey
+//				//token = strtok_s(NULL, "/", &context);
+//				//tmpTileMap->setImgKey((string)token);			
+//				//
+//				//tmpTileMap->setImg(nullptr);
+//				//
+//				//	if (tmpTileMap->getImgKey() != "null")
+//				//{
+//				//	image* tempImg = IMAGEMANAGER->findImage(tmpTileMap->getImgKey());
+//				//	tmpTileMap->setImg(tempImg);
+//				//
+//				//	tmpTileMap->getImg()->SetFrameX(tmpTileMap->getFrameX());
+//				//	tmpTileMap->getImg()->SetFrameY(tmpTileMap->getFrameY());
+//				//}
+//
+//				//imgNum
+//			}
+//			//====================================
+//			//		오브젝트 정보들 불러오기
+//			//====================================
+//			{
+//				tmpTileObj = new tile;
+//				//idx
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpIdx.x = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpIdx.y = tmpInt;
+//				tmpTileObj->setIdx(tmpIdx);
+//
+//				//pos
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpPos.x = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpPos.y = tmpInt;
+//				tmpTileObj->setPos(tmpPos);
+//
+//				//rect
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.left = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.top = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.right = tmpInt;
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpRc.bottom = tmpInt;
+//				tmpTileObj->setRc(tmpRc);
+//
+//				//frame
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileMap->setFrameX(tmpInt);
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileObj->setFrameY(tmpInt);
+//
+//				//attribute
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileObj->setAttribute(tmpInt);
+//
+//				//isAvailMove
+//				token = strtok_s(NULL, "/", &context);
+//				tmpInt = atoi(token);
+//				tmpTileObj->setIsAvailMove(tmpInt);
+//
+//				//imgKey
+//				//token = strtok_s(NULL, "/", &context);
+//				//tmpTileObj->setImgKey((string)token);
+//				//
+//				//tmpTileObj->setImg(nullptr);
+//				//
+//				//if(tmpTileObj->getImgKey() != "null")
+//				//{
+//				//	image* tempImg = IMAGEMANAGER->findImage(tmpTileObj->getImgKey());
+//				//	tmpTileObj->setImg(tempImg);
+//				//	tmpTileObj->getImg()->SetFrameX(tmpTileMap->getFrameX());
+//				//	tmpTileObj->getImg()->SetFrameY(tmpTileMap->getFrameY());
+//				//}
+//
+//				//imgNum
+//			}
+//			vLineMap.push_back(tmpTileMap);
+//			vLineObj.push_back(tmpTileObj);
+//		}
+//		_vvMap.push_back(vLineMap);
+//		_vvObj.push_back(vLineObj);
+//	}
+//	_corsor_Map_Idx = _vvMap[0][0]->getIdx();
+//	imageInit();
+//}

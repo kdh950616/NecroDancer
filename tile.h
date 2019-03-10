@@ -5,7 +5,7 @@
 enum TILE_ATTR
 {
 	TILE_NONE,
-	TILE_GROUND = 10,
+	TILE_GROUND,
 	TILE_BOSS_GROUND,
 	TILE_SHOP,
 	TILE_WATER,
@@ -17,7 +17,7 @@ enum TILE_ATTR
 
 enum OBJ_ATTR
 {
-	OBJ_NONE,
+	OBJ_NONE = 10,
 	OBJ_WALL1,
 	OBJ_WALL2,
 	OBJ_WALL3,
@@ -26,9 +26,62 @@ enum OBJ_ATTR
 	OBJ_WALL_END,
 	OBJ_DOOR_FRONT,
 	OBJ_DOOR_SIDE,
+	ENEMY1_1_1, // 검은박쥐
+	ENEMY1_1_2,	// 빨간박쥐
+	ENEMY1_2_1,	// 하얀해골
+	ENEMY1_2_2,	// 까만해골
+	ENEMY1_2_3,	// 노란해골
+	ENEMY1_3_1,	// 초록슬라임
+	ENEMY1_3_2,	// 파란슬라임
+	ENEMY1_3_3,	// 노란슬라임
+	ENEMY2_1_1,	// 유령
+	ENEMY2_1_2,	// 레이스
+	ENEMY2_2_1,	// 원숭이
+	ENEMY2_2_2,	// 좀비
+	ENEMY3_1_1,	// 미노타우로스
+	ENEMY3_1_2,	// 용
+	ENEMY3_1_3,	// 황금박쥐
+	ENEMY4_1_1,	// 폰
+	ENEMY4_1_2,	// 비숍
+	ENEMY4_1_3,	// 룩
+	ENEMY4_2_1,	// 나이트
+	ENEMY4_2_2,	// 퀸
+	ENEMY4_2_3,	// 킹
 
 
 	OBJ_END
+};
+
+enum tagImgNum
+{
+	IMG_NONE,
+	IMG_TILE,
+	IMG_WALL,
+	IMG_ITEM,
+	IMG_ENEMY1,
+	IMG_ENEMY2,
+	IMG_ENEMY3,
+	IMG_ENEMY4,
+	IMG_ETC,
+	IMG_END
+};
+
+enum tagArrow
+{
+	ARROW_X_DOWN,
+	ARROW_X_UP,
+	ARROW_Y_DOWN,
+	ARROW_Y_UP,
+	ARROW_END
+};
+enum tagPage
+{
+	PAGE_TILE,	//타일 그리기 모드
+	PAGE_WALL,	//오브젝트 그리기 모드
+	PAGE_ITEM,
+	PAGE_ENEMY,
+	PAGE_ETC,
+	PAGE_END		//끗
 };
 
 class tile : public gameNode
