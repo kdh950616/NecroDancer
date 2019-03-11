@@ -1,15 +1,18 @@
 #pragma once
 #include "gameNode.h"
+#include "lightMap.h"
 class rayCast : public gameNode
 {
 private:
-	typedef vector<POINT> vPoint;
-	typedef vector<vPoint> vvPoint;
+	typedef vector<lightMap> vLine;
+	typedef vector<vLine> vvLightMap;
+private:
+	vvLightMap _vvLightMap;
 public:
 	rayCast();
 	~rayCast();
 
-	//				플레이어좌표			뻗어갈 길이	, 몇도씩 돌릴건지
-	void rayCasting(POINTFLOAT playerPos, int length, int angleNum);
+	//				플레이어좌표			
+	void rayCasting(POINTFLOAT playerPos, int torchLevel);
 };
 

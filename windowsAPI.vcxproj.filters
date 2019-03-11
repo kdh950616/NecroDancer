@@ -311,6 +311,9 @@
     <ClCompile Include="rayCast.cpp">
       <Filter>2DFramework</Filter>
     </ClCompile>
+    <ClCompile Include="lightMap.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc">

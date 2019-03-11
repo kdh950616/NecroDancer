@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "mapLoader.h"
 #include "player.h"
+#include "lightMap.h"
 
 class testScene : public gameNode
 {
