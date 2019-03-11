@@ -192,11 +192,17 @@
     <ClInclude Include="testScene.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>PlayGround\units\player</Filter>
+    </ClInclude>
+    <ClInclude Include="rayCast.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="lightMap.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="windowsAPI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -295,6 +301,15 @@
     </ClCompile>
     <ClCompile Include="testScene.cpp">
       <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>PlayGround\units\player</Filter>
+    </ClCompile>
+    <ClCompile Include="rayCast.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,8 @@ public:
 	virtual void render();
 
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+	RECT  rectMake(D2D_RECT_F rc) { return RECT{ (LONG)rc.left,(LONG)rc.top,(LONG)rc.right,(LONG)rc.bottom }; }
+	POINT pointMake(POINTF pt) { return POINT{ (int)pt.x,(int)pt.y }; }
 
 	
 

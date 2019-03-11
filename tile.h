@@ -90,9 +90,9 @@ private:
 
 	POINT _idx;			//인덱스
 	tagTileSet _tile;
-	//string imgKeyValue;	//이미지 키값 - > 필요없을거같음 논외.
-	
+
 	bool _isAvailMove; // 트루면 갈수있슴. -> 위에 오브젝트 올려지거나 못가는거 올려지면 펄스로
+
 	//에이스타용
 	tile* _parent;		//엄마
 	int _gScore;
@@ -152,5 +152,8 @@ public:
 	//=============================
 	//			즉석 추가
 	//=============================
+
+	void objSetDefault();
+
 };
 

@@ -73,3 +73,13 @@ void tile::render()
 	//	_tile.img->frameRender(_tile.rc.left, _tile.rc.top, _tile.rc.right, _tile.rc.bottom);
 	}
 }
+
+void tile::objSetDefault()
+{
+	setImg(nullptr);
+	setFrameX(NULL);
+	setFrameY(NULL);
+	setAttribute(OBJ_NONE);
+	setImgNum(IMG_NONE);
+	setIsAvailMove(true);
+}

@@ -100,7 +100,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			if (curIdxX + i < 0 || curIdxX + i > (_vTotalList[0]).size() - 1
 				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
 
-			////11시방향 타일일때
+			////11시방향 타일일때 망해라 김도형
 			//if (i == -1 && j == -1)
 			//{
 			//	//9시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라

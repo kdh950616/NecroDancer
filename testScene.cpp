@@ -13,6 +13,40 @@ testScene::~testScene()
 
 HRESULT testScene::init()
 {
+	tileInit();
+
+	_player = new player;
+	_player->setMapAdressLink(&_vvMap);
+	_player->setObjAdressLink(&_vvObj);
+	_player->init();
+	
+
+	return S_OK;
+}
+
+void testScene::release()
+{
+}
+
+void testScene::update()
+{
+	tileUpdate();
+
+	_player->update();
+}
+
+void testScene::render()
+{
+	tileRender();
+}
+
+
+//===========================================
+//					init
+//===========================================
+
+void testScene::tileInit()
+{
 	//타일들 이미지
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
@@ -24,19 +58,20 @@ HRESULT testScene::init()
 	IMAGEMANAGER->addFrameImage("enemy4", L"images/mapTool/mob4.png", 432, 576, 3, 6);
 
 	_mapLoader = new mapLoader;
-	
+
 	_mapLoader->mapLoad(&_vvMap, &_vvObj, &_tileSizeX, &_tileSizeY, &_isTileChanged, 0);
 
+	delete _mapLoader;
+	_mapLoader = nullptr;
+
 	_tileCount = 0;
-
-	return S_OK;
 }
 
-void testScene::release()
-{
-}
+//===========================================
+//					update
+//===========================================
 
-void testScene::update()
+void testScene::tileUpdate()
 {
 	_tileCount++;
 
@@ -53,15 +88,26 @@ void testScene::update()
 	}
 }
 
-void testScene::render()
+//===========================================
+//					render
+//===========================================
+
+void testScene::tileRender()
 {
 	for (int i = 0; i < _tileSizeY; i++)
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
-			if (_vvMap[i][j]->getImg() != nullptr)
+			if (_vvMap[i][j]->getImg() != nullptr 
+				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x 
+				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y 
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y)
 			{
-				_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left, _vvMap[i][j]->getRc().top,
+				_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left
+					- CAMERA->getPosX(), 
+													_vvMap[i][j]->getRc().top
+					- CAMERA->getPosY(),
 					_vvMap[i][j]->getFrameX(), _vvMap[i][j]->getFrameY());
 			}
 		}
@@ -71,11 +117,52 @@ void testScene::render()
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
-			if (_vvObj[i][j]->getImg() != nullptr)
+			if (_vvMap[i][j]->getIdx().x == _player->getIdx().x && _vvObj[i][j]->getIdx().y == _player->getIdx().y)
 			{
-				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left, _vvObj[i][j]->getRc().top,
+				_player->render();
+			}
+
+			if (_vvObj[i][j]->getImg() != nullptr
+				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
+				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y
+				&& _vvObj[i][j]->getImgNum() == IMG_WALL)
+			{
+				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
+					- CAMERA->getPosX(),
+													_vvObj[i][j]->getRc().top - TILESIZE 
+					- CAMERA->getPosY(),
+					_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+			}
+			else if (_vvObj[i][j]->getImg() != nullptr
+				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
+				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y
+				&& _vvObj[i][j]->getImgNum() != IMG_WALL)
+			{
+				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+					- CAMERA->getPosX(),
+					_vvObj[i][j]->getRc().top
+					- CAMERA->getPosY(),
 					_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
 			}
 		}
 	}
+			EFFECTMANAGER->render();
 }
+
+//===========================================
+//					get
+//===========================================
+
+
+//===========================================
+//					set
+//===========================================
+
+
+
+
+

@@ -169,8 +169,8 @@ public:
 	void testText();
 	
 	//기타-----------------------------------------------------------------------------------------------------------------------
-	RECT  rectMake (D2D_RECT_F rc)	{ return RECT { (LONG)rc.left,(LONG)rc.top,(LONG)rc.right,(LONG)rc.bottom }; }
-	POINT pointMake(POINTF pt)		{ return POINT{ (int)pt.x,(int)pt.y }; }
+	//RECT  rectMake (D2D_RECT_F rc)	{ return RECT { (LONG)rc.left,(LONG)rc.top,(LONG)rc.right,(LONG)rc.bottom }; }
+	//POINT pointMake(POINTF pt)		{ return POINT{ (int)pt.x,(int)pt.y }; }
 
 	//접근자-----------------------------------------------------------------------------------------------------------------------
 

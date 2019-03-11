@@ -912,6 +912,7 @@ void mapEditor::setMapTile(tile* tile, int idX, int idY)
 		tile->setFrameX(_sampleTile[idY][idX]->getFrameX());
 		tile->setFrameY(_sampleTile[idY][idX]->getFrameY());
 	}
+	tile->setIsAvailMove(_sampleTile[idY][idX]->getIsAvailMove());
 	tile->setImgNum(_sampleTile[idY][idX]->getImgNum());
 	tile->setImg(_sampleTile[idY][idX]->getImg());
 }
@@ -937,7 +938,7 @@ void mapEditor::setMapObject(tile * tile, int idX, int idY)
 	}
 	
 
-
+	tile->setIsAvailMove(_sampleTile[idY][idX]->getIsAvailMove());
 	tile->setImgNum(_sampleTile[idY][idX]->getImgNum());
 	tile->setImg(_sampleTile[idY][idX]->getImg());
 }
@@ -1587,7 +1588,7 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 					break;
 				case 8:
 					tmpTileSet.attribute = ENEMY1_3_3;
-					tile->setIsAvailMove(true);
+					tile->setIsAvailMove(false);
 					break;
 				}
 				break;
@@ -1916,70 +1917,6 @@ void mapEditor::mapDragDraw()
 			}
 		}
 	}
-	//if (!_isCollision_Sample_Area_Rc || !_isShow_Sample)
-	//{
-	//	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && _draw_Area_Rc.left < _ptMouse.x && _ptMouse.x < _draw_Area_Rc.right &&
-	//		_draw_Area_Rc.top < _ptMouse.y && _ptMouse.y < _draw_Area_Rc.bottom)
-	//	{
-	//		//int yStart = _corsor_Sample_Select[0].y;
-	//		//int yEnd = _corsor_Sample_Select[1].y;
-	//		//int xStart = _corsor_Sample_Select[0].x;
-	//		//int xEnd = _corsor_Sample_Select[1].x;
-	//		int yStart = _corsor_Map_Draw[0].y;
-	//		int yEnd = _corsor_Map_Draw[1].y;
-	//		int xStart = _corsor_Map_Draw[0].x;
-	//		int xEnd = _corsor_Map_Draw[1].x;
-	//		int tmpNum;
-	//		if (yStart > yEnd)
-	//		{
-	//			tmpNum = yStart;
-	//			yStart = yEnd;
-	//			yEnd = tmpNum;
-	//		}
-	//		if (xStart > xEnd)
-	//		{
-	//			tmpNum = xStart;
-	//			xStart = xEnd;
-	//			xEnd = tmpNum;
-	//		}
-	//
-	//		int mapIdY = _corsor_Map_Idx.y;
-	//		int mapIdX = _corsor_Map_Idx.x;
-	//
-	//		for (int i = yStart; i <= yEnd; i++, mapIdY++)
-	//		{
-	//			for (int j = xStart; j <= xEnd; j++, mapIdX++)
-	//			{
-	//				//맵밖에나가면 터지는거방지
-	//				if (mapIdY + (i - yStart) > _tileNumY - 1 || mapIdX + (j - xStart) > _tileNumX - 1)
-	//				{
-	//					continue;
-	//				}
-	//				switch (_currentPage)
-	//				{
-	//				case PAGE_TILE:
-	//					setMapTile(_vvMap[mapIdY][mapIdX], j, i);
-	//					break;
-	//				case PAGE_WALL:
-	//					setMapObject(_vvObj[mapIdY][mapIdX], j, i);
-	//					break;
-	//				case PAGE_ITEM:
-	//
-	//					break;
-	//				case PAGE_ENEMY:
-	//
-	//					break;
-	//				case PAGE_ETC:
-	//
-	//					break;
-	//
-	//				}
-	//			}
-	//			mapIdX = _corsor_Map_Idx.x;
-	//		}
-	//	}
-	//}
-	
 }
 
 	//사이즈
@@ -2571,12 +2508,14 @@ void mapEditor::erase(tile* mapTile, tile* objTile)
 	mapTile->setFrameY(NULL);
 	mapTile->setImgNum(IMG_NONE);
 	mapTile->setImg(nullptr);
+	mapTile->setIsAvailMove(false);
 
 	objTile->setAttribute(TILE_NONE);
 	objTile->setFrameX(NULL);
 	objTile->setFrameY(NULL);
 	objTile->setImgNum(IMG_NONE);
 	objTile->setImg(nullptr);
+	objTile->setIsAvailMove(true);
 }
 
 void mapEditor::objErase(tile* objTile)
@@ -2586,6 +2525,7 @@ void mapEditor::objErase(tile* objTile)
 	objTile->setFrameY(NULL);
 	objTile->setImgNum(IMG_NONE);
 	objTile->setImg(nullptr);
+	objTile->setIsAvailMove(true);
 }
 
 //render----------------------------------------------------------------------------------------------------------------------
@@ -2667,13 +2607,23 @@ void mapEditor::objectTileRender()
 				_draw_Area_Rc.top < _vvObj[i][j]->getRc().bottom - CAMERA->getPosY() && 
 				_vvObj[i][j]->getRc().bottom - CAMERA->getPosY() < _draw_Area_Rc.bottom)
 			{
-				if (_vvObj[i][j]->getImg() != nullptr)
+				if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() != IMG_WALL)
 				{
 					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
-						- CAMERA->getPosX(), 
+						- CAMERA->getPosX(),
 														_vvObj[i][j]->getRc().top 
 						- CAMERA->getPosY(),
-																	_vvObj[i][j]->getImg()->GetFrameWidth(), 
+														_vvObj[i][j]->getImg()->GetFrameWidth(), 
+														_vvObj[i][j]->getImg()->GetFrameHeight(),
+														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				}
+				else if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() == IMG_WALL)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+														_vvObj[i][j]->getRc().top - TILESIZE
+						- CAMERA->getPosY(),
+														_vvObj[i][j]->getImg()->GetFrameWidth(),
 														_vvObj[i][j]->getImg()->GetFrameHeight(),
 														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
 				}
@@ -2822,10 +2772,13 @@ void mapEditor::linePreview()
 		D2DMANAGER->drawRectangle(0xff0000, _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getRc());
 	}
 
-	_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->frameRender(_ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE, _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameX(), _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameY());
-	D2DMANAGER->drawRectangle(0xffff00, _ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE,
-		_ptMouse.x + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameWidth(),
-		_ptMouse.y + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameHeight());
+	if (_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg() != nullptr)
+	{
+		_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->frameRender(_ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE, _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameX(), _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getFrameY());
+		D2DMANAGER->drawRectangle(0xffff00, _ptMouse.x + TILESIZE, _ptMouse.y + TILESIZE,
+			_ptMouse.x + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameWidth(),
+			_ptMouse.y + TILESIZE + _sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getImg()->GetFrameHeight());
+	}
 }
 
 void mapEditor::testText()
@@ -2855,17 +2808,17 @@ void mapEditor::testText()
 	swprintf_s(str, L"Map AvailMove : % d",_vvMap[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIsAvailMove());
 	D2DMANAGER->drawText(str, 0, 415, 15, 0x00ffff);
 					
-	swprintf_s(str, L"Map IdX : %d , IdY : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIdx().x, _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIdx().y);
+	swprintf_s(str, L"obj IdX : %d , IdY : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIdx().x, _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIdx().y);
 	D2DMANAGER->drawText(str, 0, 440, 15, 0x00ffff);
-	swprintf_s(str, L"Map ImgNum : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getImgNum());
+	swprintf_s(str, L"obj ImgNum : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getImgNum());
 	D2DMANAGER->drawText(str, 0, 455, 15, 0x00ffff);
-	swprintf_s(str, L"Map FrameX : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getFrameX());
+	swprintf_s(str, L"obj FrameX : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getFrameX());
 	D2DMANAGER->drawText(str, 0, 470, 15, 0x00ffff);
-	swprintf_s(str, L"Map FrameY : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getFrameY());
+	swprintf_s(str, L"obj FrameY : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getFrameY());
 	D2DMANAGER->drawText(str, 0, 485, 15, 0x00ffff);
-	swprintf_s(str, L"Map Attribute : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute());
+	swprintf_s(str, L"obj Attribute : %d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute());
 	D2DMANAGER->drawText(str, 0, 500, 15, 0x00ffff);
-	swprintf_s(str, L"Map AvailMove : % d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIsAvailMove());
+	swprintf_s(str, L"obj AvailMove : % d", _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getIsAvailMove());
 	D2DMANAGER->drawText(str, 0, 515, 15, 0x00ffff);
 
 
