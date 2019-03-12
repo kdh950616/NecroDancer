@@ -142,16 +142,16 @@ void testScene::tileRender()
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
-			if (_vvMap[i][j]->getIdx().x == _player->getIdx().x && _vvObj[i][j]->getIdx().y == _player->getIdx().y)
+			if (_vvObj[i][j]->getIdx().x == _player->getIdx().x && _vvObj[i][j]->getIdx().y == _player->getIdx().y)
 			{
 				_player->render();
 			}
 
 			if (_vvObj[i][j]->getImg() != nullptr
-				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
-				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
-				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
-				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y
+				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y
 				&& _vvObj[i][j]->getImgNum() == IMG_WALL)
 			{
 				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
@@ -161,10 +161,10 @@ void testScene::tileRender()
 					_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
 			}
 			else if (_vvObj[i][j]->getImg() != nullptr
-				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
-				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
-				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
-				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y
+				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y
 				&& _vvObj[i][j]->getImgNum() != IMG_WALL)
 			{
 				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
@@ -175,14 +175,15 @@ void testScene::tileRender()
 			}
 		}
 	}
+
 	for (int i = 0; i < _tileSizeY; i++)
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
 			if (CAMERA->getPosX() - TILESIZE <= _vvLightMap[i][j]->getPos().x
-			  &&CAMERA->getPosY() - TILESIZE <= _vvLightMap[i][j]->getPos().y
-			  &&CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvLightMap[i][j]->getPos().x
-			  &&CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvLightMap[i][j]->getPos().y)
+				&&CAMERA->getPosY() - TILESIZE <= _vvLightMap[i][j]->getPos().y
+				&&CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvLightMap[i][j]->getPos().x
+				&&CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvLightMap[i][j]->getPos().y)
 			{
 				if (_vvLightMap[i][j]->getIsFind() == false)
 				{
@@ -195,7 +196,7 @@ void testScene::tileRender()
 				}
 				else if (_vvLightMap[i][j]->getIsFind() == true)
 				{
-					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
+					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(), 
 						_vvLightMap[i][j]->getRc().left - CAMERA->getPosX(),
 						_vvLightMap[i][j]->getRc().top - CAMERA->getPosY(),
 						_vvLightMap[i][j]->getRc().right - CAMERA->getPosX(),
