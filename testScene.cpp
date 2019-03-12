@@ -19,6 +19,10 @@ HRESULT testScene::init()
 	_player->setMapAdressLink(&_vvMap);
 	_player->setObjAdressLink(&_vvObj);
 	_player->init();
+
+	_rayCast = new rayCast;
+	_rayCast->setLightMapAdress(&_vvLightMap);
+	_rayCast->setobjAdress(&_vvObj);
 	
 
 	return S_OK;
@@ -33,6 +37,12 @@ void testScene::update()
 	tileUpdate();
 
 	_player->update();
+
+	if (_player->getIsMove() == false)
+	{
+	}
+	_rayCast->rayCasting({(int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE}, 2);
+
 }
 
 void testScene::render()
@@ -65,6 +75,21 @@ void testScene::tileInit()
 	_mapLoader = nullptr;
 
 	_tileCount = 0;
+
+	_vvLightMap.clear();
+
+	for (int i = 0; i < _tileSizeY; i++)
+	{
+		vLightLine lightLine;
+		lightLine.clear();
+		for (int j = 0; j < _tileSizeX; j++)
+		{
+			lightMap* lightTile = new lightMap;
+			lightTile->setLightMap(j, i);
+			lightLine.push_back(lightTile);
+		}
+		_vvLightMap.push_back(lightLine);
+	}
 }
 
 //===========================================
@@ -150,6 +175,37 @@ void testScene::tileRender()
 			}
 		}
 	}
+	for (int i = 0; i < _tileSizeY; i++)
+	{
+		for (int j = 0; j < _tileSizeX; j++)
+		{
+			if (CAMERA->getPosX() - TILESIZE <= _vvLightMap[i][j]->getPos().x
+			  &&CAMERA->getPosY() - TILESIZE <= _vvLightMap[i][j]->getPos().y
+			  &&CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvLightMap[i][j]->getPos().x
+			  &&CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvLightMap[i][j]->getPos().y)
+			{
+				if (_vvLightMap[i][j]->getIsFind() == false)
+				{
+					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
+						_vvLightMap[i][j]->getRc().left - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getRc().top - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getRc().right - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getRc().bottom - CAMERA->getPosY(),
+						1.0f);
+				}
+				else if (_vvLightMap[i][j]->getIsFind() == true)
+				{
+					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
+						_vvLightMap[i][j]->getRc().left - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getRc().top - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getRc().right - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getRc().bottom - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getOpacity());
+				}
+			}
+		}
+	}
+
 			EFFECTMANAGER->render();
 }
 

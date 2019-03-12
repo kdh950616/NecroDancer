@@ -1,18 +1,28 @@
 #pragma once
 #include "gameNode.h"
 #include "lightMap.h"
+#include "tile.h"
 class rayCast : public gameNode
 {
 private:
-	typedef vector<lightMap> vLine;
+	typedef vector<lightMap*> vLine;
 	typedef vector<vLine> vvLightMap;
+
+	typedef vector<tile*> vLineObj;
+	typedef vector<vLineObj> vvObj;
 private:
-	vvLightMap _vvLightMap;
+
+	vvLightMap* _vvLightMap;
+	vvObj* _vvObj;
+
 public:
 	rayCast();
 	~rayCast();
 
+	void setobjAdress(vvObj* vvobj) { _vvObj = vvobj; }
+	void setLightMapAdress(vvLightMap* vvLightMap) { _vvLightMap = vvLightMap; }
+
 	//				플레이어좌표			
-	void rayCasting(POINTFLOAT playerPos, int torchLevel);
+	void rayCasting(POINT playeridx, int torchRange);
 };
 

@@ -1,7 +1,5 @@
 #pragma once
 
-const int TILESIZE = 48;
-
 struct tagTileSet
 {
 	image* img;		//ÀÌ¹ÌÁö

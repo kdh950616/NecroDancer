@@ -51,7 +51,6 @@ HRESULT d2dManager::init()
 
 	hr = createCollection(L"font/DungGeunMo.ttf");
 	assert(hr == S_OK);
-
 	// COM 라이브러리 초기화 -> 호출하지 않으면 CoCreateInstance가 제대로 수행되지 않음
 	CoInitialize(NULL);
 
@@ -302,12 +301,42 @@ void d2dManager::fillRectangle(COLORREF rgb, D2D_RECT_F rc)
 
 void d2dManager::fillRectangle(COLORREF rgb, D2D_RECT_F rc, float opacity)
 {
-	D2D1_RECT_F rcf = getDrawRectfArea(rc.left, rc.top, rc.right, rc.bottom);
+	//D2D1_RECT_F rcf = getDrawRectfArea(rc.left, rc.top, rc.right, rc.bottom);
+	//
+	//if (!isRectFInRangeWindow(rcf))
+	//	return;
+	//
+	//_renderTarget->FillRectangle(rcf, createBrush(rgb, opacity));
+
+	if (!isRectFInRangeWindow(rc))
+		return;
+
+	_renderTarget->FillRectangle(rc, createBrush(rgb, opacity));
+}
+//========================
+//		렉트 출력때매 추가
+//========================
+void d2dManager::fillRectangle(ID2D1SolidColorBrush* brush, D2D_RECT_F rc,float opacity)
+{
+
+	if (!isRectFInRangeWindow(rc))
+		return;
+
+	brush->SetOpacity(opacity);
+
+	_renderTarget->FillRectangle(rc, brush);
+}
+
+void d2dManager::fillRectangle(ID2D1SolidColorBrush* brush, float startX, float startY, float endX, float endY, float opacity)
+{
+	D2D1_RECT_F rcf = getDrawRectfArea(startX, startY, endX, endY);
 
 	if (!isRectFInRangeWindow(rcf))
 		return;
 
-	_renderTarget->FillRectangle(rcf, createBrush(rgb, opacity));
+	brush->SetOpacity(opacity);
+
+	_renderTarget->FillRectangle(rcf, brush);
 }
 
 void d2dManager::fillEllipse(ID2D1SolidColorBrush * brush, float startX, float startY, float endX, float endY)

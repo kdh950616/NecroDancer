@@ -3,6 +3,7 @@
 #include "mapLoader.h"
 #include "player.h"
 #include "lightMap.h"
+#include "rayCast.h"
 
 class testScene : public gameNode
 {
@@ -10,18 +11,21 @@ private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
 	typedef vector<vLine> vvObj;
+	typedef vector<lightMap*> vLightLine;
+	typedef vector<vLightLine> vvLightMap;
 private:
 	mapLoader* _mapLoader;
 
 	vvMap _vvMap;
 	vvObj _vvObj;
+	vvLightMap _vvLightMap;
 	int _tileSizeX;
 	int _tileSizeY;
 	bool _isTileChanged;
 	int _tileCount;
 
 	player* _player;
-
+	rayCast* _rayCast;
 
 public:
 	testScene();

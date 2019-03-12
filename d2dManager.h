@@ -68,6 +68,8 @@ public:
 	void fillRectangle(COLORREF rgb, float startX, float startY, float endX, float endY, float opacity);
 	void fillRectangle(COLORREF rgb, D2D_RECT_F rc);
 	void fillRectangle(COLORREF rgb, D2D_RECT_F rc, float opicaty);
+	void fillRectangle(ID2D1SolidColorBrush* brush, D2D_RECT_F rc , float opicaty);
+	void fillRectangle(ID2D1SolidColorBrush* brush, float startX, float startY, float endX, float endY, float opacity);
 	void fillEllipse(ID2D1SolidColorBrush* brush, float startX, float startY, float endX, float endY);
 	void fillEllipse(COLORREF rgb, D2D1_ELLIPSE e);
 
