@@ -1,0 +1,22 @@
+타일 x , y
+
+맵
+인덱스 x, y
+pos x, y
+rc l,t,r,b
+frame x, y
+attribute
+isavailmove
+imgkey
+
+오브젝트
+인덱스 x, y
+pos x, y
+rc l,t,r,b
+frame x,y
+attribute
+isAvailmove
+imgkey
+
+저장
+

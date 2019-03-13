@@ -92,6 +92,7 @@ private:
 
 	bool _isMove;					//움직이는 중이니?
 	bool _isReverse;				//반대니?
+	bool _isArrive;					//도착했니? (이동하다가)
 	
 
 private:
@@ -174,5 +175,9 @@ public:
 	//	즉석 추가 접근자
 	//======================
 	bool getIsMove() { return _isMove; }
+	float getPosZ() { return _posZ; }
+	bool getIsReverse() { return _isReverse; }
+	bool getIsArrive() { return _isArrive; }
+	void setIsArrive(bool isArrive) { _isArrive = isArrive; }
 };
 

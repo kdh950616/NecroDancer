@@ -28,6 +28,7 @@ HRESULT player::init()
 	_jumpPower = JUMPPOWER_HORIZON;
 	_isMove = false;
 	_isReverse = false;
+	_isArrive = true;
 	_shovel = BASIC;
 	_shovel_Dmg = 1;
 	_direction = { 0,0 };
@@ -116,6 +117,7 @@ void player::imgInit()
 
 void player::move()
 {
+
 	CAMERA->setPosX(_posLT.x - WINSIZEX /2);
 	CAMERA->setPosY(_posLT.y - WINSIZEY /2);
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && !_isMove)
@@ -208,6 +210,7 @@ void player::move()
 		_vec.x = 0;
 		_savePos = _posCT;
 		_isMove = false;
+		_isArrive = true;
 		_direction = { 0,0 };
 	}
 
@@ -224,9 +227,12 @@ void player::move()
 		_vec.y = 0;
 		_savePos = _posCT;
 		_isMove = false;
+		_isArrive = true;
 		_direction = { 0,0 };
 	}
 	
+	
+
 	_posCT.x += _vec.x;
 	_posCT.y += _vec.y;
 	_posLT.x = _posCT.x - TILESIZE / 2;

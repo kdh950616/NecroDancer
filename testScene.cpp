@@ -38,10 +38,12 @@ void testScene::update()
 
 	_player->update();
 
-	if (_player->getIsMove() == false)
+	if (_player->getIsArrive() == true)
 	{
+		_player->setIsArrive(false);
 	}
-	_rayCast->rayCasting({(int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE}, 2);
+		_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, 2);
+
 
 }
 
@@ -188,20 +190,33 @@ void testScene::tileRender()
 				if (_vvLightMap[i][j]->getIsFind() == false)
 				{
 					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
-						_vvLightMap[i][j]->getRc().left - CAMERA->getPosX(),
-						_vvLightMap[i][j]->getRc().top - CAMERA->getPosY(),
-						_vvLightMap[i][j]->getRc().right - CAMERA->getPosX(),
-						_vvLightMap[i][j]->getRc().bottom - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getTileRc().left - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getTileRc().top - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getTileRc().right - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getTileRc().bottom - CAMERA->getPosY(),
 						1.0f);
 				}
 				else if (_vvLightMap[i][j]->getIsFind() == true)
 				{
 					D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(), 
-						_vvLightMap[i][j]->getRc().left - CAMERA->getPosX(),
-						_vvLightMap[i][j]->getRc().top - CAMERA->getPosY(),
-						_vvLightMap[i][j]->getRc().right - CAMERA->getPosX(),
-						_vvLightMap[i][j]->getRc().bottom - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getTileRc().left - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getTileRc().top - CAMERA->getPosY(),
+						_vvLightMap[i][j]->getTileRc().right - CAMERA->getPosX(),
+						_vvLightMap[i][j]->getTileRc().bottom - CAMERA->getPosY(),
 						_vvLightMap[i][j]->getOpacity());
+				}
+
+				if (_vvLightMap[i][j]->getIdx().y == _player->getIdx().y - 1 && _vvLightMap[i][j]->getIdx().x == _player->getIdx().x)
+				{
+					//_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _headAni
+					if (_player->getIsReverse() == false)
+					{
+						_player->getHeadImg()->aniRender(_player->getPosLT().x - CAMERA->getPosX(), _player->getPosLT().y - 15 - _player->getPosZ() - CAMERA->getPosY(), _player->getHeadAni());
+					}
+					else if (_player->getIsReverse() == true)
+					{
+						_player->getHeadImg()->aniRenderReverseX(_player->getPosLT().x - CAMERA->getPosX(), _player->getPosLT().y - 15 - _player->getPosZ() - CAMERA->getPosY(), _player->getHeadAni());
+					}
 				}
 			}
 		}

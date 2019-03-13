@@ -13,26 +13,23 @@ rayCast::~rayCast()
 
 void rayCast::rayCasting(POINT playerIdx, int torchRange)
 {
-	int startX = playerIdx.x - torchRange;
-	int startY = playerIdx.y - torchRange;
-	int endX = playerIdx.x + torchRange;
-	int endY = playerIdx.y + torchRange;
-
 	for (int i = -torchRange; i <= +torchRange; i++)
 	{
 		for (int j = -torchRange; j <= +torchRange; j++)
 		{
+			//터짐방지
 			if (playerIdx.y + i < 0 || playerIdx.x + j < 0
 				||playerIdx.y + i > _vvLightMap->size() - 1
 				||playerIdx.x + j > _vvLightMap->size() - 1)
 			{
 				continue;
 			}
-			//코스트는 0으로 시작해서 코스트가 낮을수록 (이동을 적게할수록) 투명도가 높아짐 == 밝음
-			int cost = 0;
-			int maxCost = torchRange * 10;
-			POINT cal = { j,i };
 
+			
+			float cost = 0;					//코스트는 0으로 시작해서 코스트가 낮을수록 (이동을 적게할수록) 투명도가 높아짐 == 밝음
+
+			int maxCost = torchRange * 10;	//코스트 최대한도는 횃불세기의 * 10
+			POINT cal = { j,i };			//인덱스 계산용([0][0]이 플레이어임)
 
 			while (1)
 			{
@@ -41,21 +38,24 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 				//=====================
 				if (cal.x == 0 && cal.y == 0)
 				{
-					//도착햇거나
+					//도착하면 탈출
 					break;
 				}
 				if (cost > maxCost)
 				{
-					//코스트가 오버되면
+					//코스트가 오버되면 탈출
 					break;
 				}
 
+				//계산용 인덱스의 절댓값이 같다면 == 대각선이라면
 				if (abs(cal.x) == abs(cal.y))
 				{
 					if (cal.x != 0 && cal.y != 0)
 					{
+						//대각선은 16을더하고
 						cost += 16;
 
+						//0보다 큰지 작은지를 판별해서 ++ or --
 						if (cal.x > 0)
 						{
 							cal.x--;
@@ -73,9 +73,17 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 						{
 							cal.y++;
 						}
+
+						//계산용 인덱스를 새로 적용해서 보니까 벽이었다? 그럼 코스트 또증가
+						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
+							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+						{
+							cost += WALL_COST;
+						}
 					}
 				}
 
+				//x가 0이 아니라면  0이될떄까지 ++ or --
 				if (cal.x != 0)
 				{
 					cost += 10;
@@ -91,8 +99,15 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 						//더함
 						cal.x++;
 					}
+
+					if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
+						(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					{
+						cost += WALL_COST;
+					}
 				}
 
+				//y가 0이 아니라면 0이될떄까지 ++ or --
 				if (cal.y != 0)
 				{
 					cost += 10;
@@ -105,104 +120,144 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 					{
 						cal.y++;
 					}
+
+					if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
+						(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					{
+						cost += WALL_COST;
+					}
 				}
 			}
+			// 무한루프문에서 탈출을햇다. 2가지의 결론이 남.
 
-			//=========================================================================================================================================================
-			// 이제 무한루프문에서 탈출을햇다. 2가지의 결론이 남.
-			//	1. 코스트를 다써서 나옴. -> 바로아래의 이프문에 걸려서 시야설정하는부분 건너뜀
-			//	2. 횃불로 인해서 정해진 코스트내에 플레이어한테 도달함 -> 시야 설정
-			//=========================================================================================================================================================
-
-			//========================================================================
-			//						1번일 경우 여기서 걸림
-			//========================================================================
-
-			// 자 지금 뭐했냐면 포문 플레이어 기준으로 - torch범위 부터 + torch범위로 해쓴ㄴ데 지금
-			//for문 고치는 중이다. 어. 잘 하도록. 이상!
-
+			//	1. 코스트를 다써서 나왔을경우(범위안에 없었던경우)
 			if (cost > maxCost)
 			{
-				//만약 코스트가 0보다 낮으면? 사거리 밖에있는거니까 걍 건너뜀.
-
+				//1) 발견해봤던 곳이었을시엔
 				if ((*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->getIsFind())
 				{
+					//1-1) 그곳을 다시 발견했을때의 값으로 칠함
 					(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(OPACITY_FIND);
 				}
-
+				//2) 이아래는 다 건너뜀
 				continue;
 			}
+			
+			//	2. 최대 코스트 안에 도착했을경우(범위안에 있엇던경우)
 
+			// 1)발견한걸로 설정.
 			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setIsFind(true);
+			// 2)코스트를 비율로 다시 계산함
+			cost /= maxCost;	//최대 코스트로 나누고
+			cost *= 0.4f;		//0.4를 곱하는데 안하면 너무 밝음. 
 
-			float fCost = (float)cost / maxCost;
+			// 3)최종 계산이 끝난 코스트를 현재 인덱스에 넣음(계산용 인덱스말고 실제인덱스 i,j)
 
-			//switch (torchRange)
-			//{
-			//case 2:		//기본 횃불
-			//	if(fCost == 1) fCost -= 0.4f;
-			//	else if (fCost >= 0.8f) fCost -= 0.1f;
-			//	break;
-			//case 3:		// +1 횃불
-			//	if (fCost >= 1) fCost -= 0.25f;
-			//	break;
-			//case 4:		// +2 횃불
-			//	fCost -= 0.3f;
-			//	break;
-			//case 5:		// +3 횃불
-			//	//if (fCost >= 1) fCost -= 0.2f;
-			//	fCost -= 0.3f;
-			//	break;
-			//}
-
-			//설정된 opacity값을 넣어줌
-
-			fCost *= 0.4f;
-
-			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(fCost);
+			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(cost);
 
 
-			//아몰랑ㅆ
+			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
+			if (playerIdx.y + i >= 0 && playerIdx.x + i >= 0									// 터짐방지
+				&&playerIdx.y <= _vvObj->size() && playerIdx.x <= _vvObj[0].size()				// 터짐방지
+				&&(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= OBJ_WALL1 &&	// 속성이 벽이면
+				(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= OBJ_DOOR_SIDE)	// 속성이 벽이면
+			{
+				//터짐방지
+				if (playerIdx.y + i - 1 >= 0 && playerIdx.y + i - 1 <= _vvLightMap->size())
+				{
+					//벽일때 바로 위에다가 계산된 같은 코스트랑 발견했다고 해줌.
+					(*_vvLightMap)[playerIdx.y + i - 1][playerIdx.x + j]->setIsFind(true);
+					(*_vvLightMap)[playerIdx.y + i - 1][playerIdx.x + j]->setOpacity(cost);
+				}
+			}
 		}
 	}
-	
-	(*_vvLightMap)[playerIdx.y][playerIdx.x]->setIsFind(true);
+
+	//여기서부턴 있는 조건문들은 위에서 검사한곳의 1칸더 겉부분을 발견했던거라면 했을때의 값으로 칠해주는 거임
 
 
-	//if (playerIdx.y - (torchRange + 1) >= 0 && playerIdx.y - (torchRange + 1) <= _vvLightMap->size() - 1)
+	//터짐방지
+	if (playerIdx.y - (torchRange + 1) >= 0 && playerIdx.y - (torchRange + 1) <= _vvLightMap->size() - 1
+		&&(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x]->getIsFind())
 	{
-		if (playerIdx.y - (torchRange + 1) >= 0 && playerIdx.y - (torchRange + 1) <= _vvLightMap->size() - 1
-			&&(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x]->getIsFind())
+		//칠하고
+		(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x]->setOpacity(OPACITY_FIND);
+
+		//터짐방지
+		if (playerIdx.x - 1 >= 0)
 		{
-			(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x]->setOpacity(OPACITY_FIND);
+			//칠하고
+			(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x - 1]->setOpacity(OPACITY_FIND);
+		}
+		//터짐방지
+		if (playerIdx.x + 1 <= _vvLightMap->size() - 1)
+		{
+			//칠하고
+			(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x + 1]->setOpacity(OPACITY_FIND);
 		}
 	}
 
-	//if (playerIdx.y + (torchRange + 1) >= 0 && playerIdx.y + (torchRange + 1) <= _vvLightMap->size() - 1)
+	//터짐방지
+	if (playerIdx.y + (torchRange + 1) >= 0 && playerIdx.y + (torchRange + 1) <= _vvLightMap->size() - 1
+		&&(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x]->getIsFind())
 	{
-		if (playerIdx.y + (torchRange + 1) >= 0 && playerIdx.y + (torchRange + 1) <= _vvLightMap->size() - 1
-			&&(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x]->getIsFind())
+		//칠하고
+		(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x]->setOpacity(OPACITY_FIND);
+		//터짐방지
+		if (playerIdx.x - 1 >= 0)
 		{
-			(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x]->setOpacity(OPACITY_FIND);
+			//칠하고
+			(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x - 1]->setOpacity(OPACITY_FIND);
+		}
+		//터짐방지
+		if (playerIdx.x + 1 <= _vvLightMap[0].size() - 1)
+		{
+			//칠하고
+			(*_vvLightMap)[playerIdx.y + (torchRange + 1)][playerIdx.x + 1]->setOpacity(OPACITY_FIND);
 		}
 	}
 
-	//if (playerIdx.x - (torchRange + 1) >= 0 && playerIdx.x - (torchRange + 1) <= _vvLightMap[0].size() - 1)
+	//터짐방지
+	if (playerIdx.x - (torchRange + 1) >= 0 && playerIdx.x - (torchRange + 1) <= _vvLightMap[0].size() - 1
+		&&(*_vvLightMap)[playerIdx.y][playerIdx.x - (torchRange + 1)]->getIsFind())
 	{
-		if (playerIdx.x - (torchRange + 1) >= 0 && playerIdx.x - (torchRange + 1) <= _vvLightMap[0].size() - 1
-			&&(*_vvLightMap)[playerIdx.y][playerIdx.x - (torchRange + 1)]->getIsFind())
+		//칠하고
+		(*_vvLightMap)[playerIdx.y][playerIdx.x - (torchRange + 1)]->setOpacity(OPACITY_FIND);
+		//터짐방지
+		if (playerIdx.y - 1 >= 0)
 		{
-			(*_vvLightMap)[playerIdx.y][playerIdx.x - (torchRange + 1)]->setOpacity(OPACITY_FIND);
+			//칠하고
+			(*_vvLightMap)[playerIdx.y - 1][playerIdx.x - (torchRange + 1)]->setOpacity(OPACITY_FIND);
+		}
+		//터짐방지
+		if (playerIdx.y + 1 <= _vvLightMap->size() - 1)
+		{
+			//칠하고
+			(*_vvLightMap)[playerIdx.y + 1][playerIdx.x - (torchRange + 1)]->setOpacity(OPACITY_FIND);
 		}
 	}
-	//if (playerIdx.x + (torchRange + 1) >= 0 && playerIdx.x + (torchRange + 1) <= _vvLightMap[0].size() - 1)
+
+	//터짐방지
+	if (playerIdx.x + (torchRange + 1) >= 0 && playerIdx.x + (torchRange + 1) <= _vvLightMap[0].size() - 1
+		&&(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->getIsFind())
 	{
-		if (playerIdx.x + (torchRange + 1) >= 0 && playerIdx.x + (torchRange + 1) <= _vvLightMap[0].size() - 1
-			&&(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->getIsFind())
+		//칠하고
+		(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->setOpacity(OPACITY_FIND);
+		//터짐방지
+		if (playerIdx.y - 1 >= 0)
 		{
-			(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->setOpacity(OPACITY_FIND);
+			//칠하고
+			(*_vvLightMap)[playerIdx.y - 1][playerIdx.x + (torchRange + 1)]->setOpacity(OPACITY_FIND);
+		}
+		//터짐방지
+		if (playerIdx.y + 1 <= _vvLightMap->size() - 1)
+		{
+			//칠하고
+			(*_vvLightMap)[playerIdx.y + 1][playerIdx.x + (torchRange + 1)]->setOpacity(OPACITY_FIND);
 		}
 	}
+
+
 
 	//망작 
 	{
