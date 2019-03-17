@@ -105,7 +105,6 @@ void effectManager::addEffect(string effectName, string imageName, int imageWidt
 		vEffectBuffer.push_back(new effect);
 		vEffectBuffer[i]->init(img, effectWidth, effectHeight, fps, elapsedTime);
 	}
-
 	mArrEffect.insert(pair<string, arrEffects>(effectName, vEffectBuffer));
 
 	_vTotalEffect.push_back(mArrEffect);

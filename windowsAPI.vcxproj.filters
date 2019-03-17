@@ -58,9 +58,6 @@
     <Filter Include="PlayGround\units">
       <UniqueIdentifier>{df8887a4-a28a-4e81-986d-1250cf67394e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayGround\units\player">
-      <UniqueIdentifier>{cfd1fd41-c2b2-478f-a0e4-35abd6c03c83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PlayGround\units\enemy">
       <UniqueIdentifier>{7e091553-1b7f-48fe-91eb-ff559ffe38f3}</UniqueIdentifier>
     </Filter>
@@ -192,14 +189,23 @@
     <ClInclude Include="testScene.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>PlayGround\units\player</Filter>
-    </ClInclude>
     <ClInclude Include="lightMap.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
     <ClInclude Include="rayCast.h">
       <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>PlayGround\units\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="skeleton.h">
+      <Filter>PlayGround\units\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyMgr.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>PlayGround\units</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -305,14 +311,23 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>PlayGround\units\player</Filter>
-    </ClCompile>
     <ClCompile Include="rayCast.cpp">
       <Filter>2DFramework</Filter>
     </ClCompile>
     <ClCompile Include="lightMap.cpp">
       <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>PlayGround\units\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="skeleton.cpp">
+      <Filter>PlayGround\units\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyMgr.cpp">
+      <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>PlayGround\units</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

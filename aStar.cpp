@@ -96,52 +96,17 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 	{
 		for (int j = -1; j < 2; j++)
 		{
+			if (abs(i) == abs(j)) continue;
+
 			//벡터 크기 넘어가는거 예외처리
 			if (curIdxX + i < 0 || curIdxX + i > (_vTotalList[0]).size() - 1
 				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
-
-			////11시방향 타일일때 망해라 김도형
-			//if (i == -1 && j == -1)
-			//{
-			//	//9시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
-			//	if (!(*_vTotalList)[curIdxY][curIdxX - 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY - 1][curIdxX]->getIsAvailMove())
-			//	{
-			//		continue;
-			//	}
-			//}
-			////1시방향 타일일때
-			//else if (i == -1 && j == 1)
-			//{
-			//	//3시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
-			//	if (!(*_vTotalList)[curIdxY][curIdxX + 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY - 1][curIdxX]->getIsAvailMove())
-			//	{
-			//		continue;
-			//	}
-			//}
-			////7시방향 타일일때
-			//else if (i == 1 && j == -1)
-			//{
-			//	//9시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
-			//	if (!(*_vTotalList)[curIdxY][curIdxX - 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY + 1][curIdxX]->getIsAvailMove())
-			//	{
-			//		continue;
-			//	}
-			//}
-			////5시방향 타일일때
-			//else if (i == 1 && j == 1)
-			//{
-			//	//3시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
-			//	if (!(*_vTotalList)[curIdxY][curIdxX + 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY + 1][curIdxX]->getIsAvailMove())
-			//	{
-			//		continue;
-			//	}
-			//}
-
+			
 			//일단 타일 만들어놓고
 			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];
 
 			// 갈수 없는곳이면 건너뜀 -> 오브젝트랑 연동해서 해야할듯
-			//if (!openTile->getIsAvailMove()) continue;
+			if (!openTile->getIsAvailMove()) continue;
 
 			//클로즈 리스트에 있는것도 건너뜀
 			bool isClosed = false;
@@ -176,8 +141,8 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			// G , H 미리 구해놓자
 
 			//G 연산 -> 현재 내타일과 부모타일의 거리를 비교해서 대각선인지, 수평or수직에 있는건지 판별
-			int gScore = getDistance((*_vTotalList)[curIdxY][curIdxX]->getTilePos().x, (*_vTotalList)[curIdxY][curIdxX]->getTilePos().y,
-				openTile->getTilePos().x, openTile->getTilePos().y) == TILESIZE ? 10 : 14;
+			int gScore = getDistance((*_vTotalList)[curIdxY][curIdxX]->getPos().x, (*_vTotalList)[curIdxY][curIdxX]->getPos().y,
+				openTile->getPos().x, openTile->getPos().y) == TILESIZE ? 10 : 14;
 
 			//H 연산 -> 현재 내 타일과 도착타일의 인덱스를 비교
 			int hScore = (abs((*_vTotalList)[endPos.y][endPos.x]->getIdx().x - openTile->getIdx().x)

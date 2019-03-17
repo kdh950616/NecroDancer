@@ -35,8 +35,11 @@ HRESULT mapEditor::init()
 	sampleInit();
 	//기능버튼 기초설정
 	buttonInit();
+
+	//SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
+	//SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
 	
-	
+	SOUNDMANAGER->playZone("mapTool", 1.0f);
 
 	return S_OK;
 }

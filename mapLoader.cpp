@@ -10,6 +10,24 @@ mapLoader::mapLoader()
 mapLoader::~mapLoader()
 {
 }
+HRESULT mapLoader::beatInit(string stageKeyName, const char * beatFileName, float volume)
+{
+	SOUNDMANAGER->loadBeat(beatFileName, stageKeyName);
+	SOUNDMANAGER->playZone(stageKeyName, volume);
+
+	return S_OK;
+}
+HRESULT mapLoader::beatInit(string stageKeyName, const char * beatFileName, float volume, vector<tagBeat>* vBeat)
+{
+	SOUNDMANAGER->loadBeat(beatFileName, stageKeyName);
+	SOUNDMANAGER->playZone(stageKeyName, volume);
+	*vBeat = SOUNDMANAGER->getVBeat();
+
+	return S_OK;
+}
+
+
+
 //타일맵 주소, 오브젝트 주소, x사이즈 주소, y사이즈 주소, 불러올 맵번호 0 ~ 9
 void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSizeX, int * tileSizeY, bool* isTileChanged, int mapNum)
 {
@@ -245,6 +263,84 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 		}
 	}
 	CloseHandle(file);
+}
+
+void mapLoader::makeEnemy(vvObj* vvObj, int * tileSizeX, int * tileSizeY)
+{
+	for (int i = 0; i < *tileSizeY; i++)
+	{
+		for (int j = 0; j < *tileSizeX; j++)
+		{
+			switch ((*vvObj)[i][j]->getAttribute())
+			{
+				case ENEMY1_1_1:				// 검은박쥐
+
+				break;
+				case ENEMY1_1_2:				// 빨간박쥐
+
+				break;
+				case ENEMY1_2_1:				// 하얀해골
+					setNewObjTile((*vvObj)[i][j], i, j);
+					_em->createEnemy(ENEMY1_2_1, (*vvObj)[i][j]->getIdx());
+				break;
+				case ENEMY1_2_2:				// 까만해골
+
+				break;
+				case ENEMY1_2_3:				// 노란해골
+
+				break;
+				case ENEMY1_3_1:				// 초록슬라임
+
+				break;
+				case ENEMY1_3_2:				// 파란슬라임
+
+				break;
+				case ENEMY1_3_3:				// 노란슬라임
+
+				break;
+				case ENEMY2_1_1:				// 유령
+
+				break;
+				case ENEMY2_1_2:				// 레이스
+
+				break;
+				case ENEMY2_2_1:				// 원숭이
+
+				break;
+				case ENEMY2_2_2:				// 좀비
+
+				break;
+				case ENEMY3_1_1:				// 미노타우로스
+
+				break;
+				case ENEMY3_1_2:				// 용
+
+				break;
+				case ENEMY3_1_3:				// 황금박쥐
+
+				break;
+				case ENEMY4_1_1:				// 폰
+
+				break;
+				case ENEMY4_1_2:				// 비숍
+
+				break;
+				case ENEMY4_1_3:				// 룩
+
+				break;
+				case ENEMY4_2_1:				// 나이트
+
+				break;
+				case ENEMY4_2_2:				// 퀸
+
+				break;
+				case ENEMY4_2_3:				// 킹
+
+
+				break;
+			}
+		}
+	}
 }
 
 void mapLoader::setNewMapTile(tile * tile, int idX, int idY, bool isTileChanged)

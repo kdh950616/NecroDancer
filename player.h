@@ -26,6 +26,7 @@ private:
 	vvMap* _vvMap;					// 스테이지가 가지고있는 맵의 주소를 가지고 있을거임(용량걱정 ㄴ).
 	vvObj* _vvObj;					//			''		오브젝트				''
 
+
 	//=========================
 	//			image
 	//=========================
@@ -93,16 +94,15 @@ private:
 	bool _isMove;					//움직이는 중이니?
 	bool _isReverse;				//반대니?
 	bool _isArrive;					//도착했니? (이동하다가)
+	bool _isPressKey;				//키눌럿니?
+	bool _isBeat;					//비트에 맞니?
 	
 
 private:
 	//=========================
 	//			변수용
 	//=========================
-	const float GRAVITY = 1.2f;
-	const float JUMPPOWER_HORIZON = 8.0f;
-	const float JUMPPOWER_VERTICAL = 6.0f;
-	const float SPEED = 5.0f;
+
 	//=========================
 	//			좌표용
 	//=========================
@@ -130,6 +130,7 @@ public:
 	//					update
 	//===========================================
 	void move();
+	void moveCal();
 	void objFunc(POINT direction);
 
 	//===========================================
@@ -157,19 +158,19 @@ public:
 	//===========================================
 	//					set
 	//===========================================
-	image*		setHeadImg			(image* headImg)			{ _headImg = headImg; }
-	image*		setBodyImg			(image* bodyImg)			{ _bodyImg = bodyImg; }
-	animation*	setHeadAni			(animation* headAni)		{ _headAni = headAni; }
-	animation*	setBodyAni			(animation* bodyAni)		{ _bodyAni = bodyAni; }
-	POINTFLOAT	setPosCT			(POINTFLOAT posCT)			{ _posCT = posCT; }
-	POINTFLOAT	 setPosLT			(POINTFLOAT posLT)			{ _posLT = posLT; }
-	POINTFLOAT	setSavePos			(POINTFLOAT savePos)		{ _savePos = savePos; }
-	POINTFLOAT	setVec				(POINTFLOAT vec)			{ _vec = vec; }
-	POINT		setIdx				(POINT idx)					{ _idx = idx; }
-	D2D_RECT_F	setRc				(D2D_RECT_F rc)				{ _rc = rc; }
-	int			setMaxHp			(int maxHp)					{ _maxHp = maxHp; }
-	int			setCurHp			(int curHp)					{ _curHp = curHp; }
-	float		setJumpPower		(float jumpPower)			{_jumpPower = jumpPower; }
+	void		setHeadImg			(image* headImg)			{ _headImg = headImg; }
+	void		setBodyImg			(image* bodyImg)			{ _bodyImg = bodyImg; }
+	void		setHeadAni			(animation* headAni)		{ _headAni = headAni; }
+	void		setBodyAni			(animation* bodyAni)		{ _bodyAni = bodyAni; }
+	void		setPosCT			(POINTFLOAT posCT)			{ _posCT = posCT; }
+	void		 setPosLT			(POINTFLOAT posLT)			{ _posLT = posLT; }
+	void		setSavePos			(POINTFLOAT savePos)		{ _savePos = savePos; }
+	void		setVec				(POINTFLOAT vec)			{ _vec = vec; }
+	void		setIdx				(POINT idx)					{ _idx = idx; }
+	void		setRc				(D2D_RECT_F rc)				{ _rc = rc; }
+	void		setMaxHp			(int maxHp)					{ _maxHp = maxHp; }
+	void		setCurHp			(int curHp)					{ _curHp = curHp; }
+	void		setJumpPower		(float jumpPower)			{_jumpPower = jumpPower; }
 
 	//======================
 	//	즉석 추가 접근자
@@ -179,5 +180,9 @@ public:
 	bool getIsReverse() { return _isReverse; }
 	bool getIsArrive() { return _isArrive; }
 	void setIsArrive(bool isArrive) { _isArrive = isArrive; }
+	bool getIsBeat() { return _isBeat; }
+	void setIsBeat(bool isBeat) { _isBeat = isBeat; }
+	bool getIsPressKey() { return _isPressKey; }
+	void setIsPressKey(bool isPressKey) { _isPressKey = isPressKey; }
 };
 

@@ -64,12 +64,12 @@ vector<string> txtData::txtLoad(const char * loadFileName)
 	HANDLE file;
 	DWORD read;
 
-	char str[1024] = {};
+	char str[4096] = {};
 
 	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, str, 1024, &read, NULL);
+	ReadFile(file, str, 4096, &read, NULL);
 
 	CloseHandle(file);
 

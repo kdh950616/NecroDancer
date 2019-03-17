@@ -175,7 +175,6 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 
 	//여기서부턴 있는 조건문들은 위에서 검사한곳의 1칸더 겉부분을 발견했던거라면 했을때의 값으로 칠해주는 거임
 
-
 	//터짐방지
 	if (playerIdx.y - (torchRange + 1) >= 0 && playerIdx.y - (torchRange + 1) <= _vvLightMap->size() - 1
 		&&(*_vvLightMap)[playerIdx.y - (torchRange + 1)][playerIdx.x]->getIsFind())

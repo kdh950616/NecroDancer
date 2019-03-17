@@ -42,13 +42,13 @@ void player::release()
 
 void player::update()
 {
+	CAMERA->setPosX(_posLT.x - WINSIZEX / 2);
+	CAMERA->setPosY(_posLT.y - WINSIZEY / 2);
+
 	move();
+	moveCal();
 	KEYANIMANAGER->update("playerHead");
 	KEYANIMANAGER->update("playerBody");
-
-
-	if(KEYMANAGER->isStayKeyDown(VK_F7)) 
-	EFFECTMANAGER->play("shovel_basic", (_posCT.x), (_posCT.y));
 }
 
 void player::render()
@@ -61,11 +61,13 @@ void player::render()
 	D2DMANAGER->drawText(str, 0, 280, 20, 0x00ffff);
 	swprintf_s(str, L"idx : %d idy : %d ", _idx.x, _idx.y);
 	D2DMANAGER->drawText(str, 0, 300, 20, 0x00ffff);
+	swprintf_s(str, L"HP : %d ", _curHp);
+	D2DMANAGER->drawText(str, 0, 320, 20, 0x00ffff);
 	//D2DMANAGER->fillRectangle(0xff0000, _posLT.x, _posLT.y, _posLT.x + TILESIZE, _posLT.y + TILESIZE, 1.0);
 	//D2DMANAGER->fillRectangle(0x00ff00, _posCT.x, _posCT.y, _posCT.x + TILESIZE, _posCT.y + TILESIZE, 1.0);
 	//D2DMANAGER->fillRectangle(0x0000ff, _savePos.x, _savePos.y, _savePos.x + TILESIZE, _savePos.y + TILESIZE, 1.0);
 
-	_shadowImg->render(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - CAMERA->getPosY(), 1);
+	_shadowImg->render(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - CAMERA->getPosY(), 1.0f);
 	if (_isReverse)
 	{
 		_bodyImg->aniRenderReverseX(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _bodyAni);
@@ -117,76 +119,103 @@ void player::imgInit()
 
 void player::move()
 {
-
-	CAMERA->setPosX(_posLT.x - WINSIZEX /2);
-	CAMERA->setPosY(_posLT.y - WINSIZEY /2);
+	if (_isPressKey)
+	{
+		_isPressKey = false;
+	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && !_isMove)
 	{
-		_direction = { -1, 0 };
-		_isReverse = true;
-		if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+		_isPressKey = true;
+		if (_isBeat)
 		{
-			objFunc(_direction);
-		}
-		else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
-		{
-			_savePos = _posCT;
-			_vec.x -= _speed;
-			_isMove = true;
-			_jumpPower = JUMPPOWER_HORIZON;
-			_posZ = 0;
+			_direction = { -1, 0 };
+			_isReverse = true;
+			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+			{
+				objFunc(_direction);
+			}
+			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
+			{
+				_savePos = _posCT;
+				_vec.x -= _speed;
+				_isMove = true;
+				_jumpPower = JUMPPOWER_HORIZON;
+				_posZ = 0;
+			}
+			_isBeat = false;
 		}
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && !_isMove)
 	{
-		_direction = { 1, 0 };
-		_isReverse = false;
-		if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+		_isPressKey = true;
+		if (_isBeat)
 		{
-			objFunc(_direction);
-		}
-		else if((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
-		{
-			_savePos = _posCT;
-			_vec.x += _speed;
-			_isMove = true;
-			_jumpPower = JUMPPOWER_HORIZON;
-			_posZ = 0;
+			_direction = { 1, 0 };
+			_isReverse = false;
+			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+			{
+				objFunc(_direction);
+			}
+			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
+			{
+				_savePos = _posCT;
+				_vec.x += _speed;
+				_isMove = true;
+				_jumpPower = JUMPPOWER_HORIZON;
+				_posZ = 0;
+			}
+			_isBeat = false;
 		}
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_UP) && !_isMove)
 	{
-		_direction = { 0, -1 };
-		if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+		_isPressKey = true;
+		if (_isBeat)
 		{
-			objFunc(_direction);
-		}
-		else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
-		{
-			_savePos = _posCT;
-			_vec.y -= _speed;
-			_isMove = true;
-			_jumpPower = JUMPPOWER_VERTICAL;
-			_posZ = 0;
+			_direction = { 0, -1 };
+			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+			{
+				objFunc(_direction);
+			}
+			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
+			{
+				_savePos = _posCT;
+				_vec.y -= _speed;
+				_isMove = true;
+				_jumpPower = JUMPPOWER_VERTICAL;
+				_posZ = 0;
+			}
+			_isBeat = false;
 		}
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && !_isMove)
 	{
-		_direction = { 0, 1 };
-		if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+		_isPressKey = true;
+		if (_isBeat)
 		{
-			objFunc(_direction);
-		}
-		else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
-		{
-			_savePos = _posCT;
-			_vec.y += _speed;
-			_isMove = true;
-			_jumpPower = JUMPPOWER_VERTICAL;
-			_posZ = 0;
+			_direction = { 0, 1 };
+			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
+			{
+				objFunc(_direction);
+			}
+			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
+			{
+				_savePos = _posCT;
+				_vec.y += _speed;
+				_isMove = true;
+				_jumpPower = JUMPPOWER_VERTICAL;
+				_posZ = 0;
+			}
+			_isBeat = false;
 		}
 	}
+	
 
+	
+}
+
+void player::moveCal()
+{
 	if (_isMove)
 	{
 		_posZ += _jumpPower;
@@ -230,8 +259,8 @@ void player::move()
 		_isArrive = true;
 		_direction = { 0,0 };
 	}
-	
-	
+
+
 
 	_posCT.x += _vec.x;
 	_posCT.y += _vec.y;

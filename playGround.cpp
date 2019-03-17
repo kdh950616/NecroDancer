@@ -17,6 +17,14 @@ HRESULT playGround::init()
 	_mapEditor = new mapEditor;
 	_testScene = new testScene;
 
+
+	SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
+	SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
+	SOUNDMANAGER->addSound("testScene", "sounds/zone/zone1_1.ogg", true, true);
+	SOUNDMANAGER->addSound("testScene_shopkeeper", "sounds/zone/zone1_1_shopkeeper.ogg", true, true);
+
+
+
 	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
 	SCENEMANAGER->addScene("testScene", _testScene);
 
@@ -53,7 +61,7 @@ void playGround::render()
 
 
 	SCENEMANAGER->render();
-
+	EFFECTMANAGER->render();
 
 
 
