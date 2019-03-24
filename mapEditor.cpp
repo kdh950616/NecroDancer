@@ -39,7 +39,7 @@ HRESULT mapEditor::init()
 	//SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
 	//SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
 	
-	SOUNDMANAGER->playZone("mapTool", 1.0f);
+	SOUNDMANAGER->playZone("mapTool", 0.05f);
 
 	return S_OK;
 }
@@ -1590,8 +1590,12 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 					tile->setIsAvailMove(false);
 					break;
 				case 8:
-					tmpTileSet.attribute = ENEMY1_3_3;
-					tile->setIsAvailMove(false);
+					tmpTileSet.attribute = OBJ_NONE;
+					tile->setIsAvailMove(true);
+					tmpTileSet.imgNum = IMG_NONE;
+					tmpTileSet.img = nullptr;
+					tmpTileSet.frameX = NULL;
+					tmpTileSet.frameY = NULL;
 					break;
 				}
 				break;
@@ -1643,11 +1647,11 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 				switch (idY)
 				{
 				case 0:
-					tmpTileSet.attribute = ENEMY1_1_2;
+					tmpTileSet.attribute = ENEMY2_1_2;
 					tile->setIsAvailMove(false);
 					break;
 				case 4:
-					tmpTileSet.attribute = ENEMY1_2_2;
+					tmpTileSet.attribute = ENEMY2_2_2;
 					tile->setIsAvailMove(false);
 					break;
 				}
@@ -1675,7 +1679,7 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 	case IMG_ENEMY3:
 		tile->setIdx(tmpIdx);
 
-		if (idY == 0)
+		if ((idX == 0 || idX == 1) && (idY == 0 || idY == 2))
 		{
 			tmpTileSet.imgNum = _currentImgNum;
 			tmpTileSet.img = _currentImg;
@@ -1684,17 +1688,30 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 			switch (idX)
 			{
 			case 0:
-				tmpTileSet.attribute = ENEMY3_1_1;
-				tile->setIsAvailMove(false);
+				if (idY == 0)
+				{
+					tmpTileSet.attribute = ENEMY3_1_1;
+					tile->setIsAvailMove(false);	
+				}
+				if (idY == 2)
+				{
+					tmpTileSet.attribute = ENEMY3_2_1;
+					tile->setIsAvailMove(false);
+				}
 				break;
 			case 1:
-				tmpTileSet.attribute = ENEMY3_1_2;
-				tile->setIsAvailMove(false);
+				if (idY == 0)
+				{
+					tmpTileSet.attribute = ENEMY3_1_2;
+					tile->setIsAvailMove(false);
+				}
+				if (idY == 2)
+				{
+					tmpTileSet.attribute = ENEMY3_2_2;
+					tile->setIsAvailMove(false);
+				}
 				break;
-			case 2:
-				tmpTileSet.attribute = ENEMY3_1_3;
-				tile->setIsAvailMove(false);
-				break;
+			
 			}
 		}
 		else
@@ -2513,7 +2530,7 @@ void mapEditor::erase(tile* mapTile, tile* objTile)
 	mapTile->setImg(nullptr);
 	mapTile->setIsAvailMove(false);
 
-	objTile->setAttribute(TILE_NONE);
+	objTile->setAttribute(OBJ_NONE);
 	objTile->setFrameX(NULL);
 	objTile->setFrameY(NULL);
 	objTile->setImgNum(IMG_NONE);
@@ -2523,7 +2540,7 @@ void mapEditor::erase(tile* mapTile, tile* objTile)
 
 void mapEditor::objErase(tile* objTile)
 {
-	objTile->setAttribute(TILE_NONE);
+	objTile->setAttribute(OBJ_NONE);
 	objTile->setFrameX(NULL);
 	objTile->setFrameY(NULL);
 	objTile->setImgNum(IMG_NONE);
@@ -2610,7 +2627,17 @@ void mapEditor::objectTileRender()
 				_draw_Area_Rc.top < _vvObj[i][j]->getRc().bottom - CAMERA->getPosY() && 
 				_vvObj[i][j]->getRc().bottom - CAMERA->getPosY() < _draw_Area_Rc.bottom)
 			{
-				if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() != IMG_WALL)
+				if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() == IMG_ENEMY4)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - TILESIZE,
+						_vvObj[i][j]->getImg()->GetFrameWidth(),
+						_vvObj[i][j]->getImg()->GetFrameHeight(),
+						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				}
+				else if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() != IMG_WALL)
 				{
 					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
 						- CAMERA->getPosX(),

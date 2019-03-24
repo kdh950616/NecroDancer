@@ -15,6 +15,9 @@ private:
 	typedef vector<lightMap*> vLightLine;
 	typedef vector<vLightLine> vvLightMap;
 
+
+	const float VOLUME = 0.3f;
+	const float VOLUME_EFF = 1.0f;
 private:
 	mapLoader*					_mapLoader;
 
@@ -34,7 +37,6 @@ private:
 	//사운드용
 	string						_stageKeyName;
 	const char*					_beatFileName;
-	float						_volume;
 	float						_pitch;
 	int							_time;
 	vector<tagBeat>				_vBeat;			//비트 담을곳
@@ -43,6 +45,8 @@ private:
 	D2D1_RECT_F					_rc_Wrong;
 	bool						_isBeatCorrect;
 
+
+	bool _showText;
 public:
 	testScene();
 	~testScene();

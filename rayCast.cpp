@@ -20,7 +20,7 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			//터짐방지
 			if (playerIdx.y + i < 0 || playerIdx.x + j < 0
 				||playerIdx.y + i > _vvLightMap->size() - 1
-				||playerIdx.x + j > _vvLightMap->size() - 1)
+				||playerIdx.x + j > _vvLightMap[0][0].size() - 1)
 			{
 				continue;
 			}
@@ -120,11 +120,15 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 					{
 						cal.y++;
 					}
-
-					if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
-						(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					if (playerIdx.x + j >= 0 && playerIdx.x + j <= _vvLightMap[0][0].size() - 1 &&
+						playerIdx.y + i >= 0 && playerIdx.y + i <= _vvLightMap->size() - 1)
 					{
-						cost += WALL_COST;
+
+						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
+							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+						{
+							cost += WALL_COST;
+						}
 					}
 				}
 			}
@@ -134,13 +138,17 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			if (cost > maxCost)
 			{
 				//1) 발견해봤던 곳이었을시엔
-				if ((*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->getIsFind())
+				if (playerIdx.x + j >= 0 && playerIdx.x + j <= _vvLightMap[0][0].size() - 1 &&
+					playerIdx.y + i >= 0 && playerIdx.y + i <= _vvLightMap->size() - 1)
 				{
-					//1-1) 그곳을 다시 발견했을때의 값으로 칠함
-					(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(OPACITY_FIND);
+					if ((*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->getIsFind())
+					{
+						//1-1) 그곳을 다시 발견했을때의 값으로 칠함
+						(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(OPACITY_FIND);
+					}
+					//2) 이아래는 다 건너뜀
+					continue;
 				}
-				//2) 이아래는 다 건너뜀
-				continue;
 			}
 			
 			//	2. 최대 코스트 안에 도착했을경우(범위안에 있엇던경우)
@@ -158,7 +166,7 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
 			if (playerIdx.y + i >= 0 && playerIdx.x + i >= 0									// 터짐방지
-				&&playerIdx.y <= _vvObj->size() && playerIdx.x <= _vvObj[0].size()				// 터짐방지
+				&&playerIdx.y <= _vvObj->size() && playerIdx.x <= _vvObj[0][0].size()				// 터짐방지
 				&&(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= OBJ_WALL1 &&	// 속성이 벽이면
 				(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= OBJ_DOOR_SIDE)	// 속성이 벽이면
 			{
@@ -217,7 +225,7 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 	}
 
 	//터짐방지
-	if (playerIdx.x - (torchRange + 1) >= 0 && playerIdx.x - (torchRange + 1) <= _vvLightMap[0].size() - 1
+	if (playerIdx.x - (torchRange + 1) >= 0 && playerIdx.x - (torchRange + 1) <= _vvLightMap[0][0].size() - 1
 		&&(*_vvLightMap)[playerIdx.y][playerIdx.x - (torchRange + 1)]->getIsFind())
 	{
 		//칠하고
@@ -235,9 +243,8 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			(*_vvLightMap)[playerIdx.y + 1][playerIdx.x - (torchRange + 1)]->setOpacity(OPACITY_FIND);
 		}
 	}
-
 	//터짐방지
-	if (playerIdx.x + (torchRange + 1) >= 0 && playerIdx.x + (torchRange + 1) <= _vvLightMap[0].size() - 1
+	if (playerIdx.x + (torchRange + 1) >= 0 && playerIdx.x + (torchRange + 1) <= _vvLightMap[0][0].size() - 1
 		&&(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->getIsFind())
 	{
 		//칠하고
@@ -433,4 +440,28 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 		//}
 	}
 
+}
+
+void rayCast::checkMap(POINT playerIdx, int torchRange, int tileSizeX, int tileSizeY)
+{
+	for (int i = 0; i < tileSizeY; i++)
+	{
+		for (int j = 0; j < tileSizeX; j++)
+		{
+			if (i >= playerIdx.y - torchRange && playerIdx.y + torchRange <= i &&
+				j >= playerIdx.x - torchRange && playerIdx.x + torchRange <= j)
+			{
+				continue;
+			}
+
+			if ((*_vvLightMap)[i][j]->getIsFind())
+			{
+				(*_vvLightMap)[i][j]->setOpacity(OPACITY_FIND);
+			}
+			else
+			{
+				(*_vvLightMap)[i][j]->setOpacity(1.0f);
+			}
+		}
+	}
 }

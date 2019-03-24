@@ -83,3 +83,13 @@ void tile::objSetDefault()
 	setImgNum(IMG_NONE);
 	setIsAvailMove(true);
 }
+
+void tile::setWaterTile()
+{
+	setImg(IMAGEMANAGER->findImage("tile"));
+	setFrameX(7);
+	setFrameY(4);
+	setAttribute(TILE_WATER);
+	setImgNum(IMG_TILE);
+	setIsAvailMove(true);
+}

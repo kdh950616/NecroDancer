@@ -24,8 +24,8 @@ struct tagBeat
 	}
 };
 
-#define SOUNDBUFFER 100
-#define EXTRACHANNELBUFFER 100
+#define SOUNDBUFFER 200
+#define EXTRACHANNELBUFFER 200
 
 #define TOTALSOUNDBUFFER SOUNDBUFFER + EXTRACHANNELBUFFER
 
@@ -68,6 +68,8 @@ private:
 	float*	_specLeft;
 	float*	_specRight;
 	float*  _spec;
+	float _volume = 1.0f;
+	float _effectVol = 1.0f;
 
 public:
 	HRESULT init();
@@ -76,6 +78,7 @@ public:
 
 	void addSound(string keyName, string soundName, bool bgm, bool loop);
 	void play(string keyName, float volume = 1.0f); // 0.0 ~ 1.0f -> 0 ~ 255
+	void playEff(string keyName);
 	void stop(string keyName);
 	void pause(string keyName);
 	void resume(string keyName);
@@ -116,6 +119,7 @@ public:
 	void setPitch(float pitch);									//함정걸렸을때 피치조절
 	int getPosition(string keyName);							//현재길이 받아옴
 	int getLength(string keyName);								//노래 전체길이
+	void setZoneVolume(string keyName, float volume);
 
 	void getSingShopkeeper(string keyName);						//상점주인 스펙트럼
 	void ShopVolume(string keyName, float volume);				//상점주인용 볼륨조절
@@ -138,5 +142,15 @@ public:
 	void								setShopVolume(float volume) { _shopVolume = volume; }
 
 	float*								getSpec() { return _spec; }
+
+	float getEffectVol() { return _effectVol; }
+	void setEffectVol(float effectVol) { _effectVol = effectVol; }
+	void EffectVolDown() { _effectVol -= 0.1f; if (_effectVol < 0) _effectVol = 0; }
+	void EffectVolUp() { _effectVol += 0.1f; if (_effectVol > 1) _effectVol = 1; }
+
+	float getVolume() { return _volume; }
+	void setVolume(float volume) { _volume = volume; }
+	void VolDown() { _volume -= 0.1f; if (_volume < 0) _volume = 0; }
+	void VolUp() { _volume += 0.1f; if (_volume > 1) _volume = 1; }
 };
 

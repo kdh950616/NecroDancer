@@ -61,14 +61,50 @@
     <Filter Include="PlayGround\units\enemy">
       <UniqueIdentifier>{7e091553-1b7f-48fe-91eb-ff559ffe38f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayGround\units\boss">
-      <UniqueIdentifier>{fd096675-5021-4b24-b46e-924e1ad3d221}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PlayGround\UIs">
       <UniqueIdentifier>{877a2643-5410-4436-8026-60657f602f0c}</UniqueIdentifier>
     </Filter>
     <Filter Include="PlayGround\mapTool">
       <UniqueIdentifier>{59190ec2-8c4c-47a1-a019-e06cd63a659d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal">
+      <UniqueIdentifier>{220ff1b5-7637-4820-917c-aee104a830cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\bat">
+      <UniqueIdentifier>{b2e3d9a6-8007-4789-99ad-c52ab2095b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\skeleton">
+      <UniqueIdentifier>{9978dbb4-b9e1-41c0-b453-26d45990f984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\slime">
+      <UniqueIdentifier>{b4d52071-e3cf-4f78-b04b-1bf21cb1b47d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\miniboss">
+      <UniqueIdentifier>{6a2247f1-b56e-443f-ab9f-7f17ab22ff0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\boss">
+      <UniqueIdentifier>{fd096675-5021-4b24-b46e-924e1ad3d221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\zombie">
+      <UniqueIdentifier>{3c7862ee-86a5-4a11-b7c8-4dd1a994abd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\wraith">
+      <UniqueIdentifier>{d6f1f714-056c-4dc4-a372-4c849890f296}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\clone">
+      <UniqueIdentifier>{d0544986-4bb6-464b-b822-cfad4471d3c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\normal\armadillo">
+      <UniqueIdentifier>{4daea43d-52b5-4ae3-9d1f-cf90cfe5c638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\incompletion">
+      <UniqueIdentifier>{73a5f53c-c049-4225-9536-7596ec1ddc23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\boss\need work">
+      <UniqueIdentifier>{010571f6-3cf1-46e5-b0b2-e8d23a892026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units\enemy\boss\coralriff">
+      <UniqueIdentifier>{517bdf3b-4609-447b-b42e-bc176cf28348}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,14 +234,74 @@
     <ClInclude Include="enemy.h">
       <Filter>PlayGround\units\enemy</Filter>
     </ClInclude>
-    <ClInclude Include="skeleton.h">
-      <Filter>PlayGround\units\enemy</Filter>
-    </ClInclude>
     <ClInclude Include="enemyMgr.h">
       <Filter>PlayGround\units</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>PlayGround\units</Filter>
+    </ClInclude>
+    <ClInclude Include="skeleton.h">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="skeleton_2.h">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="skeleton_3.h">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="bat.h">
+      <Filter>PlayGround\units\enemy\normal\bat</Filter>
+    </ClInclude>
+    <ClInclude Include="bat_2.h">
+      <Filter>PlayGround\units\enemy\normal\bat</Filter>
+    </ClInclude>
+    <ClInclude Include="slime.h">
+      <Filter>PlayGround\units\enemy\normal\slime</Filter>
+    </ClInclude>
+    <ClInclude Include="slime_Blue.h">
+      <Filter>PlayGround\units\enemy\normal\slime</Filter>
+    </ClInclude>
+    <ClInclude Include="zombie.h">
+      <Filter>PlayGround\units\enemy\normal\zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="wraith.h">
+      <Filter>PlayGround\units\enemy\normal\wraith</Filter>
+    </ClInclude>
+    <ClInclude Include="clone.h">
+      <Filter>PlayGround\units\enemy\normal\clone</Filter>
+    </ClInclude>
+    <ClInclude Include="armadillo.h">
+      <Filter>PlayGround\units\enemy\normal\armadillo</Filter>
+    </ClInclude>
+    <ClInclude Include="minotaur.h">
+      <Filter>PlayGround\units\enemy\incompletion</Filter>
+    </ClInclude>
+    <ClInclude Include="dragon.h">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClInclude>
+    <ClInclude Include="bat_Boss.h">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClInclude>
+    <ClInclude Include="banshee.h">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_Coralriff.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="coralriff.h">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClInclude>
+    <ClInclude Include="drum.h">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClInclude>
+    <ClInclude Include="horn.h">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClInclude>
+    <ClInclude Include="violin.h">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClInclude>
+    <ClInclude Include="keybord.h">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,17 +413,77 @@
     <ClCompile Include="lightMap.cpp">
       <Filter>2DFramework</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>PlayGround\units\enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="skeleton.cpp">
-      <Filter>PlayGround\units\enemy</Filter>
-    </ClCompile>
     <ClCompile Include="enemyMgr.cpp">
       <Filter>PlayGround\units</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="skeleton.cpp">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="skeleton_2.cpp">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="skeleton_3.cpp">
+      <Filter>PlayGround\units\enemy\normal\skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="bat.cpp">
+      <Filter>PlayGround\units\enemy\normal\bat</Filter>
+    </ClCompile>
+    <ClCompile Include="bat_2.cpp">
+      <Filter>PlayGround\units\enemy\normal\bat</Filter>
+    </ClCompile>
+    <ClCompile Include="slime.cpp">
+      <Filter>PlayGround\units\enemy\normal\slime</Filter>
+    </ClCompile>
+    <ClCompile Include="slime_Blue.cpp">
+      <Filter>PlayGround\units\enemy\normal\slime</Filter>
+    </ClCompile>
+    <ClCompile Include="zombie.cpp">
+      <Filter>PlayGround\units\enemy\normal\zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="wraith.cpp">
+      <Filter>PlayGround\units\enemy\normal\wraith</Filter>
+    </ClCompile>
+    <ClCompile Include="clone.cpp">
+      <Filter>PlayGround\units\enemy\normal\clone</Filter>
+    </ClCompile>
+    <ClCompile Include="armadillo.cpp">
+      <Filter>PlayGround\units\enemy\normal\armadillo</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>PlayGround\units\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="minotaur.cpp">
+      <Filter>PlayGround\units\enemy\incompletion</Filter>
+    </ClCompile>
+    <ClCompile Include="dragon.cpp">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClCompile>
+    <ClCompile Include="bat_Boss.cpp">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClCompile>
+    <ClCompile Include="banshee.cpp">
+      <Filter>PlayGround\units\enemy\miniboss</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_Coralriff.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="coralriff.cpp">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClCompile>
+    <ClCompile Include="drum.cpp">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClCompile>
+    <ClCompile Include="horn.cpp">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClCompile>
+    <ClCompile Include="violin.cpp">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClCompile>
+    <ClCompile Include="keybord.cpp">
+      <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

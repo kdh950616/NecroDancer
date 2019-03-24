@@ -33,14 +33,14 @@ enum OBJ_ATTR
 	ENEMY1_2_3,	// 노란해골
 	ENEMY1_3_1,	// 초록슬라임
 	ENEMY1_3_2,	// 파란슬라임
-	ENEMY1_3_3,	// 노란슬라임
-	ENEMY2_1_1,	// 유령
+	ENEMY2_1_1,	// 클론
 	ENEMY2_1_2,	// 레이스
-	ENEMY2_2_1,	// 원숭이
+	ENEMY2_2_1,	// 아르마딜로
 	ENEMY2_2_2,	// 좀비
 	ENEMY3_1_1,	// 미노타우로스
 	ENEMY3_1_2,	// 용
-	ENEMY3_1_3,	// 황금박쥐
+	ENEMY3_2_1,	// 황금박쥐
+	ENEMY3_2_2, // 밴쉬
 	ENEMY4_1_1,	// 폰
 	ENEMY4_1_2,	// 비숍
 	ENEMY4_1_3,	// 룩
@@ -154,6 +154,7 @@ public:
 	//=============================
 
 	void objSetDefault();
+	void setWaterTile();
 
 };
 

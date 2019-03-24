@@ -28,6 +28,33 @@
 //	ENEMY4_2_3,	// 킹
 //};
 
+enum tagEnemyType
+{
+	BAT,
+	SKELETON,
+	SLIME,
+	ZOMBIE,
+	WRAITH,
+	CLONE,
+	ARMADILLO,
+	MINOTAUR,
+	DRAGON,
+	BAT_BOSS,
+	BANSHEE,
+	PAWN,
+	KNIGHT,
+	BISHOP,
+	ROOK,
+	QUEEN,
+	KING,
+	CORALRIFF,	//윤쟁누나
+	KEYBORD,
+	VIOLIN,
+	HORN,
+	DRUM,
+	END
+};
+
 class player;
 
 class enemy : public gameNode
@@ -58,6 +85,7 @@ protected:
 
 	D2D1_RECT_F _rc;
 
+	int _enemyType;
 	int _maxHp;
 	int _curHp;
 
@@ -76,7 +104,10 @@ protected:
 	bool _isLeft;		// 렌더용 -> 트루면 왼쪽방향 이미지 출력 펄스면 오른쪽방향
 	bool _isFind;		// 발견했니? 발견했을떄만 쫓아오는놈들을 위해 만듬
 	bool _isLight;		// 밝은상태니? -> 펄스면 그림자 이미지로
-	bool _isSpecialAct; // 특수상태니? (해골 머리떨어지기, 원숭이 붙잡기상태 등)
+	bool _isSpecialAct; // 특수상태니? (해골 머리떨어지기, 원숭이 붙잡기상태 등)  or 코랄리프는 이거 트루되면 에이스타로 쫓아옴
+	bool _isBackward;	// 도망가다가 벽에 박으면 절반갔다가 되돌아옴
+	bool _isNeedAstar;	// 에이스타 필요하니?
+
 
 	//그림자
 	image* _shadowImg;
@@ -88,9 +119,17 @@ protected:
 	//가야할곳 구하기용
 	list<POINT> _listPath;
 	list<POINT>::iterator _listIPath;
+	
+	//코랄리프용
+	int _moveCount;
+	bool _isShowShadow;
+	int _shakeVal;
+	int _shakeCount = 0;
+	bool _isAttack;
 
+	//딥블루스용
 
-public:
+public: 
 	enemy();
 	~enemy();
 
@@ -100,6 +139,12 @@ public:
 	virtual void render();
 
 	//=============================================
+
+	virtual void makeEnemyIdx(POINT idx);
+	virtual void unfoundFunc();
+	virtual void lightFunc();
+	virtual void showAttackEffect();
+	//=============================================
 	//					link
 	//=============================================
 
@@ -107,9 +152,6 @@ public:
 	void linkMap(vvMap* vvMap) { _vvMap = vvMap; }
 	void linkObj(vvObj* vvObj) { _vvObj = vvObj; }
 	void linkLightMap(vvLightMap* vvLightMap) { _vvLightMap = vvLightMap; }
-
-
-	void makeEnemyIdx(POINT idx);
 
 	//=============================================
 	//					get
@@ -160,6 +202,16 @@ public:
 	//					즉석 추가 목록
 	//=============================================
 	void setIsBeat(bool isBeat)					{ _isBeat = isBeat; }
-	list<POINT>* getListPath()							{ return &_listPath; }
+	list<POINT>* getListPath()					{ return &_listPath; }
+	bool getIsSpecialAct()						{ return _isSpecialAct; }
+	int getEnemyType()							{ return _enemyType; }
+	bool getIsNeedAstar()						{ return _isNeedAstar; }
+	int getBeatCount()							{ return _beatCount; }
+	void setBeatCount(int beatCount)			{ _beatCount = beatCount; }
+	void setIsFind(bool isFind) { _isFind = isFind; }
+	bool getIsFind() { return _isFind; }
+	void setDirection(POINT direction) { _direction = direction; }
+	POINT getDirection() { return _direction; }
+	virtual bool getIsStun() { return 0; }
 };
 

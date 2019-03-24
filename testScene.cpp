@@ -32,9 +32,12 @@ HRESULT testScene::init()
 	_em->linkMap(&_vvMap);
 	_em->linkObj(&_vvObj);
 	_em->linkLightMap(&_vvLightMap);
+	_em->linkTime(&_time);
 	_em->init();
+	_em->linkStageKeyName(&_stageKeyName);
 
-
+	//이거 링크 순서 핵중요
+	_player->linkEnemyMgr(_em);
 
 	delete _mapLoader;
 	_mapLoader = nullptr;
@@ -51,12 +54,17 @@ void testScene::update()
 
 	playerUpdate();
 	
-	_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, 2);
+	_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, 3);
 
 	beatUpdate();
 	
 	_em->update();
 	_em->setIsBeat(_isBeat);
+
+	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
+	{
+		_showText == true ? _showText = false : _showText = true;
+	}
 }
 
 void testScene::render()
@@ -65,13 +73,14 @@ void testScene::render()
 
 	objRender();
 
-	lightMapRender();
+	_em->render();
+	
+	//lightMapRender();
 
 	beatRender();
 
+	
 	textRender();
-
-	_em->render();
 }
 
 
@@ -130,6 +139,7 @@ void testScene::playerInit()
 	_player = new player;
 	_player->setMapAdressLink(&_vvMap);
 	_player->setObjAdressLink(&_vvObj);
+	_player->setPosCT({ (float)(_vvMap)[10][10]->getPos().x, (float)(_vvMap)[10][10]->getPos().y });
 	_player->init();
 }
 
@@ -145,10 +155,11 @@ void testScene::beatInit()
 	//_stageKeyName = "mapTool";
 	_stageKeyName = "testScene";
 	_beatFileName = "sounds/zone/zone1_1.txt";
-	_volume = 0.1f;
+	SOUNDMANAGER->setVolume(VOLUME);
 	_pitch = 1.0f;
+	
 
-	_mapLoader->beatInit(_stageKeyName, _beatFileName, _volume, &_vBeat);
+	_mapLoader->beatInit(_stageKeyName, _beatFileName, SOUNDMANAGER->getVolume(), &_vBeat);
 
 	_heartImg = IMAGEMANAGER->findImage("beat_Heart");
 
@@ -156,12 +167,12 @@ void testScene::beatInit()
 					(float)WINSIZEY - 100,
 					(float)WINSIZEX / 2 + 80,
 					(float)WINSIZEY - 52 };
-	_rc_Wrong = { (float)WINSIZEX / 2 - 150,
+	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 150,
+					(float)WINSIZEX / 2 + 120,
 					(float)WINSIZEY - 52 };
 
-
+	SOUNDMANAGER->setEffectVol(VOLUME_EFF);
 }
 
 //===========================================
@@ -218,7 +229,7 @@ void testScene::beatUpdate()
 	//	}
 	//}
 
-	if (_time  > _vBeat.begin()->beat)
+	if (_time - 120  > _vBeat.begin()->beat)
 	{
 		_isBeat = true;
 		_heartImg->SetFrameX(1);
@@ -257,7 +268,7 @@ void testScene::beatUpdate()
 					}
 				}
 			}
-			if (_vBeat[i].isRight == false)
+			else if (_vBeat[i].isRight == false)
 			{
 				_vBeat[i].opacity -= 0.2f;
 			}
@@ -307,7 +318,20 @@ void testScene::objRender()
 			{
 				_player->render();
 			}
-
+	
+			if (_vvObj[i][j]->getIsAvailMove() == false && _vvObj[i][j]->getAttribute() == OBJ_NONE && _vvObj[i][j]->getImgNum() == IMG_NONE)
+			{
+				for (int k = 0; k < _em->getVEnemy().size(); k++)
+				{
+					if (_vvObj[i][j]->getIdx().x == _em->getVEnemy()[k]->getIdx().x && _vvObj[i][j]->getIdx().y == _em->getVEnemy()[k]->getIdx().y)
+					{
+						_em->getVEnemy()[k]->render();
+						break;
+					}
+				}
+			}
+	
+	
 			if (_vvObj[i][j]->getImg() != nullptr
 				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
 				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
@@ -396,12 +420,12 @@ void testScene::beatRender()
 {
 	for (int i = 0; i < _vBeat.size(); i++)
 	{
-		if (_vBeat[i].rc_Left.left > 0)
+		if (_vBeat[i].rc_Left.left > 0 && _vBeat[i].rc_Left.left < WINSIZEX / 2)
 		{
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top,10,50,_vBeat[i].opacity);
 			D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
 		}
-		if (_vBeat[i].rc_Right.right < WINSIZEX)
+		if (_vBeat[i].rc_Right.right < WINSIZEX && _vBeat[i].rc_Right.right > WINSIZEX / 2)
 		{
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top,10,50, _vBeat[i].opacity);
 			D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
@@ -419,6 +443,25 @@ void testScene::textRender()
 	WCHAR str[128];
 	swprintf_s(str, L"isChanged : %d", _vBeat.size());
 	D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
+	swprintf_s(str, L"time : %d", _time);
+	D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
+
+	if (_showText)
+	{
+		for (int i = 0; i < _tileSizeY; i++)
+		{
+			for (int j = 0; j < _tileSizeX; j++)
+			{
+				if (!_vvObj[i][j]->getIsAvailMove())
+				{
+					swprintf_s(str, L"X");
+					D2DMANAGER->drawText(str, (int)_vvObj[i][j]->getPos().x - CAMERA->getPosX(), (int)_vvObj[i][j]->getPos().y - CAMERA->getPosY(), 20, 0xff00ff);
+				}
+
+
+			}
+		}
+	}
 }
 
 //===========================================

@@ -196,9 +196,6 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 						case ENEMY1_3_2:
 							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy1"));
 						break;
-						case ENEMY1_3_3:
-							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy1"));
-						break;
 					}
 				break;
 				case IMG_ENEMY2:
@@ -216,7 +213,6 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 						case ENEMY2_2_2:
 							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy2"));
 						break;
-
 					}
 				break;
 				case IMG_ENEMY3:	
@@ -228,7 +224,10 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 						case ENEMY3_1_2:
 							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy3"));
 						break;
-						case ENEMY3_1_3:
+						case ENEMY3_2_1:
+							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy3"));
+						break;
+						case ENEMY3_2_2:
 							(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy3"));
 						break;
 					}
@@ -274,68 +273,110 @@ void mapLoader::makeEnemy(vvObj* vvObj, int * tileSizeX, int * tileSizeY)
 			switch ((*vvObj)[i][j]->getAttribute())
 			{
 				case ENEMY1_1_1:				// °ËÀº¹ÚÁã
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_1_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY1_1_2:				// »¡°£¹ÚÁã
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_1_2, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY1_2_1:				// ÇÏ¾áÇØ°ñ
-					setNewObjTile((*vvObj)[i][j], i, j);
+					setNewObjTile((*vvObj)[i][j], j,i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
 					_em->createEnemy(ENEMY1_2_1, (*vvObj)[i][j]->getIdx());
 				break;
-				case ENEMY1_2_2:				// ±î¸¸ÇØ°ñ
-
+				case ENEMY1_2_2:				// ³ë¶õÇØ°ñ
+					setNewObjTile((*vvObj)[i][j], j,i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_2_2, (*vvObj)[i][j]->getIdx());
 				break;
-				case ENEMY1_2_3:				// ³ë¶õÇØ°ñ
-
+				case ENEMY1_2_3:				// ±î¸¸ÇØ°ñÇØ°ñ
+					setNewObjTile((*vvObj)[i][j], j,i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_2_3, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY1_3_1:				// ÃÊ·Ï½½¶óÀÓ
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_3_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY1_3_2:				// ÆÄ¶õ½½¶óÀÓ
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY1_3_2, (*vvObj)[i][j]->getIdx());
 				break;
-				case ENEMY1_3_3:				// ³ë¶õ½½¶óÀÓ
-
-				break;
-				case ENEMY2_1_1:				// À¯·É
-
+				case ENEMY2_1_1:				// Å¬·Ð
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY2_1_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY2_1_2:				// ·¹ÀÌ½º
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(true);
+					_em->createEnemy(ENEMY2_1_2, (*vvObj)[i][j]->getIdx());
 				break;
-				case ENEMY2_2_1:				// ¿ø¼þÀÌ
-
+				case ENEMY2_2_1:				// ¾Æ¸£¸¶µô·Î
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY2_2_1, (*vvObj)[i][j]->getIdx());
+					break;
 				break;
 				case ENEMY2_2_2:				// Á»ºñ
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY2_2_2, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY3_1_1:				// ¹Ì³ëÅ¸¿ì·Î½º
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(true);
+					//_em->createEnemy(ENEMY3_1_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY3_1_2:				// ¿ë
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY3_1_2, (*vvObj)[i][j]->getIdx());
 				break;
-				case ENEMY3_1_3:				// È²±Ý¹ÚÁã
-
+				case ENEMY3_2_1:				// È²±Ý¹ÚÁã
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY3_2_1, (*vvObj)[i][j]->getIdx());
+				break;
+				case ENEMY3_2_2:				// ¹ê½¬
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY3_2_2, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_1_1:				// Æù
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_1_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_1_2:				// ºñ¼ó
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_1_2, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_1_3:				// ·è
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_1_3, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_2_1:				// ³ªÀÌÆ®
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_2_1, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_2_2:				// Äý
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_2_2, (*vvObj)[i][j]->getIdx());
 				break;
 				case ENEMY4_2_3:				// Å·
-
+					setNewObjTile((*vvObj)[i][j], j, i);
+					(*vvObj)[i][j]->setIsAvailMove(false);
+					_em->createEnemy(ENEMY4_2_3, (*vvObj)[i][j]->getIdx());
 
 				break;
 			}

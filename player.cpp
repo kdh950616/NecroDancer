@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
+#include "enemyMgr.h"
 
 
 player::player()
@@ -17,13 +18,13 @@ HRESULT player::init()
 
 
 	//일단 걍 생성
-	_posCT = { (float)(*_vvMap)[10][10]->getPos().x, (float)(*_vvMap)[10][10]->getPos().y};
+	//_posCT = { (float)(*_vvMap)[20][6]->getPos().x, (float)(*_vvMap)[20][6]->getPos().y};
 	_savePos = _posCT;
 	_rc = {	(float)_posCT.x,
 			(float)_posCT.y,
 			(float)_posCT.x + TILESIZE,
 			(float)_posCT.y + TILESIZE};
-
+	_dmg = 1;
 	_speed = SPEED;
 	_jumpPower = JUMPPOWER_HORIZON;
 	_isMove = false;
@@ -80,6 +81,145 @@ void player::render()
 	}
 }
 
+void player::attackFunc()
+{
+	for (int i = 0; i < _em->getVEnemy().size(); i++)
+	{
+		if (_em->getVEnemy()[i]->getIdx().x == _idx.x + _direction.x && _em->getVEnemy()[i]->getIdx().y == _idx.y + _direction.y)
+		{
+			if (_em->getVEnemy()[i]->getEnemyType() == ARMADILLO && !_em->getVEnemy()[i]->getIsStun())
+			{
+				SOUNDMANAGER->playEff("armadillo_Block");
+				_em->getVEnemy()[i]->setDirection(_direction);
+			}
+			else if (_em->getVEnemy()[i]->getEnemyType() == BANSHEE)
+			{
+				_em->getVEnemy()[i]->setDirection(_direction);
+				_em->getVEnemy()[i]->setCurHp(_em->getVEnemy()[i]->getCurHp() - _dmg);
+
+				int rnd = RND->getFromIntTo(1, 4);
+				if (_em->getVEnemy()[i]->getMaxHp() - _em->getVEnemy()[i]->getCurHp() == 1)
+				{
+					SOUNDMANAGER->setZoneVolume(*_em->getStageKeyName(), SOUNDMANAGER->getVolume() / 25);
+					SOUNDMANAGER->playEff("banshee_Loop");
+					float tmp = SOUNDMANAGER->getEffectVol() / 10;
+					SOUNDMANAGER->setEffectVol(SOUNDMANAGER->getEffectVol() / 10);
+					tmp = SOUNDMANAGER->getEffectVol();
+				}
+
+				switch (rnd)
+				{
+				case 1:
+					SOUNDMANAGER->playEff("banshee_Hit1");
+					break;
+				case 2:
+					SOUNDMANAGER->playEff("banshee_Hit2");
+					break;
+				case 3:
+					SOUNDMANAGER->playEff("banshee_Hit3");
+					break;
+				}
+			}
+			else
+			{
+				_em->getVEnemy()[i]->setCurHp(_em->getVEnemy()[i]->getCurHp() - _dmg);
+				int rnd;
+				switch (_em->getVEnemy()[i]->getEnemyType())
+				{
+					case BAT:
+						SOUNDMANAGER->playEff("bat_Hit");
+					break;
+					case SKELETON:
+						rnd = RND->getFromIntTo(1, 5);
+						switch (rnd)
+						{
+						case 1:
+							SOUNDMANAGER->playEff("skeleton_Hit1");
+							break;
+						case 2:
+							SOUNDMANAGER->playEff("skeleton_Hit2");
+							break;
+						case 3:
+							SOUNDMANAGER->playEff("skeleton_Hit3");
+							break;
+						case 4:
+							SOUNDMANAGER->playEff("skeleton_Hit4");
+							break;
+						}
+					break;
+					case SLIME:
+						rnd = RND->getFromIntTo(1, 5);
+						switch (rnd)
+						{
+						case 1:
+							SOUNDMANAGER->playEff("slime_Hit1");
+							break;
+						case 2:
+							SOUNDMANAGER->playEff("slime_Hit2");
+							break;
+						case 3:
+							SOUNDMANAGER->playEff("slime_Hit3");
+							break;
+						case 4:
+							SOUNDMANAGER->playEff("slime_Hit4");
+							break;
+						}
+					break;
+					case ARMADILLO:
+						SOUNDMANAGER->playEff("armadillo_Hit");
+					break;
+					case DRAGON:
+						rnd = RND->getFromIntTo(1, 4);
+						switch (rnd)
+						{
+						case 1:
+							SOUNDMANAGER->playEff("dragon_Hit1");
+							break;
+						case 2:
+							SOUNDMANAGER->playEff("dragon_Hit2");
+							break;
+						case 3:
+							SOUNDMANAGER->playEff("dragon_Hit3");
+							break;
+						}
+					break;
+					case BAT_BOSS:
+						SOUNDMANAGER->playEff("bat_Boss_Hit");
+					break;
+					//case PAWN:
+					//break;
+					//case KNIGHT:
+					//break;
+					//case BISHOP:
+					//break;
+					//case ROOK:
+					//break;
+					//case QUEEN:
+					//break;
+					//case KING:
+					//break;
+					//case CORALRIFF:
+					//break;
+					//case PIANO:
+					//break;
+					//case VIOLIN:
+					//break;
+					//case TRUNPET:
+					//break;
+					//case DRUM:
+					//break;
+					//case END:
+					//break;
+				}
+
+				break;
+			}
+
+
+		}
+	}
+}
+
 //===========================================
 //					init
 //===========================================
@@ -130,14 +270,33 @@ void player::move()
 		{
 			_direction = { -1, 0 };
 			_isReverse = true;
+			//못가는 곳이엇을때
 			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
 			{
-				objFunc(_direction);
+				//그게 벽이면
+				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
+					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+				{
+					//벽없애기
+					objFunc(_direction);
+				}
+				//벽이 아닌 다른거 -> 적이면
+				else
+				{
+					//적만큼 돌면서 내가 공격한곳 인덱스랑 같은곳에 위치한놈 찾아내고 그놈 피 깎음
+					attackFunc();
+				}
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
 			{
 				_savePos = _posCT;
 				_vec.x -= _speed;
+				_isArrive = false;
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				//				움직일때마다 도착한곳은 갈수있냐? -> 펄스로  내가 전에있던곳은 트루로 바꿔줘야함
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 				_isMove = true;
 				_jumpPower = JUMPPOWER_HORIZON;
 				_posZ = 0;
@@ -154,12 +313,21 @@ void player::move()
 			_isReverse = false;
 			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
 			{
-				objFunc(_direction);
+				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
+					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+				{
+					objFunc(_direction);
+				}
+				else
+				{
+					attackFunc();
+				}
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
 			{
 				_savePos = _posCT;
 				_vec.x += _speed;
+				_isArrive = false;
 				_isMove = true;
 				_jumpPower = JUMPPOWER_HORIZON;
 				_posZ = 0;
@@ -175,12 +343,21 @@ void player::move()
 			_direction = { 0, -1 };
 			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
 			{
-				objFunc(_direction);
+				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
+					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+				{
+					objFunc(_direction);
+				}
+				else
+				{
+					attackFunc();
+				}
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
 			{
 				_savePos = _posCT;
 				_vec.y -= _speed;
+				_isArrive = false;
 				_isMove = true;
 				_jumpPower = JUMPPOWER_VERTICAL;
 				_posZ = 0;
@@ -196,12 +373,21 @@ void player::move()
 			_direction = { 0, 1 };
 			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
 			{
-				objFunc(_direction);
+				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
+					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+				{
+					objFunc(_direction);
+				}
+				else
+				{
+					attackFunc();
+				}
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == true)
 			{
 				_savePos = _posCT;
 				_vec.y += _speed;
+				_isArrive = false;
 				_isMove = true;
 				_jumpPower = JUMPPOWER_VERTICAL;
 				_posZ = 0;
@@ -385,6 +571,11 @@ void player::objFunc(POINT direction)
 		//_posZ = 0;
 		break;
 	}
+}
+
+void player::enemyAtk()
+{
+
 }
 
 

@@ -13,6 +13,8 @@ enum tagShovel
 	TITANIUM
 };
 
+class enemyMgr;
+
 class player : public gameNode
 {
 private:
@@ -25,7 +27,7 @@ private:
 
 	vvMap* _vvMap;					// 스테이지가 가지고있는 맵의 주소를 가지고 있을거임(용량걱정 ㄴ).
 	vvObj* _vvObj;					//			''		오브젝트				''
-
+	enemyMgr* _em;
 
 	//=========================
 	//			image
@@ -61,6 +63,8 @@ private:
 
 	POINT _idx;						//플레이어가 서있는 타일의 인덱스
 	POINT _direction;
+	vector<POINT> _vDirection;
+
 
 	//=========================
 	//			RECT
@@ -96,6 +100,7 @@ private:
 	bool _isArrive;					//도착했니? (이동하다가)
 	bool _isPressKey;				//키눌럿니?
 	bool _isBeat;					//비트에 맞니?
+	bool _isHit;					//맞았니?
 	
 
 private:
@@ -116,11 +121,15 @@ public:
 	void update();
 	void render();
 
+	void attackFunc();
 	//===========================================
 	//					link
 	//===========================================
+
 	void setMapAdressLink(vvMap* vvMap) { _vvMap = vvMap; }
 	void setObjAdressLink(vvObj* vvObj) { _vvObj = vvObj; }
+	void linkEnemyMgr(enemyMgr* em) { _em = em; }
+
 	//===========================================
 	//					init
 	//===========================================
@@ -132,6 +141,7 @@ public:
 	void move();
 	void moveCal();
 	void objFunc(POINT direction);
+	void enemyAtk();
 
 	//===========================================
 	//					render
@@ -184,5 +194,8 @@ public:
 	void setIsBeat(bool isBeat) { _isBeat = isBeat; }
 	bool getIsPressKey() { return _isPressKey; }
 	void setIsPressKey(bool isPressKey) { _isPressKey = isPressKey; }
+	POINT getDirection() { return _direction; }
+	bool getIsHit() { return _isHit; }
+	void setIsHit(bool isHit) { _isHit = isHit; }
 };
 

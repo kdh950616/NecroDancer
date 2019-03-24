@@ -153,12 +153,22 @@
   <ItemGroup>
     <ClInclude Include="action.h" />
     <ClInclude Include="animation.h" />
+    <ClInclude Include="armadillo.h" />
     <ClInclude Include="aStar.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="banshee.h" />
+    <ClInclude Include="bat.h" />
+    <ClInclude Include="bat_2.h" />
+    <ClInclude Include="bat_Boss.h" />
+    <ClInclude Include="boss_Coralriff.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="clone.h" />
+    <ClInclude Include="coralriff.h" />
     <ClInclude Include="d2dManager.h" />
+    <ClInclude Include="dragon.h" />
+    <ClInclude Include="drum.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="enemy.h" />
@@ -166,11 +176,13 @@
     <ClInclude Include="fontLoader.h" />
     <ClInclude Include="fontLoaderCommon.h" />
     <ClInclude Include="gameNode.h" />
+    <ClInclude Include="horn.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="introScene.h" />
     <ClInclude Include="keyAniManager.h" />
+    <ClInclude Include="keybord.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="lightMap.h" />
     <ClInclude Include="loadingScene.h" />
@@ -179,6 +191,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="mapLoader.h" />
+    <ClInclude Include="minotaur.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="randomFunction.h" />
@@ -187,6 +200,10 @@
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="skeleton.h" />
+    <ClInclude Include="skeleton_2.h" />
+    <ClInclude Include="skeleton_3.h" />
+    <ClInclude Include="slime.h" />
+    <ClInclude Include="slime_Blue.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1.h" />
     <ClInclude Include="stage2.h" />
@@ -200,27 +217,42 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="violin.h" />
+    <ClInclude Include="wraith.h" />
+    <ClInclude Include="zombie.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="armadillo.cpp" />
     <ClCompile Include="aStar.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="banshee.cpp" />
+    <ClCompile Include="bat.cpp" />
+    <ClCompile Include="bat_2.cpp" />
+    <ClCompile Include="bat_Boss.cpp" />
+    <ClCompile Include="boss_Coralriff.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="clone.cpp" />
+    <ClCompile Include="coralriff.cpp" />
     <ClCompile Include="d2dManager.cpp" />
+    <ClCompile Include="dragon.cpp" />
+    <ClCompile Include="drum.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyMgr.cpp" />
     <ClCompile Include="fontLoader.cpp" />
     <ClCompile Include="gameNode.cpp" />
+    <ClCompile Include="horn.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="introScene.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
+    <ClCompile Include="keybord.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="lightMap.cpp" />
     <ClCompile Include="loadingScene.cpp" />
@@ -229,11 +261,16 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="mapLoader.cpp" />
+    <ClCompile Include="minotaur.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="rayCast.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="skeleton.cpp" />
+    <ClCompile Include="skeleton_2.cpp" />
+    <ClCompile Include="skeleton_3.cpp" />
+    <ClCompile Include="slime.cpp" />
+    <ClCompile Include="slime_Blue.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1.cpp" />
     <ClCompile Include="stage2.cpp" />
@@ -250,7 +287,10 @@
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="violin.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
+    <ClCompile Include="wraith.cpp" />
+    <ClCompile Include="zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc" />

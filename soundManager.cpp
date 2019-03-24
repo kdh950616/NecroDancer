@@ -267,6 +267,35 @@ int soundManager::getLength(string keyName)
 	}
 }
 
+void soundManager::setZoneVolume(string keyName,float volume)
+{
+	int count = 0;
+	int count_BGM, count_shop;														//배경, 상점주인용 카운트
+
+	string keyName_shop = keyName + "_shopkeeper";									//상점주인용 키값을 위해 쓰인다.
+	arrSoundsIter iter_BGM = _mTotalSounds.begin();									//배경음악용 iter
+	arrSoundsIter iter_shop = _mTotalSounds.begin();								//상점주인용 iter
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			iter_BGM = iter;
+			count_BGM = count;
+		}
+		else if (keyName_shop == iter->first)
+		{
+
+			iter_shop = iter;
+			count_shop = count;
+		}
+	}
+
+	_channel[count_BGM]->setVolume(volume);
+	_channel[count_shop]->setVolume(volume);
+}
+
 int soundManager::getPosition(string keyName)
 {
 	int count = 0;
@@ -471,6 +500,37 @@ void soundManager::play(string keyName, float volume)// 0.0 ~ 1.0f -> 0 ~ 255
 
 			_system->playSound(FMOD_CHANNEL_FREE, sound, false, &_channel[count]);
 			_channel[count]->setVolume(volume);
+
+			break;
+		}
+	}
+}
+
+void soundManager::playEff(string keyName)
+{
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+	for (iter; iter != _mTotalSounds.end(); ++iter, ++count)
+	{
+		Sound* sound = *iter->second;
+		SoundGroup* soundGroup = nullptr;
+
+		if (keyName == iter->first)
+		{
+			// 어느 사운드 그룹에 속해있는지 확인
+			sound->getSoundGroup(&soundGroup);
+
+			if (soundGroup == _bgmSoundGroup)	// bgm soundgroup
+			{
+				_bgmSoundGroup->stop(); // 플레이중인 bgm 정지
+				_channel[count]->setChannelGroup(_bgmGroup);
+			}
+			else								// effect soundgroup
+				_channel[count]->setChannelGroup(_effectGroup);
+
+			_system->playSound(FMOD_CHANNEL_REUSE, sound, false, &_channel[count]);
+			_channel[count]->setVolume(_effectVol);
 
 			break;
 		}

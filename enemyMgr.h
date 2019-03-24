@@ -1,9 +1,28 @@
 #pragma once
 #include "gameNode.h"
 #include "tile.h"
-#include "skeleton.h"
 #include "lightMap.h"
 #include "aStar.h"
+#include "skeleton.h"
+#include "skeleton_2.h"
+#include "skeleton_3.h"
+#include "bat.h"
+#include "bat_2.h"
+#include "slime.h"
+#include "slime_Blue.h"
+#include "zombie.h"
+#include "wraith.h"
+#include "clone.h"
+#include "armadillo.h"
+#include "minotaur.h"
+#include "dragon.h"
+#include "bat_Boss.h"
+#include "banshee.h"
+#include "drum.h"
+#include "horn.h"
+#include "keybord.h"
+#include "violin.h"
+#include "coralriff.h"
 
 class player;
 
@@ -30,6 +49,11 @@ private:
 
 	bool _isBeat;
 
+	int* _time;
+	string* _stageKeyName;
+
+private:
+	const int ANIMATION_FPS = 5;
 public:
 	enemyMgr();
 	~enemyMgr();
@@ -45,8 +69,16 @@ public:
 	void linkMap(vvMap* vvMap) { _vvMap = vvMap; }
 	void linkObj(vvObj* vvObj) { _vvObj = vvObj; }
 	void linkLightMap(vvLightMap* vvLightMap) { _vvLightMap = vvLightMap; }
+	void linkTime(int* time) { _time = time; }
+	void linkStageKeyName(string* stageKeyName) { _stageKeyName = stageKeyName; }
 
 	void setIsBeat(bool isBeat) { _isBeat = isBeat; }
+
+	//=========================================================
+	//						°Ù¼Â±â
+	//=========================================================
+	vector<enemy*> getVEnemy() { return _vEnemy; }
+	string* getStageKeyName() { return _stageKeyName; }
 
 };
 

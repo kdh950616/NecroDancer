@@ -27,6 +27,7 @@ public:
 	void setLightMapAdress(vvLightMap* vvLightMap) { _vvLightMap = vvLightMap; }
 
 	//				플레이어좌표		//횃불세기 (2 ~ 5) 2가 기본
-	void rayCasting(POINT playeridx, int torchRange);
+	void rayCasting(POINT playerIdx, int torchRange);
+	void checkMap(POINT playerIdx, int torchRange, int tileSizeX, int tileSizeY);
 };
 
