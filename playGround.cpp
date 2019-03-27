@@ -100,18 +100,76 @@ HRESULT playGround::init()
 	//===============================================
 
 
+	//===============================================
+	//				obj
+	//===============================================
+	SOUNDMANAGER->addSound("doorOpen", "sounds/object/obj_door_open.ogg", false, false); //
+	SOUNDMANAGER->addSound("dig1", "sounds/object/vo_cas_dig_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig2", "sounds/object/vo_cas_dig_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig3", "sounds/object/vo_cas_dig_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig4", "sounds/object/vo_cas_dig_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig5", "sounds/object/vo_cas_dig_05.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig6", "sounds/object/vo_cas_dig_06.ogg", false, false);//
+	SOUNDMANAGER->addSound("wall1_Dig", "sounds/object/mov_dig_dirt.ogg", false, false);//
+	SOUNDMANAGER->addSound("wall2_Dig", "sounds/object/mov_dig_stone.ogg", false, false);//
+	SOUNDMANAGER->addSound("wall3_Dig", "sounds/object/mov_dig_brick.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig_Fail", "sounds/object/mov_dog_fail.ogg", false, false);//
+	//===============================================
+	//				player
+	//===============================================
+	//atk
+	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_04.ogg", false, false);//
+	//hit
+	SOUNDMANAGER->addSound("hit1", "sounds/player/hit/vo_cad_hurt_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit2", "sounds/player/hit/vo_cad_hurt_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit3", "sounds/player/hit/vo_cad_hurt_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit4", "sounds/player/hit/vo_cad_hurt_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit5", "sounds/player/hit/vo_cad_hurt_05.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit6", "sounds/player/hit/vo_cad_hurt_06.ogg", false, false);//
+	SOUNDMANAGER->addSound("hit", "sounds/player/hit/sfx_player_hit_ST.ogg", false, false);//
+
+	//heal
+	SOUNDMANAGER->addSound("heal1", "sounds/player/heal/vo_cad_heal_01.ogg", false, false);
+	SOUNDMANAGER->addSound("heal2", "sounds/player/heal/vo_cad_heal_02.ogg", false, false);
+	SOUNDMANAGER->addSound("heal3", "sounds/player/heal/vo_cad_heal_03.ogg", false, false);
+
+	//item broke
+	SOUNDMANAGER->addSound("brokeItem", "sounds/object/sfx_glass_break.ogg", false, false);//
+
+	플레이어 주석처리된거, obj 주석처리된거 사운드 테스트 해보기.. -> 힐아이템 사용 추가 하고 유리아이템 깨지는거 테스트 해보고 책보고 더할거없으면 보스하자.
 
 
-	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
-	SCENEMANAGER->addScene("testScene", _testScene);
-	SCENEMANAGER->addScene("bossCoral", _bossCoral);
+
+
+
+
+
+
+
 
 	//맵툴
-	//SCENEMANAGER->changeScene("mapToolScene");
+	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
 	//테스트씬
-	//SCENEMANAGER->changeScene("testScene");
+	SCENEMANAGER->addScene("testScene", _testScene);
 	//코랄리프씬
-	SCENEMANAGER->changeScene("bossCoral");
+	SCENEMANAGER->addScene("bossCoral", _bossCoral);
+
+	SCENEMANAGER->changeScene("testScene");
 	
 	return S_OK;
 }
@@ -127,7 +185,7 @@ void playGround::update()
 	gameNode::update();
 
 	SCENEMANAGER->update();
-	EFFECTMANAGER->update();
+	//EFFECTMANAGER->update();
 
 }
 
@@ -141,29 +199,29 @@ void playGround::render()
 
 
 	SCENEMANAGER->render();
-	EFFECTMANAGER->render();
+	//EFFECTMANAGER->render();
 
 
 
 	//				##			여기에 코드 작성(End)			##
 	//===========================================================================
 	//				##카메라 정보 마우스 정보 시간정보 출력	##===================
-	WCHAR str[128];
-	swprintf_s(str, L"cameraX : %d", CAMERA->getPosX());
-	//D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 80);
-	D2DMANAGER->drawText(str, 0, 80,20,0xff00ff);
-	swprintf_s(str, L"cameraY : %d", CAMERA->getPosY());
-	//D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 100);
-	D2DMANAGER->drawText(str, 0, 100, 20, 0xff00ff);
+	//WCHAR str[128];
+	//swprintf_s(str, L"cameraX : %d", CAMERA->getPosX());
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 80);
+	//D2DMANAGER->drawText(str, 0, 80,20,0xff00ff);
+	//swprintf_s(str, L"cameraY : %d", CAMERA->getPosY());
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 100);
+	//D2DMANAGER->drawText(str, 0, 100, 20, 0xff00ff);
+	//
+	//swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 140);
+	//D2DMANAGER->drawText(str, 0, 140, 20, 0xff00ff);
+	//swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
+	//D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
 
-	swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
-	//D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 140);
-	D2DMANAGER->drawText(str, 0, 140, 20, 0xff00ff);
-	swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
-	//D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
-	D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
-
-	TIMEMANAGER->render();
+	//TIMEMANAGER->render();
 	// Draw 끝 - 이 코드가 빠지면 D2D 출력 X
 	D2DMANAGER->endDraw();
 }

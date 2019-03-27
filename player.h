@@ -13,6 +13,35 @@ enum tagShovel
 	TITANIUM
 };
 
+enum tagItemKind
+{
+	INVEN_WEAPON,
+	INVEN_TORCH,
+	INVEN_SHOVEL,
+	INVEN_ARMOR,
+	INVEN_HP,
+	INVEN_END
+};
+
+enum tagWeaponType
+{
+	WEAPON_DAGGER,
+	WEAPON_SPEAR,
+	WEAPON_SWORD
+};
+
+struct tagInventory
+{
+	image* img;		//아이템 이미지 = 맵툴에있는 item이미지쓸거
+	image* slotImg;
+	int frameX;
+	int frameY;
+	int itemKind;	//아이템 종류  ex) 무기, 횃불, 삽 등
+	bool isGlass;	//유리아이템인지?
+	bool isGet;		//아이템획득했니? 
+	int itemVal;	//아이템값 ex) ITEM_TORCH_GLASS, ITEM_SPEAR_BLOOD 등 
+};
+
 class enemyMgr;
 
 class player : public gameNode
@@ -62,8 +91,8 @@ private:
 	//=========================
 
 	POINT _idx;						//플레이어가 서있는 타일의 인덱스
-	POINT _direction;
-	vector<POINT> _vDirection;
+	POINT _direction;				//플레이어가 누를값에따라 바뀜
+	vector<POINT> _vDirection;		//무기에따라 바뀜
 
 
 	//=========================
@@ -78,10 +107,6 @@ private:
 
 	int _maxHp;						//최대체력
 	int _curHp;						//현재체력
-	int _dmg;						//데미지
-
-	tagShovel _shovel;
-	int _shovel_Dmg;				//삽데미지
 
 	//=========================		
 	//			float 				
@@ -105,12 +130,26 @@ private:
 
 private:
 	//=========================
-	//			변수용
+	//			아이템
 	//=========================
 
-	//=========================
-	//			좌표용
-	//=========================
+	tagInventory _inventory[INVEN_END];
+	int _bloodKill;
+	int _dmg;						//데미지
+	int _def;						//방어력
+	int _torchPower;				//횃불세기
+	int _recoverVal;				//체력회복수치
+
+	tagShovel _shovel;
+	int _shovel_Dmg;				//삽데미지
+
+	image* _effectImg;
+	float _angle;
+	bool _isShowEff;
+	int _effCount;
+
+
+	int _atkSoundNum;
 
 public:
 	player();
@@ -121,7 +160,9 @@ public:
 	void update();
 	void render();
 
-	void attackFunc();
+
+
+	
 	//===========================================
 	//					link
 	//===========================================
@@ -134,6 +175,7 @@ public:
 	//					init
 	//===========================================
 	void imgInit();
+	void inventoryInit();
 
 	//===========================================
 	//					update
@@ -142,11 +184,25 @@ public:
 	void moveCal();
 	void objFunc(POINT direction);
 	void enemyAtk();
-
+	void setInventoryItem(int objAttr);
+	void attackFunc(POINT direction);
+	void setWeaponVDirection(int itemVal, POINT direction);
 	//===========================================
 	//					render
 	//===========================================
 
+	void renderUI();
+	void txtRender();
+	void AttackEffectRender();
+
+	//===========================================
+	//					즉석추가 기능함수
+	//===========================================
+
+	void removeWeapon();
+	void removeTorch();
+	void removeShovel();
+	void removeArmor();
 
 	//===========================================
 	//					get
@@ -197,5 +253,14 @@ public:
 	POINT getDirection() { return _direction; }
 	bool getIsHit() { return _isHit; }
 	void setIsHit(bool isHit) { _isHit = isHit; }
+	int getDef() { return _def; }
+	void setDef(int def) { _def = def; }
+
+	int getTorchPower() { return _torchPower; }
+	void setTorchPowet(int torchPower) { _torchPower = torchPower; }
+	tagInventory getInventory(int arrayNum) { return _inventory[arrayNum]; }
+	void setBloodKill(int bloodKill) { _bloodKill = bloodKill; }
+	int getBloodKill() { return _bloodKill; }
+	void addBloodKill(int addNum) { _bloodKill += addNum; }
 };
 

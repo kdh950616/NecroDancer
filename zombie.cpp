@@ -37,6 +37,7 @@ HRESULT zombie::init()
 	_enemyType = ZOMBIE;
 	_isNeedAstar = false;
 
+	_gold = 1;
 	return S_OK;
 }
 
@@ -64,9 +65,8 @@ void zombie::update()
 
 			if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
+				attackPlayer(_dmg);
 
-				showAttackEffect();
 				SOUNDMANAGER->playEff("zombie_Attack");
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
@@ -212,7 +212,7 @@ void zombie::imageInit()
 	IMAGEMANAGER->addFrameImage("zombie", L"images/monster/normal/zombie.png", 1152, 100, 24, 2);
 	_img = IMAGEMANAGER->findImage("zombie");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("zombie");
 	KEYANIMANAGER->addAnimationType("zombie_Shadow");

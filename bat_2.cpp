@@ -24,6 +24,7 @@ HRESULT bat_2::init()
 	_beatCount = 0;
 	_posZ = 30;
 	_isNeedAstar = false;
+	_gold = 2;
 
 	return S_OK;
 }
@@ -71,9 +72,8 @@ void bat_2::update()
 
 				if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 				{
-					(*_player).setCurHp((*_player).getCurHp() - _dmg);
+					attackPlayer(_dmg);
 
-					showAttackEffect();
 					SOUNDMANAGER->playEff("bat_Attack");
 				}
 				else if (_direction.x == 0)
@@ -139,7 +139,7 @@ void bat_2::imageInit()
 	IMAGEMANAGER->addFrameImage("bat_Red", L"images/monster/normal/bat_red.png", 192, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("bat_Red");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("bat_Red");
 	KEYANIMANAGER->addAnimationType("bat_Red_Shadow");

@@ -323,6 +323,13 @@ void image::aniRenderReverseX(int destX, int destY, animation * ani)
 	D2DMANAGER->_renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
+void image::aniRenderAngle(int destX, int destY, animation * ani, float angle)
+{
+	D2DMANAGER->_renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, Point2F(destX  + _imageInfo->frameWidth / 2, destY + _imageInfo->frameHeight / 2)));
+	render(destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+	D2DMANAGER->_renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+}
+
 POINTFLOAT image::GetRenderPosition(float destX, float destY)
 {
 	//POINTFLOAT pf = { destX - (int)CAMERA->getPosX() , destY - (int)CAMERA->getPosY() };

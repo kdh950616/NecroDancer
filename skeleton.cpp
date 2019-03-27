@@ -24,6 +24,7 @@ HRESULT skeleton::init()
 	_enemyType = SKELETON;
 	_isNeedAstar = true;
 	_savePos = _posLT;
+	_gold = 1;
 
 
 	return S_OK;
@@ -79,9 +80,8 @@ void skeleton::update()
 			//에이슷하로 구한 내가 가야할길이 플레이어라면 
 			if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
+				attackPlayer(_dmg);
 
-				showAttackEffect();
 				SOUNDMANAGER->playEff("skeleton_Attack");
 			}
 			else if (_direction.x == 0)
@@ -171,7 +171,7 @@ void skeleton::imageInit()
 	_img = IMAGEMANAGER->findImage("skeleton_Normal");
 
 	//이펙트 등록
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("skeleton_Normal");
 	KEYANIMANAGER->addAnimationType("skeleton_Normal_Shadow");

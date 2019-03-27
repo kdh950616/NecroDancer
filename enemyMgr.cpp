@@ -13,7 +13,7 @@ enemyMgr::~enemyMgr()
 
 HRESULT enemyMgr::init()
 {
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
@@ -184,6 +184,10 @@ void enemyMgr::update()
 			//	break;
 			}
 			_vEnemy.erase(_vEnemy.begin() + i);
+			if ((*_player).getInventory(INVEN_WEAPON).itemVal == ITEM_SPEAR_BLOOD || (*_player).getInventory(INVEN_WEAPON).itemVal == ITEM_SWORD_BLOOD)
+			{
+				(*_player).addBloodKill(1);
+			}
 		}
 		else i++;
 	}
@@ -381,4 +385,16 @@ void enemyMgr::createEnemy(int enemyType, POINT idx)
 		break;
 	}
 
+}
+
+bool enemyMgr::getIsThereEnemy(int x, int y)
+{
+	for (int i = 0; i < _vEnemy.size(); i++)
+	{
+		if (_vEnemy[i]->getIdx().x == x && _vEnemy[i]->getIdx().y == y)
+		{
+			return true;
+		}
+	}
+	return false;
 }

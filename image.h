@@ -121,7 +121,7 @@ public:
 
 	void aniRender(int destX, int destY, animation* ani);
 	void aniRenderReverseX(int destX, int destY, animation* ani);
-
+	void aniRenderAngle(int destX, int destY, animation * ani, float angle);
 	
 	//===================================================================
 	//						이미지 정보 Get, Set

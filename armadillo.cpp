@@ -25,6 +25,7 @@ HRESULT armadillo::init()
 	_enemyType = ARMADILLO;
 	_isNeedAstar = false;
 	_beatCount = 0;
+	_gold = 2;
 
 	
 
@@ -91,9 +92,7 @@ void armadillo::update()
 		//다음에 갈곳이 플레이어면
 		if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y && !_isStun)
 		{
-			(*_player).setCurHp((*_player).getCurHp() - _dmg);
-
-			showAttackEffect();
+			attackPlayer(_dmg);
 
 			if (abs(_direction.x) == 1)
 			{
@@ -263,7 +262,7 @@ void armadillo::imageInit()
 	IMAGEMANAGER->addFrameImage("armadillo", L"images/monster/normal/armadillo.png", 528, 96, 11, 2);
 	_img = IMAGEMANAGER->findImage("armadillo");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("armadillo");
 	KEYANIMANAGER->addAnimationType("armadillo_Shadow");

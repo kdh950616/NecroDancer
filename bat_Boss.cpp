@@ -24,6 +24,7 @@ HRESULT bat_Boss::init()
 	_beatCount = 0;
 	_posZ = 30;
 	_isNeedAstar = false;
+	_gold = 10;
 
 	return S_OK;
 }
@@ -76,9 +77,8 @@ void bat_Boss::update()
 
 				if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 				{
-					(*_player).setCurHp((*_player).getCurHp() - _dmg);
+					attackPlayer(_dmg);
 
-					showAttackEffect();
 					SOUNDMANAGER->playEff("bat_Boss_Attack");
 				}
 				else if (_direction.x == 0)
@@ -149,7 +149,7 @@ void bat_Boss::imageInit()
 	IMAGEMANAGER->addFrameImage("bat_Boss", L"images/monster/miniboss/bat_boss.png", 288, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("bat_Boss");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("bat_Boss");
 	KEYANIMANAGER->addAnimationType("bat_Boss_Shadow");

@@ -22,6 +22,7 @@ HRESULT wraith::init()
 	_posZ = 20;
 	_enemyType = WRAITH;
 	_isNeedAstar = true;
+	_gold = 2;
 
 
 	return S_OK;
@@ -62,11 +63,10 @@ void wraith::update()
 			//에이슷하로 구한 내가 가야할길이 플레이어라면 
 			if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
+				attackPlayer(_dmg);
 
 				attackAni_LightChange();
 
-				showAttackEffect();
 				SOUNDMANAGER->playEff("wraith_Attack");
 			}
 			else if (_direction.x == 0)
@@ -139,7 +139,7 @@ void wraith::imageInit()
 	IMAGEMANAGER->addFrameImage("wraith", L"images/monster/normal/wraith.png", 144, 96, 3, 2);
 	_img = IMAGEMANAGER->findImage("wraith");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("wraith");
 	KEYANIMANAGER->addAnimationType("wraith_Shadow");

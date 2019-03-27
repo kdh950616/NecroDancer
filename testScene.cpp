@@ -54,7 +54,7 @@ void testScene::update()
 
 	playerUpdate();
 	
-	_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, 3);
+	_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, (*_player).getTorchPower());
 
 	beatUpdate();
 	
@@ -75,12 +75,14 @@ void testScene::render()
 
 	_em->render();
 	
-	//lightMapRender();
+	lightMapRender();
 
 	beatRender();
-
 	
 	textRender();
+
+	_player->txtRender();
+	_player->AttackEffectRender();
 }
 
 
@@ -95,6 +97,7 @@ void testScene::imageInit()
 	//타일들 이미지
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
+	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
 
 	//적 이미지
 	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);

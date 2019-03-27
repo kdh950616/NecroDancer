@@ -41,6 +41,8 @@ HRESULT mapEditor::init()
 	
 	SOUNDMANAGER->playZone("mapTool", 0.05f);
 
+	_floatingVal = 0;
+
 	return S_OK;
 }
 
@@ -97,6 +99,7 @@ void mapEditor::imageInit()
 	//타일들 이미지
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
+	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
 
 	//적 이미지
 	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
@@ -1528,6 +1531,158 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 		break;
 	case IMG_ITEM:
 		tile->setIdx(tmpIdx);
+		if ((idX == 0 || idX == 2 || idX == 4 || idX == 6 || idX == 8) && (idY == 0 || idY == 2 || idY == 4 || idY == 6 || idY == 8 || idY == 10))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			tile->setIsAvailMove(true);
+			//아이템 속성 넣고있었음
+			switch (idY)
+			{
+			case 0:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_SPEAR_NORMAL;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_SPEAR_BLOOD;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_SPEAR_TITANIUM;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_SPEAR_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_SPEAR_OBSIDIAN;
+					break;
+				}
+				break;
+			case 2:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_SWORD_NORMAL;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_SWORD_BLOOD;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_SWORD_TITANIUM;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_SWORD_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_SWORD_OBSIDIAN;
+					break;
+				}
+				break;
+			case 4:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_TORCH_1;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_TORCH_2;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_TORCH_3;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_TORCH_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_TORCH_OBSIDIAN;
+					break;
+				}
+				break;
+			case 6:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_SHOVEL_NORMAL;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_SHOVEL_BLOOD;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_SHOVEL_TITANIUM;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_SHOVEL_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_SHOVEL_OBSIDIAN;
+					break;
+				}
+				break;
+			case 8:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_ARMOR_1;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_ARMOR_2;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_ARMOR_3;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_ARMOR_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_ARMOR_OBSIDIAN;
+					break;
+				}
+				break;
+			case 10:
+				switch (idX)
+				{
+				case 0:
+					tmpTileSet.attribute = ITEM_HP_APPLE;
+					break;
+				case 2:
+					tmpTileSet.attribute = ITEM_HP_CHEESE;
+					break;
+				case 4:
+					tmpTileSet.attribute = ITEM_HP_MEAT;
+					break;
+				case 6:
+					tmpTileSet.attribute = ITEM_GLASS;
+					break;
+				case 8:
+					tmpTileSet.attribute = ITEM_DAGGER;
+					break;
+				}
+				break;
+			}
+
+
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
+
 		break;
 	case IMG_ENEMY1:
 		tile->setIdx(tmpIdx);
@@ -2724,6 +2879,17 @@ void mapEditor::buttonRender()
 	//===========================================
 	_btn_Erase.img->frameRender(_btn_Erase.rc.left, _btn_Erase.rc.top, _btn_Erase.frame.x, _btn_Erase.frame.y);
 	_btn_ObjErase.img->frameRender(_btn_ObjErase.rc.left, _btn_ObjErase.rc.top, _btn_ObjErase.frame.x, _btn_ObjErase.frame.y);
+
+
+			
+	swprintf_s(str, L"X : %d", _tileSizeX);
+	D2DMANAGER->drawText(str, _btn_SizeArrow[0].pos.x - 10, _btn_SizeArrow[0].pos.y + 55, 25, 0xff00ff);
+	swprintf_s(str, L"Y : %d", _tileSizeY);
+	D2DMANAGER->drawText(str, _btn_SizeArrow[1].pos.x - 10, _btn_SizeArrow[1].pos.y + 55, 25, 0xff00ff);
+	swprintf_s(str, L"X : %d", _tileSizeX);
+	D2DMANAGER->drawText(str, _btn_SizeArrow[0].pos.x - 12, _btn_SizeArrow[0].pos.y + 54, 25, 0x00ff00);
+	swprintf_s(str, L"Y : %d", _tileSizeY);
+	D2DMANAGER->drawText(str, _btn_SizeArrow[1].pos.x - 12, _btn_SizeArrow[1].pos.y + 54, 25, 0x00ff00);
 }
 
 void mapEditor::linePreview()

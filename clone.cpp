@@ -23,6 +23,7 @@ HRESULT clone::init()
 	_posZ = 0;
 	_enemyType = CLONE;
 	_isNeedAstar = false;
+	_gold = 3;
 
 	return S_OK;
 }
@@ -53,9 +54,7 @@ void clone::update()
 			if ((*_player).getIdx().x + (*_player).getDirection().x == _idx.x + _direction.x && 
 				(*_player).getIdx().y + (*_player).getDirection().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
-
-				showAttackEffect();
+				attackPlayer(_dmg);
 
 				//이거 안하면 비트마다 계속 공격함
 				_direction = { 0,0 };
@@ -212,7 +211,7 @@ void clone::imageInit()
 	IMAGEMANAGER->addFrameImage("clone", L"images/monster/normal/clone.png", 192, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("clone");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("clone");
 	KEYANIMANAGER->addAnimationType("clone_Shadow");

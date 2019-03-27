@@ -129,6 +129,11 @@ protected:
 
 	//딥블루스용
 
+
+	//막판 추가
+
+	int _gold;
+
 public: 
 	enemy();
 	~enemy();
@@ -144,6 +149,7 @@ public:
 	virtual void unfoundFunc();
 	virtual void lightFunc();
 	virtual void showAttackEffect();
+	virtual void attackPlayer(int dmg);
 	//=============================================
 	//					link
 	//=============================================
@@ -213,5 +219,8 @@ public:
 	void setDirection(POINT direction) { _direction = direction; }
 	POINT getDirection() { return _direction; }
 	virtual bool getIsStun() { return 0; }
+
+	int getGold() { return _gold; }
+	void setGold(int gold) { _gold = gold; }
 };
 

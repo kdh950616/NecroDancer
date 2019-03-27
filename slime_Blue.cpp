@@ -20,6 +20,7 @@ HRESULT slime_Blue::init()
 	_curHp = _maxHp;
 	_speed = SPEED;
 	_dmg = 2;
+	_enemyType = SLIME;
 
 	while (1)
 	{
@@ -31,6 +32,7 @@ HRESULT slime_Blue::init()
 		}
 	}
 	_isNeedAstar = false;
+	_gold = 2;
 
 	return S_OK;
 }
@@ -59,13 +61,13 @@ void slime_Blue::update()
 
 			if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
+				attackPlayer(_dmg);
 
-				showAttackEffect();
 				SOUNDMANAGER->playEff("slime_Attack");
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
 			{
+				_direction = _direction;
 			}
 			else if (_direction.x == 0)
 			{
@@ -149,7 +151,7 @@ void slime_Blue::imageInit()
 	IMAGEMANAGER->addFrameImage("slime_Blue", L"images/monster/normal/slime_blue.png", 416, 100, 8, 2);
 	_img = IMAGEMANAGER->findImage("slime_Blue");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("slime_Blue");
 	KEYANIMANAGER->addAnimationType("slime_Blue_Shadow");
@@ -237,6 +239,7 @@ void slime_Blue::moveCal()
 		_direction.y *= -1;
 		_jumpPower = 0;
 		_posZ = 0;
+		
 	}
 
 	if (_posLT.y - _savePos.y >= TILESIZE || _savePos.y - _posLT.y >= TILESIZE)
@@ -265,13 +268,16 @@ void slime_Blue::moveCal()
 	_posCT.y = _posLT.y + TILESIZE / 2;
 	if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE)
 	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
 	}
 	else
 	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
 	_idx.x = (_posLT.x) / TILESIZE;
 	_idx.y = (_posLT.y) / TILESIZE;
-	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	if (_isMove == false)
+	{
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	}
 }

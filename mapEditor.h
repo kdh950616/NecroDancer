@@ -93,7 +93,7 @@ private:
 	//====================================
 	
 	
-	
+	float _floatingVal;
 
 
 private:

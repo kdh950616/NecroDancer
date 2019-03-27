@@ -25,6 +25,7 @@ HRESULT dragon::init()
 	_isNeedAstar = true;
 	
 	standAni_LightChange();
+	_gold = 10;
 
 	return S_OK;
 }
@@ -72,9 +73,8 @@ void dragon::update()
 
 			if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 			{
-				(*_player).setCurHp((*_player).getCurHp() - _dmg);
+				attackPlayer(_dmg);
 
-				showAttackEffect();
 				SOUNDMANAGER->playEff("dragon_Attack");
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL1 ||
@@ -165,7 +165,7 @@ void dragon::imageInit()
 	IMAGEMANAGER->addFrameImage("dragon", L"images/monster/miniboss/dragon.png", 216, 204, 2, 2);
 	_img = IMAGEMANAGER->findImage("dragon");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("dragon");
 	KEYANIMANAGER->addAnimationType("dragon_Shadow");

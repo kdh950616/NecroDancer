@@ -162,6 +162,9 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			// 3)최종 계산이 끝난 코스트를 현재 인덱스에 넣음(계산용 인덱스말고 실제인덱스 i,j)
 
 			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(cost);
+			
+
+			//여기에다가 오브젝트[playerIdx.y + i][playerIdx.x + j]의 속성에 횟불도 있다면 rayCast를 재귀로 더돔 +추가로 i와 j가 0,0이 아니고
 
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.

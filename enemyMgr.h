@@ -73,7 +73,7 @@ public:
 	void linkStageKeyName(string* stageKeyName) { _stageKeyName = stageKeyName; }
 
 	void setIsBeat(bool isBeat) { _isBeat = isBeat; }
-
+	bool getIsThereEnemy(int x, int y);
 	//=========================================================
 	//						°Ù¼Â±â
 	//=========================================================

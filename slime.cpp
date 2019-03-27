@@ -21,6 +21,7 @@ HRESULT slime::init()
 	_dmg = 9999;
 	_enemyType = SLIME;
 	_isNeedAstar = false;
+	_gold = 1;
 
 
 	return S_OK;
@@ -101,7 +102,7 @@ void slime::imageInit()
 	IMAGEMANAGER->addFrameImage("slime_Normal", L"images/monster/normal/slime_green.png", 208, 104, 4, 2);
 	_img = IMAGEMANAGER->findImage("slime_Normal");
 
-	EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("slime_Normal");
 	KEYANIMANAGER->addAnimationType("slime_Normal_Shadow");

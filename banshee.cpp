@@ -24,6 +24,7 @@ HRESULT banshee::init()
 	_beatCount = 0;
 	_posZ = 30;
 	_isNeedAstar = true;
+	_gold = 10;
 
 	return S_OK;
 }
@@ -82,9 +83,8 @@ void banshee::update()
 
 		if ((*_player).getIdx().x == _idx.x + _direction.x && (*_player).getIdx().y == _idx.y + _direction.y)
 		{
-			(*_player).setCurHp((*_player).getCurHp() - _dmg);
+			attackPlayer(_dmg);
 
-			showAttackEffect();
 			SOUNDMANAGER->playEff("banshee_Attack");
 		}
 		else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false)
