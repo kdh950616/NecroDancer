@@ -136,7 +136,10 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 				break;
 				case IMG_ETC1:
-					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
+					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc1"));
+				break;
+				case IMG_ETC2:
+					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc2"));
 				break;
 			}
 
@@ -256,8 +259,11 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 					}
 				break;
 				case IMG_ETC1:
-					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
+					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc1"));
 				break;
+				case IMG_ETC2:
+					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc2"));
+					break;
 			}
 		}
 	}

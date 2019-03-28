@@ -320,13 +320,23 @@ void player::move()
 			{
 				//못가는 곳이고 벽이면
 				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false &&
-					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
-					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= ETC_TORCH_BOSS) ||
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
 				{
 					//벽없애고 포문탈출
-					objFunc(_direction);
-					_isMove = false;
-					break;
+					if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
+					{
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
+						_isMove = false;
+						break;
+					}
+					else
+					{
+						objFunc(_direction);
+						_isMove = false;
+						break;
+					}
 				}
 				//그냥 못가는곳이면(적이면)
 				else if ((*_vvObj)[_idx.y + _vDirection[i].y][_idx.x + _vDirection[i].x]->getIsAvailMove() == false &&
@@ -367,13 +377,23 @@ void player::move()
 			{
 				//못가는 곳이고 벽이면
 				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false &&
-					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
-					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= ETC_TORCH_BOSS) ||
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
 				{
 					//벽없애고 포문탈출
-					objFunc(_direction);
-					_isMove = false;
-					break;
+					if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
+					{
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
+						_isMove = false;
+						break;
+					}
+					else
+					{
+						objFunc(_direction);
+						_isMove = false;
+						break;
+					}
 				}
 				//그냥 못가는곳이면(적이면)
 				else if ((*_vvObj)[_idx.y + _vDirection[i].y][_idx.x + _vDirection[i].x]->getIsAvailMove() == false &&
@@ -412,13 +432,23 @@ void player::move()
 			{
 				//못가는 곳이고 벽이면
 				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false &&
-					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
-					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= ETC_TORCH_BOSS) ||
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
 				{
 					//벽없애고 포문탈출
-					objFunc(_direction);
-					_isMove = false;
-					break;
+					if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
+					{
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
+						_isMove = false;
+						break;
+					}
+					else
+					{
+						objFunc(_direction);
+						_isMove = false;
+						break;
+					}
 				}
 				//그냥 못가는곳이면(적이면)
 				else if ((*_vvObj)[_idx.y + _vDirection[i].y][_idx.x + _vDirection[i].x]->getIsAvailMove() == false &&
@@ -458,13 +488,23 @@ void player::move()
 			{
 				//못가는 곳이고 벽이면
 				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false &&
-					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1
-					&& (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= ETC_TORCH_BOSS) ||
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
 				{
 					//벽없애고 포문탈출
-					objFunc(_direction);
-					_isMove = false;
-					break;
+					if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_CHEST)
+					{
+						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
+						_isMove = false;
+						break;
+					}
+					else
+					{
+						objFunc(_direction);
+						_isMove = false;
+						break;
+					}
 				}
 				//그냥 못가는곳이면(적이면)
 				else if ((*_vvObj)[_idx.y + _vDirection[i].y][_idx.x + _vDirection[i].x]->getIsAvailMove() == false &&
@@ -581,7 +621,7 @@ void player::objFunc(POINT direction)
 
 	switch ((*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->getAttribute())
 	{
-	case OBJ_WALL1:
+	case OBJ_WALL1: case ETC_TORCH_WALL1:
 		_isShowShovel = true;
 		if (_shovelDmg > 0)
 		{
@@ -620,7 +660,7 @@ void player::objFunc(POINT direction)
 			}
 		}
 		break;
-	case OBJ_WALL2:
+	case OBJ_WALL2: case ETC_TORCH_WALL2:
 		_isShowShovel = true;
 		if (_shovelDmg > 1)
 		{
@@ -692,7 +732,7 @@ void player::objFunc(POINT direction)
 			}
 		}
 		break;
-	case OBJ_WALL3:
+	case OBJ_WALL3: case ETC_TORCH_WALL3:
 		_isShowShovel = true;
 		if (_shovelDmg > 2)
 		{
@@ -766,7 +806,7 @@ void player::objFunc(POINT direction)
 			}
 		}
 		break;
-	case OBJ_WALL_GOLD:
+	case OBJ_WALL_GOLD: case ETC_TORCH_GOLD:
 		_isShowShovel = true;
 		if (_inventory[INVEN_SHOVEL].itemVal == ITEM_SHOVEL_BLOOD)
 		{
@@ -814,7 +854,7 @@ void player::objFunc(POINT direction)
 			}
 		}
 		break;
-	case OBJ_WALL_BOSS:
+	case OBJ_WALL_BOSS: case ETC_TORCH_BOSS:
 		_isShowShovel = true;
 		SOUNDMANAGER->playEff("dig_Fail");
 		_killCombo = 0;

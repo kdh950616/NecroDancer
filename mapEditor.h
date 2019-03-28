@@ -94,7 +94,8 @@ private:
 	
 	
 	float _floatingVal;
-
+	int _torchCount;
+	int _torchFrameY;
 
 private:
 	const int DEFAULT_MAP_SIZE_X = 40;

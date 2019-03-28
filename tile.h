@@ -17,7 +17,7 @@ enum TILE_ATTR
 
 enum OBJ_ATTR
 {
-	OBJ_NONE = 10,
+	OBJ_NONE = 100,
 	OBJ_WALL1,
 	OBJ_WALL2,
 	OBJ_WALL3,
@@ -48,13 +48,12 @@ enum OBJ_ATTR
 	ENEMY4_2_2,	// 퀸
 	ENEMY4_2_3,	// 킹
 
-
 	OBJ_END
 };
 
 enum tagItem
 {
-	ITEM_START = 100,
+	ITEM_START = 200,
 	ITEM_SPEAR_NORMAL,
 	ITEM_SPEAR_BLOOD,
 	ITEM_SPEAR_TITANIUM,
@@ -95,9 +94,26 @@ enum tagItem
 	ITEM_END
 };
 
+enum tagEtc
+{
+	ETC_START = 299,
+	ETC_TORCH,			// 땅에 횃불 뿌릴경우 이거
+	ETC_TORCH_WALL1,	//횃불을 벽에다가 뿌릴경우 해당 벽의 속성 + 200하면 이속성이된다. 이속성인 벽은 기존 벽의 이미지 출력하면서 동시에 자기위에 횟불프레임 렌더 해야함.
+	ETC_TORCH_WALL2,	//				"
+	ETC_TORCH_WALL3,	//				"
+	ETC_TORCH_GOLD,		//				"
+	ETC_TORCH_BOSS,		//				"
+	ETC_CHEST,
+	ETC_SLOW,
+	ETC_FAST,
+	ETC_TRAPDOOR,
+	ETC_SHOPKEEPER,
+	ETC_END
+};
+
 enum tagImgNum
 {
-	IMG_NONE,
+	IMG_NONE = 400,
 	IMG_TILE,
 	IMG_WALL,
 	IMG_ITEM,
@@ -112,7 +128,7 @@ enum tagImgNum
 
 enum tagArrow
 {
-	ARROW_X_DOWN,
+	ARROW_X_DOWN = 500,
 	ARROW_X_UP,
 	ARROW_Y_DOWN,
 	ARROW_Y_UP,
@@ -199,6 +215,7 @@ public:
 
 	void objSetDefault();
 	void setWaterTile();
+	void openChest();
 
 };
 

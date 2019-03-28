@@ -104,6 +104,8 @@ void testScene::imageInit()
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
 	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("etc1", L"images/mapTool/etc1.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("etc2", L"images/mapTool/etc2.png", 432, 576, 3, 6);
 
 	//적 이미지
 	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
@@ -377,7 +379,7 @@ void testScene::tileRender()
 		}
 	}
 	//골드배수가 1보다 크면 타일이 반짝임
-	else if ((*_player).getGrooveChain() > 1)
+	else
 	{
 		for (int i = 0; i < _tileSizeY; i++)
 		{
@@ -422,6 +424,41 @@ void testScene::objRender()
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
+			if (_vvObj[i][j]->getImg() != nullptr
+				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
+				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvObj[i][j]->getPos().x
+				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y &&
+				_vvObj[i][j]->getAttribute() == ETC_TORCH || (_vvObj[i][j]->getAttribute() >= ETC_CHEST && _vvObj[i][j]->getAttribute() <= ETC_SHOPKEEPER))
+			{
+				if (_vvObj[i][j]->getAttribute() == ETC_TORCH)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+														_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY(),
+														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY() + _torchFrameY);
+				}
+				else if (_vvObj[i][j]->getAttribute() == ETC_SHOPKEEPER)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX() - TILESIZE,
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - TILESIZE,
+						_vvObj[i][j]->getFrameX() + _torchFrameY, _vvObj[i][j]->getFrameY());
+				}
+				else
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+														_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY(),
+														_vvObj[i][j]->getImg()->GetFrameWidth(),
+														_vvObj[i][j]->getImg()->GetFrameHeight(),
+														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				}
+			}
+
 			if (_vvObj[i][j]->getIdx().x == _player->getIdx().x && _vvObj[i][j]->getIdx().y == _player->getIdx().y)
 			{
 				_player->render();
@@ -439,7 +476,7 @@ void testScene::objRender()
 				}
 			}
 	
-	
+				//벽이면 일정수치 위로 띄워서 출력
 			if (_vvObj[i][j]->getImg() != nullptr
 				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
 				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
@@ -452,7 +489,13 @@ void testScene::objRender()
 					_vvObj[i][j]->getRc().top - TILESIZE
 					- CAMERA->getPosY(),
 					_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+
+				if (_vvObj[i][j]->getAttribute() >= ETC_TORCH_WALL1 && _vvObj[i][j]->getAttribute() <= ETC_TORCH_BOSS)
+				{
+					IMAGEMANAGER->frameRender("etc1", _vvObj[i][j]->getRc().left - CAMERA->getPosX(), _vvObj[i][j]->getRc().top - CAMERA->getPosY() - TILESIZE, 1, _torchFrameY);
+				}
 			}
+			//오브젝트가 이미지는 있는데 벽이 아니면
 			else if (_vvObj[i][j]->getImg() != nullptr
 				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
 				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y
@@ -460,8 +503,10 @@ void testScene::objRender()
 				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y
 				&& _vvObj[i][j]->getImgNum() != IMG_WALL)
 			{
+				//아이템이면
 				if (_vvObj[i][j]->getAttribute() > ITEM_START && _vvObj[i][j]->getAttribute() < ITEM_END)
 				{
+					//플레이어의 시야범위 안에 있다면 
 					if (_vvLightMap[i][j]->getOpacity() < 0.64f)
 					{
 						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
@@ -475,6 +520,7 @@ void testScene::objRender()
 							_vvObj[i][j]->getRc().top
 							- CAMERA->getPosY() - 14);
 					}
+					//플레이어의 시야범위 밖에 있다면
 					else
 					{
 						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
@@ -489,20 +535,6 @@ void testScene::objRender()
 							- CAMERA->getPosY() - 14);
 					}
 				}
-				else
-				{
-					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
-						- CAMERA->getPosX(),
-						_vvObj[i][j]->getRc().top
-						- CAMERA->getPosY() - TILESIZE / 2 + _itemPosY,
-						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
-
-					IMAGEMANAGER->findImage("shadow_Standard")->render(_vvObj[i][j]->getRc().left
-						- CAMERA->getPosX(),
-						_vvObj[i][j]->getRc().top
-						- CAMERA->getPosY() - 14);
-				}
-				
 			}
 		}
 	}
@@ -527,25 +559,6 @@ void testScene::lightMapRender()
 				{
 					IMAGEMANAGER->render("black", j * TILESIZE - CAMERA->getPosX(), i*TILESIZE - CAMERA->getPosY(), _vvLightMap[i][j]->getOpacity());
 				}
-				//if (_vvLightMap[i][j]->getIsFind() == false)
-				//{
-				//	D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
-				//		_vvLightMap[i][j]->getTileRc().left - CAMERA->getPosX(),
-				//		_vvLightMap[i][j]->getTileRc().top - CAMERA->getPosY(),
-				//		_vvLightMap[i][j]->getTileRc().right - CAMERA->getPosX(),
-				//		_vvLightMap[i][j]->getTileRc().bottom - CAMERA->getPosY(),
-				//		1.0f);
-				//}
-				//else if (_vvLightMap[i][j]->getIsFind() == true)
-				//{
-				//	D2DMANAGER->fillRectangle(_vvLightMap[i][j]->getBrush(),
-				//		_vvLightMap[i][j]->getTileRc().left - CAMERA->getPosX(),
-				//		_vvLightMap[i][j]->getTileRc().top - CAMERA->getPosY(),
-				//		_vvLightMap[i][j]->getTileRc().right - CAMERA->getPosX(),
-				//		_vvLightMap[i][j]->getTileRc().bottom - CAMERA->getPosY(),
-				//		_vvLightMap[i][j]->getOpacity());
-				//}
-
 				if (_vvLightMap[i][j]->getIdx().y == _player->getIdx().y - 1 && _vvLightMap[i][j]->getIdx().x == _player->getIdx().x)
 				{
 					if (_player->getIsReverse() == false)
@@ -570,9 +583,6 @@ void testScene::beatRender()
 		{
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top,10,50,_vBeat[i].opacity);
 			D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
-		}
-		if (_vBeat[i].rc_Right.right < WINSIZEX && _vBeat[i].rc_Right.right > WINSIZEX / 2)
-		{
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top,10,50, _vBeat[i].opacity);
 			D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
 		}

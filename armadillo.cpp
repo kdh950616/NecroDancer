@@ -114,10 +114,11 @@ void armadillo::update()
 		else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getIsAvailMove() == false && (abs(_direction.x) == 1 || abs(_direction.y) == 1))
 		{
 			_isSpecialAct = true;			
-
 			//그놈의 속성이 벽이었다면 벽없앰.
 			if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL1 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL2)
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL2 ||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL1 ||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL2)
 			{
 				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->objSetDefault();
 				SOUNDMANAGER->playEff("armadillo_Wall");

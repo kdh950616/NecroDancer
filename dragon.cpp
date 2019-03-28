@@ -81,8 +81,12 @@ void dragon::update()
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL1 ||
 				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL2 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL2 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL_GOLD)
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL3 ||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL_GOLD||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL2||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL3||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_GOLD)
 			{
 				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->objSetDefault();
 			}
@@ -293,7 +297,8 @@ void dragon::moveCal()
 	_posLT.y += _vec.y;
 	_posCT.x = _posLT.x + TILESIZE / 2;
 	_posCT.y = _posLT.y + TILESIZE / 2;
-	if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE)
+	if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+		(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
 	}

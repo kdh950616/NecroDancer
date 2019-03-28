@@ -54,7 +54,7 @@ private:
 
 	int _tileBlinkX;			//코인배수가 있을때 이미지프레임 x에 더할 값 ( + 1 ~ + 2)  
 								//플레이어한테 코인배수 받아와서 2이상이면 1 ~ 2사이로 움직이면서 적요하면됨 적용법은 이전에 맵에디터에 만들어뒀던거 참고
-
+	int _torchFrameY;			//횃불프레임변화용 변수
 public:
 	testScene();
 	~testScene();

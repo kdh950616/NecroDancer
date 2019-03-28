@@ -168,9 +168,8 @@ HRESULT playGround::init()
 	//미니맵
 	//상점 -> 사운드 npc 등							//진행중
 	//함정											//진행중
-	//레이캐스트 횃불개선.							//진행중
-	//아이템상자 추가해서 까면 아이템 랜덤으로 나오게.	//진행중
-	//
+	//레이캐스트 횃불개선.							//완료 - > 씬에서 프레임만 돌게 하자.
+	//아이템상자 추가해서 까면 아이템 랜덤으로 나오게.	//완료
 
 
 
@@ -239,7 +238,7 @@ void playGround::render()
 	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
 	//D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
 
-	//TIMEMANAGER->render();
+	TIMEMANAGER->render();
 	// Draw 끝 - 이 코드가 빠지면 D2D 출력 X
 	D2DMANAGER->endDraw();
 }

@@ -93,3 +93,157 @@ void tile::setWaterTile()
 	setImgNum(IMG_TILE);
 	setIsAvailMove(true);
 }
+
+void tile::openChest()
+{
+	int idX;
+	while (1)
+	{
+		idX = RND->getFromIntTo(0, 9);
+
+		if (idX % 2 == 0)
+		{
+			break;
+		}
+	}
+
+	int idY;
+	while (1)
+	{
+		idY = RND->getFromIntTo(0, 11);
+
+		if (idY % 2 == 0)
+		{
+			break;
+		}
+	}
+	setImg(IMAGEMANAGER->findImage("Item"));
+	setImgNum(IMG_ITEM);
+	setFrameX(idX);
+	setFrameY(idY);
+	setIsAvailMove(true);
+
+	switch (idY)
+	{
+	case 0:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_SPEAR_NORMAL);
+			break;
+		case 2:
+			setAttribute(ITEM_SPEAR_BLOOD);
+			break;
+		case 4:
+			setAttribute(ITEM_SPEAR_TITANIUM);
+			break;
+		case 6:
+			setAttribute(ITEM_SPEAR_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_SPEAR_OBSIDIAN);
+			break;
+		}
+		break;
+	case 2:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_SWORD_NORMAL);
+			break;
+		case 2:
+			setAttribute(ITEM_SWORD_BLOOD);
+			break;
+		case 4:
+			setAttribute(ITEM_SWORD_TITANIUM);
+			break;
+		case 6:
+			setAttribute(ITEM_SWORD_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_SWORD_OBSIDIAN);
+			break;
+		}
+		break;
+	case 4:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_TORCH_1);
+			break;
+		case 2:
+			setAttribute(ITEM_TORCH_2);
+			break;
+		case 4:
+			setAttribute(ITEM_TORCH_3);
+			break;
+		case 6:
+			setAttribute(ITEM_TORCH_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_TORCH_OBSIDIAN);
+			break;
+		}
+		break;
+	case 6:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_SHOVEL_NORMAL);
+			break;
+		case 2:
+			setAttribute(ITEM_SHOVEL_BLOOD);
+			break;
+		case 4:
+			setAttribute(ITEM_SHOVEL_TITANIUM);
+			break;
+		case 6:
+			setAttribute(ITEM_SHOVEL_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_SHOVEL_OBSIDIAN);
+			break;
+		}
+		break;
+	case 8:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_ARMOR_1);
+			break;
+		case 2:
+			setAttribute(ITEM_ARMOR_2);
+			break;
+		case 4:
+			setAttribute(ITEM_ARMOR_3);
+			break;
+		case 6:
+			setAttribute(ITEM_ARMOR_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_ARMOR_OBSIDIAN);
+			break;
+		}
+		break;
+	case 10:
+		switch (idX)
+		{
+		case 0:
+			setAttribute(ITEM_HP_APPLE);
+			break;
+		case 2:
+			setAttribute(ITEM_HP_CHEESE);
+			break;
+		case 4:
+			setAttribute(ITEM_HP_MEAT);
+			break;
+		case 6:
+			setAttribute(ITEM_GLASS);
+			break;
+		case 8:
+			setAttribute(ITEM_DAGGER);
+			break;
+		}
+		break;
+	}
+}

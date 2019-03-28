@@ -18,6 +18,8 @@ private:
 	vvLightMap* _vvLightMap;	//밝기용 맵의		주소를 가지고있음
 	vvObj* _vvObj;				//밝기용 오브젝트맵을 주소를 가지고있음
 
+	vector<POINT> _saveTorch;
+
 public:
 	rayCast();
 	~rayCast();
@@ -28,6 +30,7 @@ public:
 
 	//				플레이어좌표		//횃불세기 (2 ~ 5) 2가 기본
 	void rayCasting(POINT playerIdx, int torchRange);
+	void rayCastingTorch(POINT torchIdx, int torchRange);
 	void checkMap(POINT playerIdx, int torchRange, int tileSizeX, int tileSizeY);
 };
 

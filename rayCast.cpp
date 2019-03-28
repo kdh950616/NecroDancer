@@ -24,7 +24,6 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			{
 				continue;
 			}
-
 			
 			float cost = 0;					//코스트는 0으로 시작해서 코스트가 낮을수록 (이동을 적게할수록) 투명도가 높아짐 == 밝음
 
@@ -75,8 +74,8 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 						}
 
 						//계산용 인덱스를 새로 적용해서 보니까 벽이었다? 그럼 코스트 또증가
-						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
-							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
 						{
 							cost += WALL_COST;
 						}
@@ -100,13 +99,12 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 						cal.x++;
 					}
 
-					if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
-						(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+					if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+						(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
 					{
 						cost += WALL_COST;
 					}
 				}
-
 				//y가 0이 아니라면 0이될떄까지 ++ or --
 				if (cal.y != 0)
 				{
@@ -124,8 +122,8 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 						playerIdx.y + i >= 0 && playerIdx.y + i <= _vvLightMap->size() - 1)
 					{
 
-						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 &&
-							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE)
+						if ((*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+							(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
 						{
 							cost += WALL_COST;
 						}
@@ -163,15 +161,17 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 
 			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(cost);
 			
-
 			//여기에다가 오브젝트[playerIdx.y + i][playerIdx.x + j]의 속성에 횟불도 있다면 rayCast를 재귀로 더돔 +추가로 i와 j가 0,0이 아니고
-
+			if ((*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)
+			{
+				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 4);
+			}
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
 			if (playerIdx.y + i >= 0 && playerIdx.x + i >= 0									// 터짐방지
 				&&playerIdx.y <= _vvObj->size() && playerIdx.x <= _vvObj[0][0].size()				// 터짐방지
-				&&(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= OBJ_WALL1 &&	// 속성이 벽이면
-				(*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= OBJ_DOOR_SIDE)	// 속성이 벽이면
+				&& (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+				(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)	// 속성이 벽이면
 			{
 				//터짐방지
 				if (playerIdx.y + i - 1 >= 0 && playerIdx.y + i - 1 <= _vvLightMap->size())
@@ -442,6 +442,187 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 		//	(*_vvLightMap)[playerIdx.y][playerIdx.x + (torchRange + 1)]->setOpacity(0.7f);
 		//}
 	}
+
+}
+
+void rayCast::rayCastingTorch(POINT torchIdx, int torchRange)
+{
+	for (int i = -torchRange; i <= +torchRange; i++)
+	{
+		for (int j = -torchRange; j <= +torchRange; j++)
+		{
+			//터짐방지
+			if (torchIdx.y + i < 0 || torchIdx.x + j < 0
+				|| torchIdx.y + i > _vvLightMap->size() - 1
+				|| torchIdx.x + j > _vvLightMap[0][0].size() - 1)
+			{
+				continue;
+			}
+			if (i == 0 && j == 0)continue;
+
+			float cost = 0;					//코스트는 0으로 시작해서 코스트가 낮을수록 (이동을 적게할수록) 투명도가 높아짐 == 밝음
+
+			int maxCost = torchRange * 10;	//코스트 최대한도는 횃불세기의 * 10
+			POINT cal = { j,i };			//인덱스 계산용([0][0]이 플레이어임)
+
+			while (1)
+			{
+				//=====================
+				//		탈출
+				//=====================
+				if (cal.x == 0 && cal.y == 0)
+				{
+					//도착하면 탈출
+					break;
+				}
+				if (cost > maxCost)
+				{
+					//코스트가 오버되면 탈출
+					break;
+				}
+
+				//계산용 인덱스의 절댓값이 같다면 == 대각선이라면
+				if (abs(cal.x) == abs(cal.y))
+				{
+					if (cal.x != 0 && cal.y != 0)
+					{
+						//대각선은 16을더하고
+						cost += 16;
+
+						//0보다 큰지 작은지를 판별해서 ++ or --
+						if (cal.x > 0)
+						{
+							cal.x--;
+						}
+						else if (cal.x < 0)
+						{
+							cal.x++;
+						}
+
+						if (cal.y > 0)
+						{
+							cal.y--;
+						}
+						else if (cal.y < 0)
+						{
+							cal.y++;
+						}
+
+						//계산용 인덱스를 새로 적용해서 보니까 벽이었다? 그럼 코스트 또증가
+						if ((*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+							(*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
+						{
+							cost += WALL_COST;
+						}
+					}
+				}
+
+				//x가 0이 아니라면  0이될떄까지 ++ or --
+				if (cal.x != 0)
+				{
+					cost += 10;
+
+					//부호에따라
+					if (cal.x > 0)
+					{
+						//까이거나
+						cal.x--;
+					}
+					else if (cal.x < 0)
+					{
+						//더함
+						cal.x++;
+					}
+
+					if ((*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+						(*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
+					{
+						cost += WALL_COST;
+					}
+				}
+				//y가 0이 아니라면 0이될떄까지 ++ or --
+				if (cal.y != 0)
+				{
+					cost += 10;
+
+					if (cal.y > 0)
+					{
+						cal.y--;
+					}
+					else if (cal.y < 0)
+					{
+						cal.y++;
+					}
+					if (torchIdx.x + j >= 0 && torchIdx.x + j <= _vvLightMap[0][0].size() - 1 &&
+						torchIdx.y + i >= 0 && torchIdx.y + i <= _vvLightMap->size() - 1)
+					{
+
+						if ((*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+							(*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)
+						{
+							cost += WALL_COST;
+						}
+					}
+				}
+			}
+			// 무한루프문에서 탈출을햇다. 2가지의 결론이 남.
+
+			if (torchIdx.x + j == 15 && torchIdx.y + i == 14)
+			{
+				int a = 0;
+			}
+
+
+			//	1. 코스트를 다써서 나왔을경우(범위안에 없었던경우)
+			if (cost > maxCost)
+			{
+				//1) 발견해봤던 곳이었을시엔
+				if (torchIdx.x + j >= 0 && torchIdx.x + j <= _vvLightMap[0][0].size() - 1 &&
+					torchIdx.y + i >= 0 && torchIdx.y + i <= _vvLightMap->size() - 1)
+				{
+					if ((*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->getIsFind() > cost)
+					{
+						//1-1) 그곳을 다시 발견했을때의 값으로 칠함
+						(*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->setOpacity(OPACITY_FIND);
+					}
+					//2) 이아래는 다 건너뜀
+					continue;
+				}
+			}
+
+			//	2. 최대 코스트 안에 도착했을경우(범위안에 있엇던경우)
+
+			// 1)발견한걸로 설정.
+			(*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->setIsFind(true);
+			// 2)코스트를 비율로 다시 계산함
+			cost /= maxCost;	//최대 코스트로 나누고
+			cost *= 0.4f;		//0.4를 곱하는데 안하면 너무 밝음. 
+
+			// 3)최종 계산이 끝난 코스트를 현재 인덱스에 넣음(계산용 인덱스말고 실제인덱스 i,j)
+			if ((*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->getOpacity() > cost)
+			{
+				float tmp = (*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->getOpacity();
+				float tmp2 = cost;
+				(*_vvLightMap)[torchIdx.y + i][torchIdx.x + j]->setOpacity(cost);
+			}
+
+			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
+			if (torchIdx.y + i >= 0 && torchIdx.x + i >= 0									// 터짐방지
+				&& torchIdx.y <= _vvObj->size() && torchIdx.x <= _vvObj[0][0].size()				// 터짐방지
+				&& (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+				(*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)	// 속성이 벽이면
+			{
+				//터짐방지
+				if (torchIdx.y + i - 1 >= 0 && torchIdx.y + i - 1 <= _vvLightMap->size())
+				{
+					//벽일때 바로 위에다가 계산된 같은 코스트랑 발견했다고 해줌.
+					(*_vvLightMap)[torchIdx.y + i - 1][torchIdx.x + j]->setIsFind(true);
+					(*_vvLightMap)[torchIdx.y + i - 1][torchIdx.x + j]->setOpacity(cost);
+				}
+			}
+		}
+	}
+
 
 }
 

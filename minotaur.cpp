@@ -86,7 +86,9 @@ void minotaur::update()
 				}
 				//에이스타로 구한 갈곳이 벽이었다면
 				if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL1 ||
-					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL2)
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL2 ||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL1||
+					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL2)
 				{
 					//벽없앰
 					(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->objSetDefault();
@@ -97,7 +99,8 @@ void minotaur::update()
 						stunAni_LightChange();
 					}
 				}
-				else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() <= OBJ_DOOR_SIDE)
+				else if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+					(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
 				{
 
 					if (_direction.x == 0)
@@ -199,8 +202,8 @@ void minotaur::update()
 					{
 						for (int i = _idx.y; i <= (*_player).getIdx().y; i++)
 						{
-							if ((*_vvObj)[i][_idx.x]->getAttribute() >= OBJ_WALL1 &&
-								(*_vvObj)[i][_idx.x]->getAttribute() <= OBJ_WALL_END)
+							if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+								(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS) 
 							{
 								break;
 							}
@@ -216,8 +219,8 @@ void minotaur::update()
 					{
 						for (int i = (*_player).getIdx().y; i <= _idx.y; i++)
 						{
-							if ((*_vvObj)[i][_idx.x]->getAttribute() >= OBJ_WALL1 &&
-								(*_vvObj)[i][_idx.x]->getAttribute() <= OBJ_WALL_END)
+							if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+								(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS) 
 							{
 								break;
 							}
@@ -238,8 +241,8 @@ void minotaur::update()
 					{
 						for (int i = _idx.x; i <= (*_player).getIdx().x; i++)
 						{
-							if ((*_vvObj)[_idx.y][i]->getAttribute() >= OBJ_WALL1 &&
-								(*_vvObj)[_idx.y][i]->getAttribute() <= OBJ_WALL_END)
+							if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+								(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS) 
 							{
 								break;
 							}
@@ -255,8 +258,8 @@ void minotaur::update()
 					{
 						for (int i = (*_player).getIdx().x; i <= _idx.x; i++)
 						{
-							if ((*_vvObj)[_idx.y][i]->getAttribute() >= OBJ_WALL1 &&
-								(*_vvObj)[_idx.y][i]->getAttribute() <= OBJ_WALL_END)
+							if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+								(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS) 
 							{
 								break;
 							}

@@ -71,6 +71,17 @@ void mapEditor::update()
 	cameraFunc();
 	mapDragDraw();
 
+	_torchCount++;
+	if (_torchCount >= 8)
+	{
+		_torchCount = 0;
+		_torchFrameY++;
+
+		if (_torchFrameY == 4)
+		{
+			_torchFrameY = 0;
+		}
+	}
 }
 
 
@@ -96,16 +107,16 @@ void mapEditor::render()
 
 void mapEditor::imageInit()
 {
-	//타일들 이미지
+	//샘플이미지
 	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
 	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
-
-	//적 이미지
 	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("enemy2", L"images/mapTool/mob2.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("enemy3", L"images/mapTool/mob3.png", 432, 576, 3, 4);
 	IMAGEMANAGER->addFrameImage("enemy4", L"images/mapTool/mob4.png", 432, 576, 3, 6);
+	IMAGEMANAGER->addFrameImage("etc1", L"images/mapTool/etc1.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("etc2", L"images/mapTool/etc2.png", 432, 576, 3, 6);
 
 	//버튼 이미지
 
@@ -927,12 +938,12 @@ void mapEditor::setMapObject(tile * tile, int idX, int idY)
 {
 	if (_sampleTile[idY][idX]->getImg() == nullptr) return;
 	tile->setAttribute(_sampleTile[idY][idX]->getAttribute());
-	if (_sampleTile[idY][idX]->getAttribute() == OBJ_WALL1)
+	if (_sampleTile[idY][idX]->getAttribute() == OBJ_WALL1 || _sampleTile[idY][idX]->getAttribute() == ETC_TORCH_WALL1)
 	{
 		tile->setFrameX(_sampleTile[RND->getFromIntTo(0, 2)][RND->getFromIntTo(0, 3)]->getIdx().x);
 		tile->setFrameY(_sampleTile[RND->getFromIntTo(0, 2)][RND->getFromIntTo(0, 3)]->getIdx().y);
 	}
-	else if (_sampleTile[idY][idX]->getAttribute() == OBJ_WALL_BOSS)
+	else if (_sampleTile[idY][idX]->getAttribute() == OBJ_WALL_BOSS || _sampleTile[idY][idX]->getAttribute() == ETC_TORCH_BOSS)
 	{
 		tile->setFrameX(_sampleTile[RND->getFromIntTo(2, 4)][RND->getFromIntTo(3, 5)]->getIdx().x);
 		tile->setFrameY(_sampleTile[RND->getFromIntTo(2, 4)][RND->getFromIntTo(3, 5)]->getIdx().y);
@@ -996,6 +1007,10 @@ void mapEditor::categoryFunc()
 					_corsor_Sample_Select.x *= 1;
 					_corsor_Sample_Select.y *= 1;
 					break;
+				case IMG_ETC2:
+					break;
+					_corsor_Sample_Select.x *= 3;
+					_corsor_Sample_Select.y *= 2;
 				}
 
 				_btn_Category[_currentPage].frame.y = 0;
@@ -1072,8 +1087,13 @@ void mapEditor::categoryFunc()
 					_corsor_Sample_Select.x /= 1;
 					_corsor_Sample_Select.y /= 1;
 					_currentPage = PAGE_ETC;
-					_currentImg = IMAGEMANAGER->findImage("etc");
+					_currentImg = IMAGEMANAGER->findImage("etc1");
 					break;
+				case IMG_ETC2:
+					_corsor_Sample_Select.x /= 3;
+					_corsor_Sample_Select.y /= 2;
+					_currentPage = PAGE_ETC;
+					_currentImg = IMAGEMANAGER->findImage("etc2");
 				}
 
 				//이미지 변경했으니 이미지 재적용
@@ -1129,6 +1149,10 @@ void mapEditor::categoryFunc()
 			case IMG_ETC1:
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ETC2:
+				_corsor_Sample_Select.x *= 3;
+				_corsor_Sample_Select.y *= 2;
 				break;
 			}
 
@@ -1197,7 +1221,13 @@ void mapEditor::categoryFunc()
 				_corsor_Sample_Select.x /= 1;
 				_corsor_Sample_Select.y /= 1;
 				_currentPage = PAGE_ETC;
-				_currentImg = IMAGEMANAGER->findImage("etc");
+				_currentImg = IMAGEMANAGER->findImage("etc1");
+				break;
+			case IMG_ETC2:
+				_corsor_Sample_Select.x /= 3;
+				_corsor_Sample_Select.y /= 2;
+				_currentPage = PAGE_ETC;
+				_currentImg = IMAGEMANAGER->findImage("etc2");
 				break;
 			}
 			_btn_Category[_currentPage].frame.y = 1;
@@ -1259,6 +1289,10 @@ void mapEditor::categoryFunc()
 			case IMG_ETC1:
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
+				break;
+			case IMG_ETC2:
+				_corsor_Sample_Select.x *= 3;
+				_corsor_Sample_Select.y *= 2;
 				break;
 			}
 
@@ -1327,7 +1361,13 @@ void mapEditor::categoryFunc()
 				_corsor_Sample_Select.x /= 1;
 				_corsor_Sample_Select.y /= 1;
 				_currentPage = PAGE_ETC;
-				_currentImg = IMAGEMANAGER->findImage("etc");
+				_currentImg = IMAGEMANAGER->findImage("etc1");
+				break;
+			case IMG_ETC2:
+				_corsor_Sample_Select.x /= 3;
+				_corsor_Sample_Select.y /= 2;
+				_currentPage = PAGE_ETC;
+				_currentImg = IMAGEMANAGER->findImage("etc2");
 				break;
 			}
 			_btn_Category[_currentPage].frame.y = 1;
@@ -1959,6 +1999,101 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 		break;
 	case IMG_ETC1:
 		tile->setIdx(tmpIdx);
+
+		if ((idX == 1 || idX == 4 || idX == 7) && (idY == 0 || idY == 4))
+		{
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+			switch (idY)
+			{
+			case 0:
+				if (idX == 1)
+				{
+					tmpTileSet.attribute = ETC_TORCH;
+					tile->setIsAvailMove(false);
+				}
+				else if (idX == 4)
+				{
+					tmpTileSet.attribute = ETC_CHEST;
+					tile->setIsAvailMove(false);
+				}
+				else if (idX == 7)
+				{
+					tmpTileSet.attribute = OBJ_NONE;
+					tile->setIsAvailMove(true);
+					tmpTileSet.imgNum = IMG_NONE;
+					tmpTileSet.img = nullptr;
+					tmpTileSet.frameX = NULL;
+					tmpTileSet.frameY = NULL;
+				}
+				break;
+			case 4:
+				if (idX == 1)
+				{
+					tmpTileSet.attribute = ETC_SLOW;
+					tile->setIsAvailMove(true);
+				}
+				else if (idX == 4)
+				{
+					tmpTileSet.attribute = ETC_FAST;
+					tile->setIsAvailMove(true);
+				}
+				else if (idX == 7)
+				{
+					tmpTileSet.attribute = ETC_TRAPDOOR;
+					tile->setIsAvailMove(true);
+				}
+				break;
+			}
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+			tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+			tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+			tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+							(float)tmpTileSet.pos.y,
+							(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+							(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+			tile->setTileSet(tmpTileSet);
+		break;
+	case IMG_ETC2:
+		tile->setIdx(tmpIdx);
+		if ((idX == 0) && (idY == 0))
+		{
+			tmpTileSet.attribute = ETC_SHOPKEEPER;
+			tile->setIsAvailMove(false);
+			tmpTileSet.imgNum = _currentImgNum;
+			tmpTileSet.img = _currentImg;
+			tmpTileSet.frameX = idX;
+			tmpTileSet.frameY = idY;
+		}
+		else
+		{
+			tmpTileSet.attribute = OBJ_NONE;
+			tile->setIsAvailMove(true);
+			tmpTileSet.imgNum = IMG_NONE;
+			tmpTileSet.img = nullptr;
+			tmpTileSet.frameX = NULL;
+			tmpTileSet.frameY = NULL;
+		}
+		tmpTileSet.pos.x = _sample_Area_Rc.left + TILESIZE + _currentImg->GetFrameWidth() * idX;
+		tmpTileSet.pos.y = _sample_Area_Rc.top + TILESIZE + _currentImg->GetFrameHeight() * idY;
+		tmpTileSet.rc = { (float)tmpTileSet.pos.x,
+						(float)tmpTileSet.pos.y,
+						(float)tmpTileSet.pos.x + _currentImg->GetFrameWidth(),
+						(float)tmpTileSet.pos.y + _currentImg->GetFrameHeight() };
+
+		tile->setTileSet(tmpTileSet);
 		break;
 	}
 }
@@ -2047,9 +2182,23 @@ void mapEditor::mapDragDraw()
 								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 							break;
 							case PAGE_ETC:
-								setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+								if (_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getAttribute() == ETC_TORCH)
+								{
+									if (_vvObj[i][j]->getAttribute() >= OBJ_WALL1 && _vvObj[i][j]->getAttribute() <= OBJ_WALL_BOSS)
+									{
+										_vvObj[i][j]->setAttribute(_vvObj[i][j]->getAttribute() + 200);
+									}
+									else if (_vvObj[i][j]->getAttribute() >= ETC_TORCH_WALL1 && _vvObj[i][j]->getAttribute() <= ETC_TORCH_BOSS) {}
+									else
+									{
+										setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+									}
+								}
+								else
+								{
+									setMapObject(_vvObj[i][j], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+								}
 							break;
-
 						}
 					}
 				}
@@ -2085,7 +2234,22 @@ void mapEditor::mapDragDraw()
 					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
 					break;
 				case PAGE_ETC:
-					setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					if (_sampleTile[_corsor_Sample_Select.y][_corsor_Sample_Select.x]->getAttribute() == ETC_TORCH)
+					{
+						if (_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute() >= OBJ_WALL1 && _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute() <= OBJ_WALL_BOSS)
+						{
+							_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->setAttribute(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute() + 200);
+						}
+						else if (_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute() >= ETC_TORCH_WALL1 && _vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x]->getAttribute() <= ETC_TORCH_BOSS) {}
+						else
+						{
+							setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+						}
+					}
+					else
+					{
+						setMapObject(_vvObj[_corsor_Map_Idx.y][_corsor_Map_Idx.x], _corsor_Sample_Select.x, _corsor_Sample_Select.y);
+					}
 					break;
 
 				}
@@ -2477,7 +2641,10 @@ void mapEditor::loadMap()
 					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 					break;
 				case IMG_ETC1:
-					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("etc1"));
+					break;
+				case IMG_ETC2:
+					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("etc2"));
 				break;
 			}
 
@@ -2540,7 +2707,10 @@ void mapEditor::loadMap()
 				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 				break;
 			case IMG_ETC1:
-				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("etc1"));
+				break;
+			case IMG_ETC2:
+				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("etc2"));
 				break;
 			}
 		}
@@ -2794,13 +2964,26 @@ void mapEditor::objectTileRender()
 				}
 				else if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() != IMG_WALL)
 				{
-					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
-						- CAMERA->getPosX(),
-														_vvObj[i][j]->getRc().top 
-						- CAMERA->getPosY(),
-														_vvObj[i][j]->getImg()->GetFrameWidth(), 
-														_vvObj[i][j]->getImg()->GetFrameHeight(),
-														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+					if (_vvObj[i][j]->getAttribute() == ETC_TORCH)
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY(),
+							_vvObj[i][j]->getImg()->GetFrameWidth(),
+							_vvObj[i][j]->getImg()->GetFrameHeight(),
+							_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY() + _torchFrameY);
+					}
+					else
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left 
+							- CAMERA->getPosX(),
+															_vvObj[i][j]->getRc().top 
+							- CAMERA->getPosY(),
+															_vvObj[i][j]->getImg()->GetFrameWidth(), 
+															_vvObj[i][j]->getImg()->GetFrameHeight(),
+															_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+					}
 				}
 				else if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() == IMG_WALL)
 				{
@@ -2811,6 +2994,10 @@ void mapEditor::objectTileRender()
 														_vvObj[i][j]->getImg()->GetFrameWidth(),
 														_vvObj[i][j]->getImg()->GetFrameHeight(),
 														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+					if (_vvObj[i][j]->getAttribute() >= ETC_TORCH_WALL1 && _vvObj[i][j]->getAttribute() <= ETC_TORCH_BOSS)
+					{
+						IMAGEMANAGER->frameRender("etc1", _vvObj[i][j]->getRc().left - CAMERA->getPosX(), _vvObj[i][j]->getRc().top - CAMERA->getPosY() - TILESIZE, 1, _torchFrameY);
+					}
 				}
 			}
 		}
