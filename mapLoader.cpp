@@ -135,7 +135,7 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 				case IMG_ENEMY4:
 					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 				break;
-				case IMG_ETC:
+				case IMG_ETC1:
 					(*vvMapAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
 				break;
 			}
@@ -255,7 +255,7 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 						break;
 					}
 				break;
-				case IMG_ETC:
+				case IMG_ETC1:
 					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
 				break;
 			}

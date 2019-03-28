@@ -14,6 +14,8 @@ banshee::~banshee()
 
 HRESULT banshee::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 4;
@@ -136,6 +138,11 @@ void banshee::update()
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
+
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void banshee::render()
@@ -148,6 +155,10 @@ void banshee::render()
 	else if (!_isLeft)
 	{
 		_img->aniRenderReverseX(_posLT.x - CAMERA->getPosX() - 10, _posLT.y - 15 - _posZ - CAMERA->getPosY(), _ani);
+	}
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0, _atkAngle);
 	}
 }
 

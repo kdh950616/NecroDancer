@@ -992,7 +992,7 @@ void mapEditor::categoryFunc()
 					_corsor_Sample_Select.x *= 3;
 					_corsor_Sample_Select.y *= 2;
 					break;
-				case IMG_ETC:
+				case IMG_ETC1:
 					_corsor_Sample_Select.x *= 1;
 					_corsor_Sample_Select.y *= 1;
 					break;
@@ -1020,7 +1020,7 @@ void mapEditor::categoryFunc()
 					_currentImgNum = IMG_ENEMY1;
 					break;
 				case PAGE_ETC:
-					_currentImgNum = IMG_ETC;
+					_currentImgNum = IMG_ETC1;
 					break;
 				}
 
@@ -1068,7 +1068,7 @@ void mapEditor::categoryFunc()
 					_currentPage = PAGE_ENEMY;
 					_currentImg = IMAGEMANAGER->findImage("enemy4");
 					break;
-				case IMG_ETC:
+				case IMG_ETC1:
 					_corsor_Sample_Select.x /= 1;
 					_corsor_Sample_Select.y /= 1;
 					_currentPage = PAGE_ETC;
@@ -1126,7 +1126,7 @@ void mapEditor::categoryFunc()
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
 				break;
-			case IMG_ETC:
+			case IMG_ETC1:
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
 				break;
@@ -1193,7 +1193,7 @@ void mapEditor::categoryFunc()
 				_currentPage = PAGE_ENEMY;
 				_currentImg = IMAGEMANAGER->findImage("enemy4");
 				break;
-			case IMG_ETC:
+			case IMG_ETC1:
 				_corsor_Sample_Select.x /= 1;
 				_corsor_Sample_Select.y /= 1;
 				_currentPage = PAGE_ETC;
@@ -1256,7 +1256,7 @@ void mapEditor::categoryFunc()
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
 				break;
-			case IMG_ETC:
+			case IMG_ETC1:
 				_corsor_Sample_Select.x *= 1;
 				_corsor_Sample_Select.y *= 1;
 				break;
@@ -1323,7 +1323,7 @@ void mapEditor::categoryFunc()
 				_currentPage = PAGE_ENEMY;
 				_currentImg = IMAGEMANAGER->findImage("enemy4");
 				break;
-			case IMG_ETC:
+			case IMG_ETC1:
 				_corsor_Sample_Select.x /= 1;
 				_corsor_Sample_Select.y /= 1;
 				_currentPage = PAGE_ETC;
@@ -1957,7 +1957,7 @@ void mapEditor::changeCategory(tile* tile, int idX, int idY)
 
 		tile->setTileSet(tmpTileSet);
 		break;
-	case IMG_ETC:
+	case IMG_ETC1:
 		tile->setIdx(tmpIdx);
 		break;
 	}
@@ -2476,7 +2476,7 @@ void mapEditor::loadMap()
 				case IMG_ENEMY4:
 					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 					break;
-				case IMG_ETC:
+				case IMG_ETC1:
 					_vvMap[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
 				break;
 			}
@@ -2539,7 +2539,7 @@ void mapEditor::loadMap()
 			case IMG_ENEMY4:
 				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("enemy4"));
 				break;
-			case IMG_ETC:
+			case IMG_ETC1:
 				_vvObj[i][j]->setImg(IMAGEMANAGER->findImage("etc"));
 				break;
 			}

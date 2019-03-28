@@ -2,17 +2,6 @@
 #include "gameNode.h"
 #include "tile.h"
 
-enum tagShovel
-{
-	BASIC,
-	SHARD,
-	OBSIDIAN,
-	BLOOD,
-	CRYSTAL,
-	GLASS,
-	TITANIUM
-};
-
 enum tagItemKind
 {
 	INVEN_WEAPON,
@@ -134,22 +123,30 @@ private:
 	//=========================
 
 	tagInventory _inventory[INVEN_END];
-	int _bloodKill;
+	int _bloodKill;					//피무기일때 킬횟수 10되면 피1회복하고 0으로다시만듬
 	int _dmg;						//데미지
 	int _def;						//방어력
 	int _torchPower;				//횃불세기
-	int _recoverVal;				//체력회복수치
+	int _recoverHp;				//체력회복수치
 
-	tagShovel _shovel;
-	int _shovel_Dmg;				//삽데미지
+	//삽
+	image* _shovelImg;			//삽이미지
+	int _shovelFrameX;
+	int _shovelFrameY;
+	int _shovelDmg;				//삽데미지
+	bool _isShowShovel;			//삽보여주니?
+	int _shovelCount;		//삽보여주는시간
 
+	//공격관련
 	image* _effectImg;
-	float _angle;
+	float _effectAngle;
 	bool _isShowEff;
 	int _effCount;
+	int _atkCombo;
 
-
-	int _atkSoundNum;
+	//코인배수 관련
+	int _grooveChain;
+	int _killCombo;
 
 public:
 	player();
@@ -183,26 +180,26 @@ public:
 	void move();
 	void moveCal();
 	void objFunc(POINT direction);
-	void enemyAtk();
 	void setInventoryItem(int objAttr);
 	void attackFunc(POINT direction);
 	void setWeaponVDirection(int itemVal, POINT direction);
+	void useHpIten();
 	//===========================================
 	//					render
 	//===========================================
 
 	void renderUI();
 	void txtRender();
-	void AttackEffectRender();
+	void effectRender();
 
 	//===========================================
 	//					즉석추가 기능함수
 	//===========================================
 
-	void removeWeapon();
-	void removeTorch();
-	void removeShovel();
-	void removeArmor();
+	void brokeWeapon();
+	void brokeTorch();
+	void brokeShovel();
+	void brokeArmor();
 
 	//===========================================
 	//					get
@@ -262,5 +259,10 @@ public:
 	void setBloodKill(int bloodKill) { _bloodKill = bloodKill; }
 	int getBloodKill() { return _bloodKill; }
 	void addBloodKill(int addNum) { _bloodKill += addNum; }
+
+	void setGrooveChain(int grooveChain) { _grooveChain = grooveChain; }
+	int getGrooveChain() { return _grooveChain; }
+	void setKillCombo(int killCombo) { _killCombo = killCombo; }
+	int getKillCombo() { return _killCombo; }
 };
 

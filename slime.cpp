@@ -13,6 +13,8 @@ slime::~slime()
 
 HRESULT slime::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 1;

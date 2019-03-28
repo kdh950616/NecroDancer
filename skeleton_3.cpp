@@ -14,6 +14,8 @@ skeleton_3::~skeleton_3()
 
 HRESULT skeleton_3::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 3;
@@ -172,7 +174,7 @@ void skeleton_3::update()
 			{
 				(*_player).setCurHp((*_player).getCurHp() - _dmg);
 
-				showAttackEffect();
+				attackPlayer(_dmg);
 			}
 			else if (_direction.x == 0)
 			{
@@ -253,6 +255,10 @@ void skeleton_3::update()
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void skeleton_3::render()
@@ -269,6 +275,10 @@ void skeleton_3::render()
 	else if (!_isLeft)
 	{
 		_img->aniRenderReverseX(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _ani);
+	}
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0,_atkAngle);
 	}
 }
 

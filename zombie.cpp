@@ -14,6 +14,8 @@ zombie::~zombie()
 
 HRESULT zombie::init()
 {
+	enemy::init();
+
 	while (1)
 	{
 		_direction = { RND->getFromIntTo(-1, 2), RND->getFromIntTo(-1,2) };
@@ -188,6 +190,11 @@ void zombie::update()
 			specialMoveCal();
 		}
 	}
+
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void zombie::render()
@@ -204,6 +211,10 @@ void zombie::render()
 	else if (!_isLeft)
 	{
 		_img->aniRenderReverseX(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _ani);
+	}
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0, _atkAngle);
 	}
 }
 

@@ -22,21 +22,20 @@ HRESULT player::init()
 			(float)_posCT.y,
 			(float)_posCT.x + TILESIZE,
 			(float)_posCT.y + TILESIZE};
-	_dmg = 1;
+	
 	_speed = SPEED;
 	_jumpPower = JUMPPOWER_HORIZON;
 	_isMove = false;
 	_isReverse = false;
 	_isArrive = true;
-	_shovel = BASIC;
-	_shovel_Dmg = 1;
+
 	_direction = { 0,0 };
-	_def = 0;
-	_bloodKill = 0;
-	_torchPower = 2;
-	_angle = 0;
 	_effCount = 0;
-	_atkSoundNum = 0;
+	_atkCombo = 1;
+	_bloodKill = 0;
+	_effectAngle = 0;
+	_grooveChain = 1;
+	_killCombo = 0;
 
 	return S_OK;
 }
@@ -81,6 +80,74 @@ void player::update()
 			}
 		}
 	}
+
+	if (_isShowShovel)
+	{
+		_shovelCount++;
+
+		if (_shovelCount > 10)
+		{
+			_isShowShovel = false;
+			_shovelCount = 0;
+		}
+	}
+
+	if (_inventory[INVEN_HP].isGet && KEYMANAGER->isOnceKeyDown('E'))
+	{
+		useHpIten();
+	}
+
+	if (_isBeat)
+	{
+		switch (_killCombo)
+		{
+		case 0:
+			_grooveChain = 1;
+			_killCombo++;
+			break;
+		case 2:
+			_grooveChain = 2;
+			_killCombo++;		// 스위치문 적용 한번만 하기위해 킬콤보 ++함
+			SOUNDMANAGER->playEff("grooveChainStart");
+			break;
+		case 6:
+			_grooveChain = 3;
+			_killCombo++;
+			SOUNDMANAGER->playEff("grooveChainStart");
+			break;
+		case 13:
+			_grooveChain = 4;
+			_killCombo++;
+			SOUNDMANAGER->playEff("grooveChainStart");
+			break;
+		}
+
+
+		for (int i = 0; i < INVEN_END; i++)
+		{
+			if (_inventory[i].frameX == 8 && _inventory[i].frameY != 10)
+			{
+				switch (_inventory[i].frameY)
+				{
+				case 0:
+					_dmg = _grooveChain;
+					break;
+				case 2:
+					_dmg = _grooveChain;
+					break;
+				case 4:
+					_torchPower = 2 + _grooveChain;
+					break;
+				case 6:
+					_shovelDmg = _grooveChain;
+					break;
+				case 8:
+					_def = _grooveChain;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void player::render()
@@ -103,7 +170,6 @@ void player::render()
 		_bodyImg->aniRender(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _bodyAni);
 		_headImg->aniRender(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _headAni);
 	}
-	renderUI();
 }
 
 //===========================================
@@ -115,6 +181,7 @@ void player::imgInit()
 	IMAGEMANAGER->addFrameImage("playerHead", L"images/player/head.png", 192, 96, 4, 2);
 	IMAGEMANAGER->addFrameImage("playerBody", L"images/player/body.png", 192, 480, 4, 10);
 	IMAGEMANAGER->addImage("playerShadow", L"images/player/shadow.png", 48, 54);
+	//아이템 & 슬롯
 	IMAGEMANAGER->addFrameImage("Item", L"images/item/item.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addImage("slot_Shovel", L"images/item/slot_Shovel.png", 60, 66);
 	IMAGEMANAGER->addImage("slot_Weapon", L"images/item/slot_Weapon.png", 60, 66);
@@ -128,7 +195,7 @@ void player::imgInit()
 	IMAGEMANAGER->addFrameImage("effect_Sword", L"images/effect/swipe_broadsword.png", 144, 144, 3, 1);
 	
 	_effectImg = IMAGEMANAGER->findImage("effect_Dagger");
-
+	_shovelImg = IMAGEMANAGER->findImage("Item");
 
 	int head[] = { 0,1,2,3,4,5,6,7 };
 	KEYANIMANAGER->addAnimationType("playerHead");
@@ -183,6 +250,7 @@ void player::inventoryInit()
 	_inventory[INVEN_WEAPON].isGlass = false;
 	_inventory[INVEN_WEAPON].itemKind = INVEN_WEAPON;
 	_inventory[INVEN_WEAPON].itemVal = ITEM_DAGGER;
+	_dmg = 1;
 
 	_inventory[INVEN_TORCH].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_TORCH].slotImg = IMAGEMANAGER->findImage("slot_Torch");
@@ -192,6 +260,7 @@ void player::inventoryInit()
 	_inventory[INVEN_TORCH].isGlass = false;
 	_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 	_inventory[INVEN_TORCH].itemVal = NULL;
+	_torchPower = 2;
 
 	_inventory[INVEN_SHOVEL].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_SHOVEL].slotImg = IMAGEMANAGER->findImage("slot_Shovel");
@@ -201,6 +270,10 @@ void player::inventoryInit()
 	_inventory[INVEN_SHOVEL].isGlass = false;
 	_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 	_inventory[INVEN_SHOVEL].itemVal = ITEM_SHOVEL_NORMAL;
+	_shovelDmg = 1;
+	_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+	_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+	_shovelCount = 0;
 
 	_inventory[INVEN_ARMOR].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_ARMOR].slotImg = IMAGEMANAGER->findImage("slot_Armor");
@@ -210,6 +283,7 @@ void player::inventoryInit()
 	_inventory[INVEN_ARMOR].isGlass = false;
 	_inventory[INVEN_ARMOR].itemKind = INVEN_ARMOR;
 	_inventory[INVEN_ARMOR].itemVal = NULL;
+	_def = 0;
 
 	_inventory[INVEN_HP].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_HP].slotImg = IMAGEMANAGER->findImage("slot_Hp");
@@ -261,7 +335,7 @@ void player::move()
 					//적만큼 돌면서 내가 공격한곳 인덱스랑 같은곳에 위치한놈 찾아내고 그놈 피 깎음
 					attackFunc(_vDirection[i]);
 					_isShowEff = true;
-					_angle = 180;
+					_effectAngle = 180;
 					_isMove = false;
 				}
 			}
@@ -308,7 +382,7 @@ void player::move()
 					//적만큼 돌면서 내가 공격한곳 인덱스랑 같은곳에 위치한놈 찾아내고 그놈 피 깎음
 					attackFunc(_vDirection[i]);
 					_isMove = false;
-					_angle = 0;
+					_effectAngle = 0;
 					_isShowEff = true;
 				}
 			}
@@ -354,7 +428,7 @@ void player::move()
 					attackFunc(_vDirection[i]);
 					_isMove = false;
 					_isShowEff = true;
-					_angle = 270;
+					_effectAngle = 270;
 				}
 			}
 			_isBeat = false;
@@ -400,7 +474,7 @@ void player::move()
 					attackFunc(_vDirection[i]);
 					_isMove = false;
 					_isShowEff = true;
-					_angle = 90;
+					_effectAngle = 90;
 				}
 			}
 			_isBeat = false;
@@ -444,7 +518,7 @@ void player::moveCal()
 		_isMove = false;
 		_isArrive = true;
 		_direction = { 0,0 };
-		_atkSoundNum = 0;
+		_atkCombo = 1;
 
 		//
 		_posCT.x += _vec.x;
@@ -475,7 +549,7 @@ void player::moveCal()
 		_isMove = false;
 		_isArrive = true;
 		_direction = { 0,0 };
-		_atkSoundNum = 0;
+		_atkCombo = 1;
 
 		//
 		_posCT.x += _vec.x;
@@ -508,8 +582,8 @@ void player::objFunc(POINT direction)
 	switch ((*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->getAttribute())
 	{
 	case OBJ_WALL1:
-	//	EFFECTMANAGER->play("shovel_basic", _posCT.x + (direction.x * TILESIZE) - CAMERA->getPosX(), _posCT.y + (direction.y * TILESIZE) - 35 - CAMERA->getPosY());
-		if (_shovel_Dmg > 0)
+		_isShowShovel = true;
+		if (_shovelDmg > 0)
 		{
 			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
 			
@@ -539,11 +613,16 @@ void player::objFunc(POINT direction)
 		else
 		{
 			SOUNDMANAGER->playEff("dig_Fail");
+			_killCombo = 0;
+			if (_grooveChain > 1)
+			{
+				SOUNDMANAGER->playEff("grooveChainFail");
+			}
 		}
 		break;
 	case OBJ_WALL2:
-	//	EFFECTMANAGER->play("shovel_basic", _posCT.x + (direction.x * TILESIZE) - CAMERA->getPosX(), _posCT.y + (direction.y * TILESIZE) - 35 - CAMERA->getPosY());
-		if (_shovel_Dmg > 1)
+		_isShowShovel = true;
+		if (_shovelDmg > 1)
 		{
 			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
 			switch (rnd)
@@ -569,13 +648,53 @@ void player::objFunc(POINT direction)
 			}
 			SOUNDMANAGER->playEff("wall2_Dig");
 		}
+		else if (_inventory[INVEN_SHOVEL].itemVal == ITEM_SHOVEL_BLOOD)
+		{
+			_curHp -= 1;
+			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+			switch (rnd)
+			{
+			case 1:
+				SOUNDMANAGER->playEff("dig1");
+				SOUNDMANAGER->playEff("hit1");
+				break;
+			case 2:
+				SOUNDMANAGER->playEff("dig2");
+				SOUNDMANAGER->playEff("hit2");
+				break;
+			case 3:
+				SOUNDMANAGER->playEff("dig3");
+				SOUNDMANAGER->playEff("hit3");
+				break;
+			case 4:
+				SOUNDMANAGER->playEff("dig4");
+				SOUNDMANAGER->playEff("hit4");
+				break;
+			case 5:
+				SOUNDMANAGER->playEff("dig5");
+				SOUNDMANAGER->playEff("hit5");
+				break;
+			case 6:
+				SOUNDMANAGER->playEff("dig6");
+				SOUNDMANAGER->playEff("hit6");
+				break;
+			}
+			SOUNDMANAGER->playEff("wall2_Dig");
+			SOUNDMANAGER->playEff("hit");
+		}
 		else
 		{
 			SOUNDMANAGER->playEff("dig_Fail");
+			_killCombo = 0;
+			if (_grooveChain > 1)
+			{
+				SOUNDMANAGER->playEff("grooveChainFail");
+			}
 		}
 		break;
 	case OBJ_WALL3:
-		if (_shovel_Dmg > 2)
+		_isShowShovel = true;
+		if (_shovelDmg > 2)
 		{
 			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
 			switch (rnd)
@@ -601,39 +720,139 @@ void player::objFunc(POINT direction)
 			}
 			SOUNDMANAGER->playEff("wall3_Dig");
 		}
+		else if (_inventory[INVEN_SHOVEL].itemVal == ITEM_SHOVEL_BLOOD)
+		{
+			_curHp -= 1;
+			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+			_curHp -= 1;
+			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+			switch (rnd)
+			{
+			case 1:
+				SOUNDMANAGER->playEff("dig1");
+				SOUNDMANAGER->playEff("hit1");
+				break;
+			case 2:
+				SOUNDMANAGER->playEff("dig2");
+				SOUNDMANAGER->playEff("hit2");
+				break;
+			case 3:
+				SOUNDMANAGER->playEff("dig3");
+				SOUNDMANAGER->playEff("hit3");
+				break;
+			case 4:
+				SOUNDMANAGER->playEff("dig4");
+				SOUNDMANAGER->playEff("hit4");
+				break;
+			case 5:
+				SOUNDMANAGER->playEff("dig5");
+				SOUNDMANAGER->playEff("hit5");
+				break;
+			case 6:
+				SOUNDMANAGER->playEff("dig6");
+				SOUNDMANAGER->playEff("hit6");
+				break;
+			}
+			SOUNDMANAGER->playEff("wall2_Dig");
+			SOUNDMANAGER->playEff("hit");
+		}
 		else
 		{
 			SOUNDMANAGER->playEff("dig_Fail");
+			_killCombo = 0;
+			if (_grooveChain > 1)
+			{
+				SOUNDMANAGER->playEff("grooveChainFail");
+			}
 		}
 		break;
 	case OBJ_WALL_GOLD:
-		SOUNDMANAGER->playEff("dig_Fail");
-		//(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+		_isShowShovel = true;
+		if (_inventory[INVEN_SHOVEL].itemVal == ITEM_SHOVEL_BLOOD)
+		{
+			_curHp -= 1;
+			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+			_curHp -= 1;
+			(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+			switch (rnd)
+			{
+			case 1:
+				SOUNDMANAGER->playEff("dig1");
+				SOUNDMANAGER->playEff("hit1");
+				break;
+			case 2:
+				SOUNDMANAGER->playEff("dig2");
+				SOUNDMANAGER->playEff("hit2");
+				break;
+			case 3:
+				SOUNDMANAGER->playEff("dig3");
+				SOUNDMANAGER->playEff("hit3");
+				break;
+			case 4:
+				SOUNDMANAGER->playEff("dig4");
+				SOUNDMANAGER->playEff("hit4");
+				break;
+			case 5:
+				SOUNDMANAGER->playEff("dig5");
+				SOUNDMANAGER->playEff("hit5");
+				break;
+			case 6:
+				SOUNDMANAGER->playEff("dig6");
+				SOUNDMANAGER->playEff("hit6");
+				break;
+			}
+			SOUNDMANAGER->playEff("wall2_Dig");
+			SOUNDMANAGER->playEff("hit");
+		}
+		else
+		{
+			SOUNDMANAGER->playEff("dig_Fail");
+			_killCombo = 0;
+			if (_grooveChain > 1)
+			{
+				SOUNDMANAGER->playEff("grooveChainFail");
+			}
+		}
 		break;
 	case OBJ_WALL_BOSS:
+		_isShowShovel = true;
 		SOUNDMANAGER->playEff("dig_Fail");
-		//(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+		_killCombo = 0;
+		if (_grooveChain > 1)
+		{
+			SOUNDMANAGER->playEff("grooveChainFail");
+		}
 		break;
 	case OBJ_WALL_END:
+		_isShowShovel = true;
 		SOUNDMANAGER->playEff("dig_Fail");
-		//(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
+		_killCombo = 0;
+		if (_grooveChain > 1)
+		{
+			SOUNDMANAGER->playEff("grooveChainFail");
+		}
 		break;
 	case OBJ_DOOR_FRONT:
 		(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
 		SOUNDMANAGER->playEff("doorOpen");
+		_killCombo = 0;
+		if (_grooveChain > 1)
+		{
+			SOUNDMANAGER->playEff("grooveChainFail");
+		}
 		break;
 	case OBJ_DOOR_SIDE:
 		(*_vvObj)[_idx.y + direction.y][_idx.x + direction.x]->objSetDefault();
 		SOUNDMANAGER->playEff("doorOpen");
+		_killCombo = 0;
+		if (_grooveChain > 1)
+		{
+			SOUNDMANAGER->playEff("grooveChainFail");
+		}
 		break;
 	}
 
-	_atkSoundNum = 0;
-}
-
-void player::enemyAtk()
-{
-
+	_atkCombo = 1;
 }
 
 void player::setInventoryItem(int objAttr)
@@ -649,6 +868,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Spear");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		//공격 이펙트 이미지 넣을것.
 		break;
 	case ITEM_SPEAR_BLOOD:
@@ -660,6 +880,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Spear");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SPEAR_TITANIUM:
 		_inventory[INVEN_WEAPON].frameX = 4;
@@ -670,6 +891,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 2;
 		_effectImg = IMAGEMANAGER->findImage("effect_Spear");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SPEAR_GLASS:
 		_inventory[INVEN_WEAPON].frameX = 6;
@@ -680,6 +902,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 4;
 		_effectImg = IMAGEMANAGER->findImage("effect_Spear");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SPEAR_OBSIDIAN:
 		_inventory[INVEN_WEAPON].frameX = 8;
@@ -690,6 +913,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Spear");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SWORD_NORMAL:
 		_inventory[INVEN_WEAPON].frameX = 0;
@@ -700,6 +924,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Sword");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SWORD_BLOOD:
 		_inventory[INVEN_WEAPON].frameX = 2;
@@ -710,6 +935,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Sword");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SWORD_TITANIUM:
 		_inventory[INVEN_WEAPON].frameX = 4;
@@ -720,6 +946,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 2;
 		_effectImg = IMAGEMANAGER->findImage("effect_Sword");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SWORD_GLASS:
 		_inventory[INVEN_WEAPON].frameX = 6;
@@ -730,6 +957,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 4;
 		_effectImg = IMAGEMANAGER->findImage("effect_Sword");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_SWORD_OBSIDIAN:
 		_inventory[INVEN_WEAPON].frameX = 8;
@@ -740,6 +968,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
 		_effectImg = IMAGEMANAGER->findImage("effect_Sword");
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	case ITEM_GLASS_WEAPON:
 		_inventory[INVEN_WEAPON].frameX = 6;
@@ -759,6 +988,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 		_inventory[INVEN_TORCH].itemVal = objAttr;
 		_torchPower = 3;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_TORCH_2:
 		_inventory[INVEN_TORCH].frameX = 2;
@@ -768,6 +998,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 		_inventory[INVEN_TORCH].itemVal = objAttr;
 		_torchPower = 4;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_TORCH_3:
 		_inventory[INVEN_TORCH].frameX = 4;
@@ -777,6 +1008,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 		_inventory[INVEN_TORCH].itemVal = objAttr;
 		_torchPower = 5;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_TORCH_GLASS:
 		_inventory[INVEN_TORCH].frameX = 6;
@@ -786,7 +1018,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 		_inventory[INVEN_TORCH].itemVal = objAttr;
 		_torchPower = 6;
-		//레이캐스트 떄문에 토치파워 6으로했을때 문제생기면 5로 넣자그냥
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_TORCH_OBSIDIAN:
 		_inventory[INVEN_TORCH].frameX = 8;
@@ -796,6 +1028,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 		_inventory[INVEN_TORCH].itemVal = objAttr;
 		_torchPower = 3;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_GLASS_TORCH:
 		_inventory[INVEN_TORCH].frameX = 6;
@@ -813,7 +1046,10 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = false;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg = 1;
+		_shovelDmg = 1;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_SHOVEL_BLOOD:
 		_inventory[INVEN_SHOVEL].frameX = 2;
@@ -822,7 +1058,10 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = false;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg = 1;
+		_shovelDmg = 1;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_SHOVEL_TITANIUM:
 		_inventory[INVEN_SHOVEL].frameX = 4;
@@ -831,7 +1070,10 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = false;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg =2;
+		_shovelDmg =2;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_SHOVEL_GLASS:
 		_inventory[INVEN_SHOVEL].frameX = 6;
@@ -840,7 +1082,10 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = true;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg = 3;
+		_shovelDmg = 3;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_SHOVEL_OBSIDIAN:
 		_inventory[INVEN_SHOVEL].frameX = 8;
@@ -849,7 +1094,10 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = false;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg = 1;
+		_shovelDmg = 1;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_GLASS_SHOVEL:
 		_inventory[INVEN_SHOVEL].frameX = 6;
@@ -858,7 +1106,9 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_SHOVEL].isGlass = false;
 		_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
 		_inventory[INVEN_SHOVEL].itemVal = objAttr;
-		_shovel_Dmg = 1;
+		_shovelDmg = 1;
+		_shovelFrameX = _inventory[INVEN_SHOVEL].frameX;
+		_shovelFrameY = _inventory[INVEN_SHOVEL].frameY;
 		break;
 	case ITEM_ARMOR_1:
 		_inventory[INVEN_ARMOR].frameX = 0;
@@ -873,6 +1123,7 @@ void player::setInventoryItem(int objAttr)
 		_bodyAni->start();
 		_headImg->SetFrameX(0);
 		_headAni->start();
+		SOUNDMANAGER->playEff("pickup_Armor");
 		break;
 	case ITEM_ARMOR_2:
 		_inventory[INVEN_ARMOR].frameX = 2;
@@ -887,6 +1138,7 @@ void player::setInventoryItem(int objAttr)
 		_bodyAni->start();
 		_headImg->SetFrameX(0);
 		_headAni->start();
+		SOUNDMANAGER->playEff("pickup_Armor");
 		break;
 	case ITEM_ARMOR_3:
 		_inventory[INVEN_ARMOR].frameX = 4;
@@ -901,6 +1153,7 @@ void player::setInventoryItem(int objAttr)
 		_bodyAni->start();
 		_headImg->SetFrameX(0);
 		_headAni->start();
+		SOUNDMANAGER->playEff("pickup_Armor");
 		break;
 	case ITEM_ARMOR_GLASS:
 		_inventory[INVEN_ARMOR].frameX = 6;
@@ -915,6 +1168,7 @@ void player::setInventoryItem(int objAttr)
 		_bodyAni->start();
 		_headImg->SetFrameX(0);
 		_headAni->start();
+		SOUNDMANAGER->playEff("pickup_Armor");
 		break;
 	case ITEM_ARMOR_OBSIDIAN:
 		_inventory[INVEN_ARMOR].frameX = 8;
@@ -929,6 +1183,7 @@ void player::setInventoryItem(int objAttr)
 		_bodyAni->start();
 		_headImg->SetFrameX(0);
 		_headAni->start();
+		SOUNDMANAGER->playEff("pickup_Armor");
 		break;
 	case ITEM_HP_APPLE:
 		_inventory[INVEN_HP].frameX = 0;
@@ -937,7 +1192,8 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_HP].isGlass = false;
 		_inventory[INVEN_HP].itemKind = INVEN_HP;
 		_inventory[INVEN_HP].itemVal = objAttr;
-		_recoverVal = 2;
+		_recoverHp = 2;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_HP_CHEESE:
 		_inventory[INVEN_HP].frameX = 2;
@@ -946,7 +1202,8 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_HP].isGlass = false;
 		_inventory[INVEN_HP].itemKind = INVEN_HP;
 		_inventory[INVEN_HP].itemVal = objAttr;
-		_recoverVal = 4;
+		_recoverHp = 4;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_HP_MEAT:
 		_inventory[INVEN_HP].frameX = 4;
@@ -955,7 +1212,8 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_HP].isGlass = false;
 		_inventory[INVEN_HP].itemKind = INVEN_HP;
 		_inventory[INVEN_HP].itemVal = objAttr;
-		_recoverVal = 6;
+		_recoverHp = 6;
+		SOUNDMANAGER->playEff("pickup");
 		break;
 	case ITEM_DAGGER:
 		_inventory[INVEN_WEAPON].frameX = 8;
@@ -965,6 +1223,7 @@ void player::setInventoryItem(int objAttr)
 		_inventory[INVEN_WEAPON].itemKind = INVEN_WEAPON;
 		_inventory[INVEN_WEAPON].itemVal = objAttr;
 		_dmg = 1;
+		SOUNDMANAGER->playEff("pickup_Weapon");
 		break;
 	}
 }
@@ -973,11 +1232,11 @@ void player::attackFunc(POINT direction)
 {
 	int rnd = RND->getFromIntTo(1, 5);
 
-	if (_atkSoundNum > 4)
+	if (_atkCombo > 4)
 	{
-		_atkSoundNum = 0;
+		_atkCombo = 1;
 	}
-	switch (_atkSoundNum)
+	switch (_atkCombo)
 	{
 	case 1:
 		switch (rnd)
@@ -1049,7 +1308,7 @@ void player::attackFunc(POINT direction)
 		break;
 	}
 
-	_atkSoundNum++;
+	_atkCombo++;
 
 	for (int i = 0; i < _em->getVEnemy().size(); i++)
 	{
@@ -1290,6 +1549,32 @@ void player::setWeaponVDirection(int itemVal, POINT direction)
 	}
 }
 
+void player::useHpIten()
+{
+	_curHp += _recoverHp;
+	_inventory[INVEN_HP].frameX = NULL;
+	_inventory[INVEN_HP].frameY = NULL;
+	_inventory[INVEN_HP].isGet = false;
+	_inventory[INVEN_HP].isGlass = false;
+	_inventory[INVEN_HP].itemKind = INVEN_HP;
+	_inventory[INVEN_HP].itemVal = NULL;
+	_recoverHp = 0;
+	SOUNDMANAGER->playEff("heal");
+	int rnd = RND->getFromIntTo(1, 4);
+	switch (rnd)
+	{
+	case 1:
+		SOUNDMANAGER->playEff("heal1");
+		break;
+	case 2:
+		SOUNDMANAGER->playEff("heal2");
+		break;
+	case 3:
+		SOUNDMANAGER->playEff("heal3");
+		break;
+	}
+}
+
 //===========================================
 //					render
 //===========================================
@@ -1338,19 +1623,19 @@ void player::txtRender()
 	D2DMANAGER->drawText(str, 0, 340, 20, 0x00ffff);
 	swprintf_s(str, L"def : %d ", _def);
 	D2DMANAGER->drawText(str, 0, 360, 20, 0x00ffff);
-	swprintf_s(str, L"torchPower : %d ", _torchPower);
+	swprintf_s(str, L"grooveChain : %d ", _grooveChain);
 	D2DMANAGER->drawText(str, 0, 380, 20, 0x00ffff);
-	swprintf_s(str, L"회복 : %d ", _recoverVal);
+	swprintf_s(str, L"killCombo : %d ", _killCombo);
 	D2DMANAGER->drawText(str, 0, 400, 20, 0x00ffff);
 }
 
-void player::AttackEffectRender()
+void player::effectRender()
 {
 	if (_isShowEff)
 	{
 		if (_inventory[INVEN_WEAPON].itemVal == ITEM_DAGGER || _inventory[INVEN_WEAPON].itemVal == ITEM_GLASS_WEAPON)
 		{
-			_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+			_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 		}
 		else if (_inventory[INVEN_WEAPON].itemVal >= ITEM_SPEAR_NORMAL && _inventory[INVEN_WEAPON].itemVal <= ITEM_SPEAR_OBSIDIAN)
 		{
@@ -1358,42 +1643,48 @@ void player::AttackEffectRender()
 
 			if (_direction.x == 1)
 			{
-				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() - 10, _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() - 10, _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 			}
 			else if (_direction.x == -1)
 			{
-				_effectImg->frameRenderAngle((_idx.x + _direction.x - 1) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() - 5, _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+				_effectImg->frameRenderAngle((_idx.x + _direction.x - 1) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() - 5, _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 			}
 			else if (_direction.y == 1)
 			{
-				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() - 20, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() - 20, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 			}
 			else if (_direction.y == -1)
 			{
-				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() - 25, (_idx.y + _direction.y - 1) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+				_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() - 25, (_idx.y + _direction.y - 1) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 			}
 		}
 		else if (_inventory[INVEN_WEAPON].itemVal >= ITEM_SWORD_NORMAL && _inventory[INVEN_WEAPON].itemVal <= ITEM_SWORD_OBSIDIAN)
 		{
-			_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y - 1) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _angle, 1.0f);
+			_effectImg->frameRenderAngle((_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _direction.y - 1) * TILESIZE - CAMERA->getPosY(), _effectImg->GetFrameX(), _effectImg->GetFrameY(), _effectAngle, 1.0f);
 		}
+	}
+	if (_isShowShovel)
+	{
+		_shovelImg->frameRender(_posCT.x + (_direction.x * TILESIZE) - CAMERA->getPosX() - TILESIZE / 2, _posCT.y + (_direction.y * TILESIZE) - 30 - CAMERA->getPosY() - TILESIZE / 2, _shovelFrameX, _shovelFrameY);
 	}
 }
 
-void player::removeWeapon()
+void player::brokeWeapon()
 {
 	_inventory[INVEN_WEAPON].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_WEAPON].slotImg = IMAGEMANAGER->findImage("slot_Weapon");
-	_inventory[INVEN_WEAPON].frameX = 8;
+	_inventory[INVEN_WEAPON].frameX = 6;
 	_inventory[INVEN_WEAPON].frameY = 10;
 	_inventory[INVEN_WEAPON].isGet = false;
 	_inventory[INVEN_WEAPON].isGlass = false;
 	_inventory[INVEN_WEAPON].itemKind = INVEN_WEAPON;
-	_inventory[INVEN_WEAPON].itemVal = ITEM_DAGGER;
+	_inventory[INVEN_WEAPON].itemVal = ITEM_GLASS_WEAPON;
+	_dmg = 1;
+	_effectImg = IMAGEMANAGER->findImage("effect_Dagger");
 	SOUNDMANAGER->playEff("brokeItem");
 }
 
-void player::removeTorch()
+void player::brokeTorch()
 {
 	_inventory[INVEN_TORCH].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_TORCH].slotImg = IMAGEMANAGER->findImage("slot_Torch");
@@ -1403,10 +1694,11 @@ void player::removeTorch()
 	_inventory[INVEN_TORCH].isGlass = false;
 	_inventory[INVEN_TORCH].itemKind = INVEN_TORCH;
 	_inventory[INVEN_TORCH].itemVal = NULL;
+	_torchPower = 2;
 	SOUNDMANAGER->playEff("brokeItem");
 }
 
-void player::removeShovel()
+void player::brokeShovel()
 {
 	_inventory[INVEN_SHOVEL].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_SHOVEL].slotImg = IMAGEMANAGER->findImage("slot_Shovel");
@@ -1415,11 +1707,12 @@ void player::removeShovel()
 	_inventory[INVEN_SHOVEL].isGet = false;
 	_inventory[INVEN_SHOVEL].isGlass = false;
 	_inventory[INVEN_SHOVEL].itemKind = INVEN_SHOVEL;
-	_inventory[INVEN_SHOVEL].itemVal = ITEM_SHOVEL_NORMAL;
+	_inventory[INVEN_SHOVEL].itemVal = ITEM_GLASS_SHOVEL;
+	_shovelDmg = 1;
 	SOUNDMANAGER->playEff("brokeItem");
 }
 
-void player::removeArmor()
+void player::brokeArmor()
 {
 	_inventory[INVEN_ARMOR].img = IMAGEMANAGER->findImage("Item");
 	_inventory[INVEN_ARMOR].slotImg = IMAGEMANAGER->findImage("slot_Armor");
@@ -1429,7 +1722,12 @@ void player::removeArmor()
 	_inventory[INVEN_ARMOR].isGlass = false;
 	_inventory[INVEN_ARMOR].itemKind = INVEN_ARMOR;
 	_inventory[INVEN_ARMOR].itemVal = NULL;
-
+	_def = 0;
+	_bodyAni = KEYANIMANAGER->findAnimation("playerBody", "normalBody");
+	_bodyImg->SetFrameX(0);
+	_bodyAni->start();
+	_headImg->SetFrameX(0);
+	_headAni->start();
 	SOUNDMANAGER->playEff("brokeItem");
 }
 

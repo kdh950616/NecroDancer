@@ -13,6 +13,7 @@ enemyMgr::~enemyMgr()
 
 HRESULT enemyMgr::init()
 {
+	IMAGEMANAGER->addFrameImage("enemy_Attack", L"images/effect/swipe_enemy.png", 270, 48, 5, 1);
 	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	for (int i = 0; i < _vEnemy.size(); i++)
@@ -87,26 +88,8 @@ void enemyMgr::update()
 
 		if (_vEnemy[i]->getCurHp() <= 0)
 		{
-			//자기 주변 검사하는 포문
-			//for (int j = -1; j <= 1; j++)
-			//{
-			//	for (int k = -1; k <= 1; k++)
-			//	{
-			//		if (abs(j) == abs(k) && j != 0 && k != 0) continue;
-			//		//벡터 터짐방지
-			//		if ((*_vvObj).size() > _vEnemy[i]->getIdx().y + j && _vEnemy[i]->getIdx().y + j > 0
-			//			&& (*_vvObj)[0].size() > _vEnemy[i]->getIdx().x + k && _vEnemy[i]->getIdx().x + k > 0)
-			//		{
-			//			//주변녀석의 속성이 없으면 -> 벽일경우를 위해 
-			//			if ((*_vvObj)[_vEnemy[i]->getIdx().y + j][_vEnemy[i]->getIdx().x + k]->getAttribute() == OBJ_NONE)
-			//			{
-			//				//해당 오브젝트 true로 바꿔줌. -> 지워지면서 땅건들던거 초기화하는거임
-			//				(*_vvObj)[_vEnemy[i]->getIdx().y + j][_vEnemy[i]->getIdx().x + k]->setIsAvailMove(true);
-			//			}
-			//		}
-			//	}
-			//}
 			(*_vvObj)[_vEnemy[i]->getIdx().y][_vEnemy[i]->getIdx().x]->setIsAvailMove(true);
+			(*_player).setKillCombo((*_player).getKillCombo() + 1);
 			int rnd;
 			switch (_vEnemy[i]->getEnemyType())
 			{
@@ -170,18 +153,6 @@ void enemyMgr::update()
 				break;
 				case KING:		//베이스(최종)
 				break;
-			//	case CORALRIFF:
-			//	break;
-			//	case PIANO:
-			//	break;
-			//	case VIOLIN:
-			//	break;
-			//	case TRUNPET:
-			//	break;
-			//	case DRUM:
-			//	break;
-			//	case END:
-			//	break;
 			}
 			_vEnemy.erase(_vEnemy.begin() + i);
 			if ((*_player).getInventory(INVEN_WEAPON).itemVal == ITEM_SPEAR_BLOOD || (*_player).getInventory(INVEN_WEAPON).itemVal == ITEM_SWORD_BLOOD)

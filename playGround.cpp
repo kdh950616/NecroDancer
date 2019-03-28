@@ -113,27 +113,30 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("wall1_Dig", "sounds/object/mov_dig_dirt.ogg", false, false);//
 	SOUNDMANAGER->addSound("wall2_Dig", "sounds/object/mov_dig_stone.ogg", false, false);//
 	SOUNDMANAGER->addSound("wall3_Dig", "sounds/object/mov_dig_brick.ogg", false, false);//
-	SOUNDMANAGER->addSound("dig_Fail", "sounds/object/mov_dog_fail.ogg", false, false);//
+	SOUNDMANAGER->addSound("dig_Fail", "sounds/object/mov_dig_fail.ogg", false, false);//
+	SOUNDMANAGER->addSound("pickup_Weapon", "sounds/object/sfx_pickup_weapon.ogg", false, false);//
+	SOUNDMANAGER->addSound("pickup_Armor", "sounds/object/sfx_pickup_armor.ogg", false, false);//
+	SOUNDMANAGER->addSound("pickup", "sounds/object/sfx_pickup_general_ST.ogg", false, false);//
 	//===============================================
 	//				player
 	//===============================================
 	//atk
-	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_01.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_02.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_03.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_1_1", "sounds/player/atk/vo_cad_melee_1_04.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_01.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_02.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_03.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_2_1", "sounds/player/atk/vo_cad_melee_2_04.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_01.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_02.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_03.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_3_1", "sounds/player/atk/vo_cad_melee_3_04.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_01.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_02.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_03.ogg", false, false);//
-	SOUNDMANAGER->addSound("atk_4_1", "sounds/player/atk/vo_cad_melee_4_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk1_1", "sounds/player/atk/vo_cad_melee_1_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk1_2", "sounds/player/atk/vo_cad_melee_1_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk1_3", "sounds/player/atk/vo_cad_melee_1_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk1_4", "sounds/player/atk/vo_cad_melee_1_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk2_1", "sounds/player/atk/vo_cad_melee_2_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk2_2", "sounds/player/atk/vo_cad_melee_2_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk2_3", "sounds/player/atk/vo_cad_melee_2_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk2_4", "sounds/player/atk/vo_cad_melee_2_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk3_1", "sounds/player/atk/vo_cad_melee_3_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk3_2", "sounds/player/atk/vo_cad_melee_3_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk3_3", "sounds/player/atk/vo_cad_melee_3_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk3_4", "sounds/player/atk/vo_cad_melee_3_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk4_1", "sounds/player/atk/vo_cad_melee_4_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk4_2", "sounds/player/atk/vo_cad_melee_4_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk4_3", "sounds/player/atk/vo_cad_melee_4_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("atk4_4", "sounds/player/atk/vo_cad_melee_4_04.ogg", false, false);//
 	//hit
 	SOUNDMANAGER->addSound("hit1", "sounds/player/hit/vo_cad_hurt_01.ogg", false, false);//
 	SOUNDMANAGER->addSound("hit2", "sounds/player/hit/vo_cad_hurt_02.ogg", false, false);//
@@ -141,18 +144,33 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("hit4", "sounds/player/hit/vo_cad_hurt_04.ogg", false, false);//
 	SOUNDMANAGER->addSound("hit5", "sounds/player/hit/vo_cad_hurt_05.ogg", false, false);//
 	SOUNDMANAGER->addSound("hit6", "sounds/player/hit/vo_cad_hurt_06.ogg", false, false);//
-	SOUNDMANAGER->addSound("hit", "sounds/player/hit/sfx_player_hit_ST.ogg", false, false);//
 
 	//heal
-	SOUNDMANAGER->addSound("heal1", "sounds/player/heal/vo_cad_heal_01.ogg", false, false);
-	SOUNDMANAGER->addSound("heal2", "sounds/player/heal/vo_cad_heal_02.ogg", false, false);
-	SOUNDMANAGER->addSound("heal3", "sounds/player/heal/vo_cad_heal_03.ogg", false, false);
+	SOUNDMANAGER->addSound("heal1", "sounds/player/heal/vo_cad_heal_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("heal2", "sounds/player/heal/vo_cad_heal_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("heal3", "sounds/player/heal/vo_cad_heal_03.ogg", false, false);//
 
 	//item broke
+
+	//===============================================
+	//				ui & item
+	//===============================================
+	SOUNDMANAGER->addSound("hit", "sounds/player/hit/sfx_player_hit_ST.ogg", false, false);//
+	SOUNDMANAGER->addSound("heal", "sounds/player/heal/sfx_item_food.ogg", false, false);//
 	SOUNDMANAGER->addSound("brokeItem", "sounds/object/sfx_glass_break.ogg", false, false);//
+	SOUNDMANAGER->addSound("grooveChainStart", "sounds/ui/sfx_chain_groovr_ST.ogg", false, false);//
+	SOUNDMANAGER->addSound("grooveChainFail", "sounds/ui/sfx_chain_break_ST.ogg", false, false);//
+	SOUNDMANAGER->addSound("missBeat", "sounds/ui/sfx_missedbeat.ogg", false, false);//
 
-	플레이어 주석처리된거, obj 주석처리된거 사운드 테스트 해보기.. -> 힐아이템 사용 추가 하고 유리아이템 깨지는거 테스트 해보고 책보고 더할거없으면 보스하자.
-
+	// 해야할것. 
+	//보스					
+	//오른쪽 상단 골드, hp UI 등
+	//미니맵
+	//상점 -> 사운드 npc 등							//진행중
+	//함정											//진행중
+	//레이캐스트 횃불개선.							//진행중
+	//아이템상자 추가해서 까면 아이템 랜덤으로 나오게.	//진행중
+	//
 
 
 

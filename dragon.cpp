@@ -14,6 +14,8 @@ dragon::~dragon()
 
 HRESULT dragon::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 4;
@@ -141,6 +143,11 @@ void dragon::update()
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
+
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void dragon::render()
@@ -157,6 +164,10 @@ void dragon::render()
 	else if (!_isLeft)
 	{
 		_img->aniRenderReverseX(_posLT.x - CAMERA->getPosX() - 24, _posLT.y - 30 - _posZ - CAMERA->getPosY() - 48, _ani);
+	}
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0, _atkAngle);
 	}
 }
 

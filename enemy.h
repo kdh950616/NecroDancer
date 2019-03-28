@@ -133,6 +133,10 @@ protected:
 	//막판 추가
 
 	int _gold;
+	POINT _atkDirection;
+	int _atkCount;
+	int _atkEff_Frame;
+	int _atkAngle;
 
 public: 
 	enemy();
@@ -150,6 +154,7 @@ public:
 	virtual void lightFunc();
 	virtual void showAttackEffect();
 	virtual void attackPlayer(int dmg);
+	virtual void countAttackEffect();
 	//=============================================
 	//					link
 	//=============================================

@@ -14,7 +14,8 @@ enemy::~enemy()
 
 HRESULT enemy::init()
 {
-
+	_atkCount = 0;
+	_atkEff_Frame = 0;
 
 	return S_OK;
 }
@@ -82,37 +83,41 @@ void enemy::lightFunc()
 
 void enemy::showAttackEffect()
 {
-	if (_direction.x == 0)
+	if (_direction.y == 1)
 	{
-		if (_direction.y == 1)
-		{
-			//EFFECTMANAGER->play("enemy_attack", (_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() + TILESIZE / 2, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() + TILESIZE / 2);
-		}
-		else if (_direction.y == -1)
-		{
-			//EFFECTMANAGER->play("enemy_attack", (_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() + TILESIZE / 2, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() + TILESIZE / 2);
-		}
+		_atkDirection = { 0,1 };
+		_atkAngle = 90;
 	}
-	else if (_direction.y == 0)
+	else if (_direction.y == -1)
 	{
-		if (_direction.x == 1)
-		{
-			//EFFECTMANAGER->play("enemy_attack", (_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() + TILESIZE / 2, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() + TILESIZE / 2);
-		}
-		else if (_direction.x == -1)
-		{
-			//EFFECTMANAGER->play("enemy_attack", (_idx.x + _direction.x) * TILESIZE - CAMERA->getPosX() + TILESIZE / 2, (_idx.y + _direction.y) * TILESIZE - CAMERA->getPosY() + TILESIZE / 2);
-		}
+		_atkDirection = { 0,-1 };
+		_atkAngle = 270;
 	}
+	if (_direction.x == 1)
+	{
+		_atkDirection = { 1,0 };
+		_atkAngle = 0;
+	}
+	else if (_direction.x == -1)
+	{
+		_atkDirection = { -1,0 };
+		_atkAngle = 180;
+	}
+	_isAttack = true;
 }
 
 void enemy::attackPlayer(int dmg)
 {
-	if ((*_player).getDef() - dmg > 0)
+	if (dmg - (*_player).getDef() > 0)
 	{
-		(*_player).setCurHp((*_player).getCurHp() - ((*_player).getDef() - dmg));
+		(*_player).setCurHp((*_player).getCurHp() - (dmg - (*_player).getDef()));
 	}
 
+	(*_player).setKillCombo(0);
+	if ((*_player).getGrooveChain() > 1)
+	{
+		SOUNDMANAGER->playEff("grooveChainFail");
+	}
 	showAttackEffect();
 
 	int rnd = RND->getFromIntTo(1, 7);
@@ -139,22 +144,40 @@ void enemy::attackPlayer(int dmg)
 	}
 	if ((*_player).getInventory(INVEN_ARMOR).isGlass == true)
 	{
-		(*_player).removeArmor();
+		(*_player).brokeArmor();
 	}
 	else if ((*_player).getInventory(INVEN_WEAPON).isGlass == true)
 	{
-		(*_player).removeWeapon();
+		(*_player).brokeWeapon();
 	}
 	else if ((*_player).getInventory(INVEN_SHOVEL).isGlass == true)
 	{
-		(*_player).removeShovel();
+		(*_player).brokeShovel();
 	}
 	else if ((*_player).getInventory(INVEN_TORCH).isGlass == true)
 	{
-		(*_player).removeTorch();
+		(*_player).brokeTorch();
 	}
 
 	SOUNDMANAGER->playEff("hit");
 
 	//코인배수 0 만들기 추가================================================================
+}
+
+void enemy::countAttackEffect()
+{
+	_atkCount++;
+
+	if (_atkCount >= 3)
+	{
+		_atkEff_Frame++;
+		_atkCount = 0;
+
+		if (_atkEff_Frame > 5)
+		{
+			_atkEff_Frame = 0;
+			_atkDirection = { 0,0 };
+			_isAttack = false;
+		}
+	}
 }

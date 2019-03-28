@@ -47,6 +47,14 @@ private:
 
 
 	bool _showText;
+
+
+	float _itemPosY;			//아이템 둥둥 떠다니기 전용 변수
+	bool _isNeedIncress;		//증가 -> 감소 -> 증가 하기위한 불변수
+
+	int _tileBlinkX;			//코인배수가 있을때 이미지프레임 x에 더할 값 ( + 1 ~ + 2)  
+								//플레이어한테 코인배수 받아와서 2이상이면 1 ~ 2사이로 움직이면서 적요하면됨 적용법은 이전에 맵에디터에 만들어뒀던거 참고
+
 public:
 	testScene();
 	~testScene();
@@ -79,6 +87,7 @@ public:
 	void tileUpdate();
 	void playerUpdate();
 	void beatUpdate();
+	void itemFloating();
 
 	//===========================================
 	//					render

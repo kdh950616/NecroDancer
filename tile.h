@@ -105,7 +105,8 @@ enum tagImgNum
 	IMG_ENEMY2,
 	IMG_ENEMY3,
 	IMG_ENEMY4,
-	IMG_ETC,
+	IMG_ETC1,
+	IMG_ETC2,
 	IMG_END
 };
 

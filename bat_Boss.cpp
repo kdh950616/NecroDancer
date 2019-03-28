@@ -14,6 +14,8 @@ bat_Boss::~bat_Boss()
 
 HRESULT bat_Boss::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 3;
@@ -129,6 +131,11 @@ void bat_Boss::update()
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
+
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void bat_Boss::render()
@@ -141,6 +148,10 @@ void bat_Boss::render()
 	else if (!_isLeft)
 	{
 		_img->aniRender(_posLT.x - CAMERA->getPosX() - 5, _posLT.y - 10 - _posZ - CAMERA->getPosY(), _ani);
+	}
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0, _atkAngle);
 	}
 }
 

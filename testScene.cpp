@@ -41,6 +41,8 @@ HRESULT testScene::init()
 
 	delete _mapLoader;
 	_mapLoader = nullptr;
+
+	_itemPosY = 0;
 	return S_OK;
 }
 
@@ -54,6 +56,7 @@ void testScene::update()
 
 	playerUpdate();
 	
+	_rayCast->checkMap({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, (*_player).getTorchPower(), _tileSizeX, _tileSizeY);
 	_rayCast->rayCasting({ (int)_player->getPosCT().x / TILESIZE, (int)_player->getPosCT().y / TILESIZE }, (*_player).getTorchPower());
 
 	beatUpdate();
@@ -65,6 +68,8 @@ void testScene::update()
 	{
 		_showText == true ? _showText = false : _showText = true;
 	}
+
+	itemFloating();
 }
 
 void testScene::render()
@@ -82,7 +87,8 @@ void testScene::render()
 	textRender();
 
 	_player->txtRender();
-	_player->AttackEffectRender();
+	_player->effectRender();
+	_player->renderUI();
 }
 
 
@@ -109,7 +115,12 @@ void testScene::imageInit()
 	IMAGEMANAGER->addFrameImage("beat_Heart", L"images/ui/beat_Heart.png", 160, 100, 2, 1);
 	IMAGEMANAGER->addImage("beat_Green", L"images/ui/beat_Green.png", 12, 64);
 	IMAGEMANAGER->addImage("beat_Red", L"images/ui/beat_Red.png", 12, 64);
+	//코인배수
+	IMAGEMANAGER->addImage("grooveChain", L"images/ui/game_coinmultiplier.png", 81, 18);
+	IMAGEMANAGER->addFrameImage("number", L"images/ui/number.png", 40, 18, 4, 1);
 
+	//아이템용 그림자
+	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 }
 
 void testScene::mapLoaderInit()
@@ -237,20 +248,52 @@ void testScene::beatUpdate()
 		_isBeat = true;
 		_heartImg->SetFrameX(1);
 		_vBeat.erase(_vBeat.begin());
+
+		if ((*_player).getGrooveChain() > 1)
+		{
+			if (_tileBlinkX == 0)
+			{
+				_tileBlinkX = 1;
+			}
+			else if (_tileBlinkX == 1)
+			{
+				_tileBlinkX = 2;
+			}
+			else if (_tileBlinkX == 2)
+			{
+				_tileBlinkX = 1;
+			}
+		}
+		else
+		{
+			_tileBlinkX = 0;
+		}
 	}
 
 	RECT tmp;
 	if (_player->getIsPressKey())
 	{
-		//if (_vBeat.begin()->beat - 200 < _time && _vBeat.begin()->beat + 100 > _time)
-		if(IntersectRect(&tmp, &rectMake(_rc_Correct), &rectMake(_vBeat.begin()->rc_Left)))// && _vBeat.begin()->isRight == true)
+		//비트 맞으면
+		if(IntersectRect(&tmp, &rectMake(_rc_Correct), &rectMake(_vBeat.begin()->rc_Left)))
 		{
 			_vBeat.begin()->isRight = false;
 			_player->setIsBeat(true);
 		}
-		else if (IntersectRect(&tmp, &rectMake(_rc_Wrong), &rectMake(_vBeat.begin()->rc_Left)))// && _vBeat.begin()->isRight == true)
+		//비트 틀리면
+		else if (IntersectRect(&tmp, &rectMake(_rc_Wrong), &rectMake(_vBeat.begin()->rc_Left)))
 		{
 			_vBeat.begin()->isRight = false;
+			(*_player).setKillCombo(0);
+
+			if ((*_player).getGrooveChain() > 1)
+			{
+				SOUNDMANAGER->playEff("grooveChainFail");
+			}
+			else
+			{
+				SOUNDMANAGER->playEff("missBeat");
+			}
+			//여기에 비트 틀릴때 사운드 넣어주자
 		}
 	}
 	
@@ -285,27 +328,89 @@ void testScene::beatUpdate()
 	}
 }
 
+void testScene::itemFloating()
+{
+	if (_isNeedIncress) //증가해야하면
+	{
+		if (_itemPosY >= 5.0f)
+		{
+			_isNeedIncress = false;
+		}
+		_itemPosY += 0.2f;
+	}
+	else if (!_isNeedIncress) //감소해야하면
+	{
+		if (_itemPosY <= -5.0f)
+		{
+			_isNeedIncress = true;
+		}
+		_itemPosY -= 0.2f;
+	}
+}
+
 //===========================================
 //					render
 //===========================================
 
 void testScene::tileRender()
 {
-	for (int i = 0; i < _tileSizeY; i++)
+	//골드배수가 1과 같거나 작으면 반짝이지 않음
+	if ((*_player).getGrooveChain() <= 1)
 	{
-		for (int j = 0; j < _tileSizeX; j++)
+		for (int i = 0; i < _tileSizeY; i++)
 		{
-			if (_vvMap[i][j]->getImg() != nullptr 
-				&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x 
-				&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y 
-				&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
-				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y)
+			for (int j = 0; j < _tileSizeX; j++)
 			{
-				_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left
-					- CAMERA->getPosX(), 
-													_vvMap[i][j]->getRc().top
-					- CAMERA->getPosY(),
-					_vvMap[i][j]->getFrameX(), _vvMap[i][j]->getFrameY());
+				if (_vvMap[i][j]->getImg() != nullptr
+					&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
+					&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
+					&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
+					&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y)
+				{
+					_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left
+						- CAMERA->getPosX(),
+						_vvMap[i][j]->getRc().top
+						- CAMERA->getPosY(),
+						_vvMap[i][j]->getFrameX(), _vvMap[i][j]->getFrameY());
+				}
+			}
+		}
+	}
+	//골드배수가 1보다 크면 타일이 반짝임
+	else if ((*_player).getGrooveChain() > 1)
+	{
+		for (int i = 0; i < _tileSizeY; i++)
+		{
+			for (int j = 0; j < _tileSizeX; j++)
+			{
+				if (_vvMap[i][j]->getImg() != nullptr
+					&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
+					&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
+					&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _vvMap[i][j]->getPos().x
+					&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvMap[i][j]->getPos().y)
+				{
+					//타일의 정보가 땅 or 보스땅이고 프레임x가 4면 기존 프레임 x에 타일업데이트에서 구한 tileBlinkX를 더한것을출력함.
+					if ((_vvMap[i][j]->getAttribute() == TILE_GROUND || _vvMap[i][j]->getAttribute() == TILE_BOSS_GROUND)
+						&& _vvMap[i][j]->getFrameX() == 4)
+					{
+						_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvMap[i][j]->getRc().top
+							- CAMERA->getPosY(),
+							_vvMap[i][j]->getImg()->GetFrameWidth(),
+							_vvMap[i][j]->getImg()->GetFrameHeight(),
+							_vvMap[i][j]->getFrameX() + _tileBlinkX, _vvMap[i][j]->getFrameY());
+					}
+					//그게 아니면 그냥 출력
+					else
+					{
+						_vvMap[i][j]->getImg()->frameRender(_vvMap[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvMap[i][j]->getRc().top
+							- CAMERA->getPosY(),
+							_vvMap[i][j]->getFrameX(), _vvMap[i][j]->getFrameY());
+					}
+				}
 			}
 		}
 	}
@@ -355,11 +460,49 @@ void testScene::objRender()
 				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y
 				&& _vvObj[i][j]->getImgNum() != IMG_WALL)
 			{
-				_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
-					- CAMERA->getPosX(),
-					_vvObj[i][j]->getRc().top
-					- CAMERA->getPosY(),
-					_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				if (_vvObj[i][j]->getAttribute() > ITEM_START && _vvObj[i][j]->getAttribute() < ITEM_END)
+				{
+					if (_vvLightMap[i][j]->getOpacity() < 0.64f)
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY() - TILESIZE / 2 + _itemPosY,
+							_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+
+						IMAGEMANAGER->findImage("shadow_Standard")->render(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY() - 14);
+					}
+					else
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY() - TILESIZE / 2 + _itemPosY,
+							_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY() + 1);
+
+						IMAGEMANAGER->findImage("shadow_Standard")->render(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+							_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY() - 14);
+					}
+				}
+				else
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - TILESIZE / 2 + _itemPosY,
+						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+
+					IMAGEMANAGER->findImage("shadow_Standard")->render(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX(),
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - 14);
+				}
+				
 			}
 		}
 	}
@@ -439,6 +582,19 @@ void testScene::beatRender()
 	 D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
 	//IMAGEMANAGER->frameRender("beat_Heart", WINSIZEX / 2 - IMAGEMANAGER->findImage("beat_Heart")->GetFrameWidth() / 2, WINSIZEY - 125, 0, 0);
 
+	 //코인배수
+	 IMAGEMANAGER->render("grooveChain", WINSIZEX / 2 - 40, WINSIZEY - 20);
+	 //코인배수 숫자
+	 WCHAR str[128];
+	 swprintf_s(str, L"%d", (*_player).getGrooveChain());
+	 if ((*_player).getGrooveChain() > 2)
+	 {
+		 D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xff0000);
+	 }
+	 else
+	 {
+		 D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xffffff);
+	 }
 }
 
 void testScene::textRender()
@@ -448,7 +604,6 @@ void testScene::textRender()
 	D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
 	swprintf_s(str, L"time : %d", _time);
 	D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
-
 	if (_showText)
 	{
 		for (int i = 0; i < _tileSizeY; i++)

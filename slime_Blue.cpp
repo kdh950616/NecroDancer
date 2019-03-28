@@ -14,6 +14,8 @@ slime_Blue::~slime_Blue()
 
 HRESULT slime_Blue::init()
 {
+	enemy::init();
+
 	imageInit();
 
 	_maxHp = 2;
@@ -126,6 +128,11 @@ void slime_Blue::update()
 	{
 		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
 	}
+
+	if (_isAttack)
+	{
+		countAttackEffect();
+	}
 }
 
 void slime_Blue::render()
@@ -143,7 +150,10 @@ void slime_Blue::render()
 	{
 		_img->aniRender(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - _posZ - CAMERA->getPosY(), _ani);
 	}
-
+	if (_isAttack)
+	{
+		IMAGEMANAGER->findImage("enemy_Attack")->frameRenderAngle((_idx.x + _atkDirection.x) * TILESIZE - CAMERA->getPosX(), (_idx.y + _atkDirection.y) * TILESIZE - CAMERA->getPosY(), _atkEff_Frame, 0, _atkAngle);
+	}
 }
 
 void slime_Blue::imageInit()
