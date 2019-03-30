@@ -16,8 +16,8 @@ private:
 	typedef vector<vLightLine> vvLightMap;
 
 
-	const float VOLUME = 0.3f;
-	const float VOLUME_EFF = 1.0f;
+	const float VOLUME = 0.02f;
+	const float VOLUME_EFF = 0.5f;
 private:
 	mapLoader*					_mapLoader;
 
@@ -55,6 +55,14 @@ private:
 	int _tileBlinkX;			//코인배수가 있을때 이미지프레임 x에 더할 값 ( + 1 ~ + 2)  
 								//플레이어한테 코인배수 받아와서 2이상이면 1 ~ 2사이로 움직이면서 적요하면됨 적용법은 이전에 맵에디터에 만들어뒀던거 참고
 	int _torchFrameY;			//횃불프레임변화용 변수
+	float _torchCompare;		//횃불프레임 변화에 쓰일 비교값(비트와 비트사이의 크기 저장해놈)
+
+	int _trapCount;
+
+	aStar* _aStar;
+	list<POINT> _lShopVol;
+	list<POINT>::iterator _lIShopVol; 
+
 public:
 	testScene();
 	~testScene();
@@ -101,7 +109,7 @@ public:
 	//===========================================
 	//					get
 	//===========================================
-
+	list<POINT>* getShopVol() { return &_lShopVol; }
 
 	//===========================================
 	//					set

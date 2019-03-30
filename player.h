@@ -148,6 +148,10 @@ private:
 	int _grooveChain;
 	int _killCombo;
 
+	bool _isSlow;				//슬로우중이니	함정
+	bool _isFast;				//패스트중이니   함정
+	POINT _trapIdx;
+
 public:
 	player();
 	~player();
@@ -261,5 +265,12 @@ public:
 	int getGrooveChain() { return _grooveChain; }
 	void setKillCombo(int killCombo) { _killCombo = killCombo; }
 	int getKillCombo() { return _killCombo; }
+
+	bool getIsSlow() { return _isSlow; }
+	bool getIsFast() { return _isFast; }
+	void setIsSlow(bool isSlow) { _isSlow = isSlow; }
+	void setIsFast(bool isFast) { _isFast = isFast; }
+	POINT getTrapIdx() { return _trapIdx; }
+	void setTrapIdx(POINT trapIdx) { _trapIdx = trapIdx; }
 };
 

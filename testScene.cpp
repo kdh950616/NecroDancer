@@ -42,7 +42,15 @@ HRESULT testScene::init()
 	delete _mapLoader;
 	_mapLoader = nullptr;
 
+	_torchCompare = (_vBeat[1].beat - _vBeat[0].beat) / 4;
+
 	_itemPosY = 0;
+
+	SOUNDMANAGER->ShopVolume(_stageKeyName,0);
+	_aStar = new aStar;
+	_aStar->setMap(&_vvObj);
+	_lShopVol.clear();
+
 	return S_OK;
 }
 
@@ -106,6 +114,7 @@ void testScene::imageInit()
 	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("etc1", L"images/mapTool/etc1.png", 432, 576, 9, 12);
 	IMAGEMANAGER->addFrameImage("etc2", L"images/mapTool/etc2.png", 432, 576, 3, 6);
+	IMAGEMANAGER->addFrameImage("shopkeeper", L"images/item/shopkeeper2.png", 752, 152, 8, 2);
 
 	//적 이미지
 	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
@@ -205,6 +214,101 @@ void testScene::tileUpdate()
 			for (int j = 0; j < _tileSizeX; j++)
 			{
 				_vvMap[i][j]->update();
+				if (_vvObj[i][j]->getAttribute() == ETC_SHOPKEEPER)
+				{
+					_aStar->pathFinderShopkeeper({ j,i }, { _player->getIdx().x, _player->getIdx().y }, { j,i }, *(getShopVol()));
+					
+					if (_lShopVol.size() <= 5)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 10);
+					}
+					else if (_lShopVol.size() <= 6)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 9);
+					}
+					else if (_lShopVol.size() <= 7)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 8);
+					}
+					else if (_lShopVol.size() <= 8)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 7);
+					}
+					else if (_lShopVol.size() <= 9)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 6);
+					}
+					else if (_lShopVol.size() <= 10)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 5);
+					}
+					else if (_lShopVol.size() <= 11)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 4);
+					}
+					else if (_lShopVol.size() <= 12)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 3);
+					}
+					else if (_lShopVol.size() <= 13)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 2);
+					}
+					else if (_lShopVol.size() <= 14)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 1);
+					}
+					else if (_lShopVol.size() <= 15)
+					{
+						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 0);
+					}
+
+					//if (_lShopVol.size() <= 15)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, 0);
+					//}		
+					//else if (_lShopVol.size() <= 14)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 1);
+					//}
+					//else if (_lShopVol.size() <= 13)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 2);
+					//}
+					//else if (_lShopVol.size() <= 12)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 3);
+					//}
+					//else if (_lShopVol.size() <= 11)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 4);
+					//}
+					//else if (_lShopVol.size() <= 10)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 5);
+					//}
+					//else if (_lShopVol.size() <= 9)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 6);
+					//}
+					//else if (_lShopVol.size() <= 8)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 7);
+					//}
+					//else if (_lShopVol.size() <= 7)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 8);
+					//}
+					//else if (_lShopVol.size() <= 6)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 9);
+					//}
+					//else if (_lShopVol.size() <= 5)
+					//{
+					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume());
+					//}
+
+				}
 			}
 		}
 		_isBeat = false;
@@ -226,6 +330,24 @@ void testScene::beatUpdate()
 {
 	_time = SOUNDMANAGER->getPosition(_stageKeyName);
 
+	//횃불 프레임 변경해주는거
+	if (_vBeat.begin()->beat - _time <= _torchCompare)
+	{
+		_torchFrameY = 3;
+	}
+	else if (_vBeat.begin()->beat - _time <= _torchCompare * 2)
+	{
+		_torchFrameY = 2;
+	}
+	else if (_vBeat.begin()->beat - _time <= _torchCompare * 3)
+	{
+		_torchFrameY = 1;
+	}
+	else if (_vBeat.begin()->beat - _time <= _torchCompare * 4)
+	{
+		_torchFrameY = 0;
+	}
+
 	if (_heartImg->GetFrameX() == 1)
 	{
 		_heartImg->SetFrameX(0);
@@ -245,7 +367,7 @@ void testScene::beatUpdate()
 	//	}
 	//}
 
-	if (_time - 120  > _vBeat.begin()->beat)
+	if (_time  > _vBeat.begin()->beat)
 	{
 		_isBeat = true;
 		_heartImg->SetFrameX(1);
@@ -270,19 +392,44 @@ void testScene::beatUpdate()
 		{
 			_tileBlinkX = 0;
 		}
+
+		if ((*_player).getIsSlow())
+		{
+			_trapCount++;
+
+			if (_trapCount >= 15)
+			{
+				(*_player).setIsSlow(false);
+				SOUNDMANAGER->setPitch(1);
+				_vvObj[(*_player).getTrapIdx().y][(*_player).getTrapIdx().x]->setFrameX(_vvObj[(*_player).getTrapIdx().y][(*_player).getTrapIdx().x]->getFrameX() - 1);
+				_trapCount = 0;
+			}
+		}
+		if ((*_player).getIsFast())
+		{
+			_trapCount++;
+
+			if (_trapCount >= 20)
+			{
+				(*_player).setIsFast(false);
+				SOUNDMANAGER->setPitch(1);
+				_vvObj[(*_player).getTrapIdx().y][(*_player).getTrapIdx().x]->setFrameX(_vvObj[(*_player).getTrapIdx().y][(*_player).getTrapIdx().x]->getFrameX() - 1);
+				_trapCount = 0;
+			}
+		}
 	}
 
 	RECT tmp;
 	if (_player->getIsPressKey())
 	{
 		//비트 맞으면
-		if(IntersectRect(&tmp, &rectMake(_rc_Correct), &rectMake(_vBeat.begin()->rc_Left)))
+		if(IntersectRect(&tmp, &rectMake(_rc_Correct), &rectMake(_vBeat.begin()->rc_Left)) && _vBeat.begin()->isRight == true)
 		{
 			_vBeat.begin()->isRight = false;
 			_player->setIsBeat(true);
 		}
 		//비트 틀리면
-		else if (IntersectRect(&tmp, &rectMake(_rc_Wrong), &rectMake(_vBeat.begin()->rc_Left)))
+		else if (IntersectRect(&tmp, &rectMake(_rc_Wrong), &rectMake(_vBeat.begin()->rc_Left)) && _vBeat.begin()->isRight == true)
 		{
 			_vBeat.begin()->isRight = false;
 			(*_player).setKillCombo(0);
@@ -431,31 +578,44 @@ void testScene::objRender()
 				&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _vvObj[i][j]->getPos().y &&
 				_vvObj[i][j]->getAttribute() == ETC_TORCH || (_vvObj[i][j]->getAttribute() >= ETC_CHEST && _vvObj[i][j]->getAttribute() <= ETC_SHOPKEEPER))
 			{
-				if (_vvObj[i][j]->getAttribute() == ETC_TORCH)
+				switch (_vvObj[i][j]->getAttribute())
 				{
+				case ETC_TORCH:
 					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
 						- CAMERA->getPosX(),
-														_vvObj[i][j]->getRc().top
+														_vvObj[i][j]->getRc().top*
 						- CAMERA->getPosY(),
 														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY() + _torchFrameY);
-				}
-				else if (_vvObj[i][j]->getAttribute() == ETC_SHOPKEEPER)
-				{
+					break;
+				case ETC_CHEST: case ETC_TRAPDOOR:	case ETC_SLOW:	case ETC_FAST:
+					if (_vvLightMap[i][j]->getOpacity() < 0.64f)
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+															_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY(),
+															_vvObj[i][j]->getImg()->GetFrameWidth(),
+															_vvObj[i][j]->getImg()->GetFrameHeight(),
+															_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+					}
+					else
+					{
+						_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+							- CAMERA->getPosX(),
+															_vvObj[i][j]->getRc().top
+							- CAMERA->getPosY(),
+															_vvObj[i][j]->getImg()->GetFrameWidth(),
+															_vvObj[i][j]->getImg()->GetFrameHeight(),
+															_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY() + 1);
+					}
+					break;
+				case ETC_SHOPKEEPER:
 					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
-						- CAMERA->getPosX() - TILESIZE,
-						_vvObj[i][j]->getRc().top
-						- CAMERA->getPosY() - TILESIZE,
-						_vvObj[i][j]->getFrameX() + _torchFrameY, _vvObj[i][j]->getFrameY());
-				}
-				else
-				{
-					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
-						- CAMERA->getPosX(),
+						- CAMERA->getPosX() - TILESIZE / 2,
 														_vvObj[i][j]->getRc().top
-						- CAMERA->getPosY(),
-														_vvObj[i][j]->getImg()->GetFrameWidth(),
-														_vvObj[i][j]->getImg()->GetFrameHeight(),
-														_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+						- CAMERA->getPosY() - TILESIZE,
+														_vvObj[i][j]->getFrameX() + _torchFrameY, _vvObj[i][j]->getFrameY());
+					break;
 				}
 			}
 

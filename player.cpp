@@ -97,32 +97,31 @@ void player::update()
 		useHpIten();
 	}
 
+	switch (_killCombo)
+	{
+	case 0:
+		_grooveChain = 1;
+		_killCombo++;
+		break;
+	case 2:
+		_grooveChain = 2;
+		_killCombo++;		// 스위치문 적용 한번만 하기위해 킬콤보 ++함
+		SOUNDMANAGER->playEff("grooveChainStart");
+		break;
+	case 6:
+		_grooveChain = 3;
+		_killCombo++;
+		SOUNDMANAGER->playEff("grooveChainStart");
+		break;
+	case 13:
+		_grooveChain = 4;
+		_killCombo++;
+		SOUNDMANAGER->playEff("grooveChainStart");
+		break;
+	}
+
 	if (_isBeat)
 	{
-		switch (_killCombo)
-		{
-		case 0:
-			_grooveChain = 1;
-			_killCombo++;
-			break;
-		case 2:
-			_grooveChain = 2;
-			_killCombo++;		// 스위치문 적용 한번만 하기위해 킬콤보 ++함
-			SOUNDMANAGER->playEff("grooveChainStart");
-			break;
-		case 6:
-			_grooveChain = 3;
-			_killCombo++;
-			SOUNDMANAGER->playEff("grooveChainStart");
-			break;
-		case 13:
-			_grooveChain = 4;
-			_killCombo++;
-			SOUNDMANAGER->playEff("grooveChainStart");
-			break;
-		}
-
-
 		for (int i = 0; i < INVEN_END; i++)
 		{
 			if (_inventory[i].frameX == 8 && _inventory[i].frameY != 10)
@@ -329,6 +328,7 @@ void player::move()
 					{
 						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
 						_isMove = false;
+						SOUNDMANAGER->playEff("chest");
 						break;
 					}
 					else
@@ -372,7 +372,6 @@ void player::move()
 			setWeaponVDirection(_inventory[INVEN_WEAPON].itemVal, _direction);
 			_isMove = true;
 
-
 			for (int i = 0; i < _vDirection.size(); i++)
 			{
 				//못가는 곳이고 벽이면
@@ -386,6 +385,7 @@ void player::move()
 					{
 						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
 						_isMove = false;
+						SOUNDMANAGER->playEff("chest");
 						break;
 					}
 					else
@@ -441,6 +441,7 @@ void player::move()
 					{
 						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
 						_isMove = false;
+						SOUNDMANAGER->playEff("chest");
 						break;
 					}
 					else
@@ -483,7 +484,6 @@ void player::move()
 			setWeaponVDirection(_inventory[INVEN_WEAPON].itemVal, _direction);
 			_isMove = true;
 		
-
 			for (int i = 0; i < _vDirection.size(); i++)
 			{
 				//못가는 곳이고 벽이면
@@ -497,6 +497,7 @@ void player::move()
 					{
 						(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->openChest();
 						_isMove = false;
+						SOUNDMANAGER->playEff("chest");
 						break;
 					}
 					else
@@ -572,6 +573,27 @@ void player::moveCal()
 			setInventoryItem((*_vvObj)[_idx.y][_idx.x]->getAttribute());
 			(*_vvObj)[_idx.y][_idx.x]->objSetDefault();
 		}
+		if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_SLOW && _isSlow == false && _isFast == false)
+		{
+			_isSlow = true;
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->setPitch(0.9f);
+			_trapIdx = { _idx.x, _idx.y };
+			(*_vvObj)[_trapIdx.y][_trapIdx.x]->setFrameX((*_vvObj)[_idx.y][_idx.x]->getFrameX() + 1);
+		}
+		else if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_FAST && _isSlow == false && _isFast == false)
+		{
+			_isFast = true;
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->setPitch(1.1f);
+			_trapIdx = { _idx.x, _idx.y };
+			(*_vvObj)[_trapIdx.y][_trapIdx.x]->setFrameX((*_vvObj)[_idx.y][_idx.x]->getFrameX() + 1);
+		}
+		else if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_TRAPDOOR)
+		{
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->playEff("trapdoor");
+		}
 	}
 
 	if (_posCT.y - _savePos.y >= TILESIZE || _savePos.y - _posCT.y >= TILESIZE)
@@ -591,7 +613,6 @@ void player::moveCal()
 		_direction = { 0,0 };
 		_atkCombo = 1;
 
-		//
 		_posCT.x += _vec.x;
 		_posCT.y += _vec.y;
 		_posLT.x = _posCT.x - TILESIZE / 2;
@@ -603,9 +624,28 @@ void player::moveCal()
 			setInventoryItem((*_vvObj)[_idx.y][_idx.x]->getAttribute());
 			(*_vvObj)[_idx.y][_idx.x]->objSetDefault();
 		}
+		if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_SLOW && _isSlow == false && _isFast == false)
+		{
+			_isSlow = true;
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->setPitch(0.9f);
+			_trapIdx = { _idx.x, _idx.y };
+			(*_vvObj)[_trapIdx.y][_trapIdx.x]->setFrameX((*_vvObj)[_idx.y][_idx.x]->getFrameX() + 1);
+		}
+		else if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_FAST && _isSlow == false && _isFast == false)
+		{
+			_isFast = true;
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->setPitch(1.1f);
+			_trapIdx = { _idx.x, _idx.y };
+			(*_vvObj)[_trapIdx.y][_trapIdx.x]->setFrameX((*_vvObj)[_idx.y][_idx.x]->getFrameX() + 1);
+		}
+		else if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() == ETC_TRAPDOOR)
+		{
+			SOUNDMANAGER->playEff("trap");
+			SOUNDMANAGER->playEff("trapdoor");
+		}
 	}
-
-
 
 	_posCT.x += _vec.x;
 	_posCT.y += _vec.y;
@@ -1465,24 +1505,9 @@ void player::attackFunc(POINT direction)
 					//break;
 					//case KING:
 					//break;
-					//case CORALRIFF:
-					//break;
-					//case PIANO:
-					//break;
-					//case VIOLIN:
-					//break;
-					//case TRUNPET:
-					//break;
-					//case DRUM:
-					//break;
-					//case END:
-					//break;
 				}
-
 				break;
 			}
-
-
 		}
 	}
 }

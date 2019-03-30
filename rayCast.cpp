@@ -164,7 +164,7 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			//여기에다가 오브젝트[playerIdx.y + i][playerIdx.x + j]의 속성에 횟불도 있다면 rayCast를 재귀로 더돔 +추가로 i와 j가 0,0이 아니고
 			if ((*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)
 			{
-				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 4);
+				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 3);
 			}
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.

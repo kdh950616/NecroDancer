@@ -117,6 +117,9 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("pickup_Weapon", "sounds/object/sfx_pickup_weapon.ogg", false, false);//
 	SOUNDMANAGER->addSound("pickup_Armor", "sounds/object/sfx_pickup_armor.ogg", false, false);//
 	SOUNDMANAGER->addSound("pickup", "sounds/object/sfx_pickup_general_ST.ogg", false, false);//
+	SOUNDMANAGER->addSound("chest", "sounds/object/obj_chest_open.ogg", false, false);
+	SOUNDMANAGER->addSound("trap", "sounds/object/obj_trap_trapdoor_open.ogg", false, false);
+	SOUNDMANAGER->addSound("trapdoor", "sounds/object/obj_trap_trapdoor_fall.ogg", false, false);
 	//===============================================
 	//				player
 	//===============================================
@@ -158,17 +161,16 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("hit", "sounds/player/hit/sfx_player_hit_ST.ogg", false, false);//
 	SOUNDMANAGER->addSound("heal", "sounds/player/heal/sfx_item_food.ogg", false, false);//
 	SOUNDMANAGER->addSound("brokeItem", "sounds/object/sfx_glass_break.ogg", false, false);//
-	SOUNDMANAGER->addSound("grooveChainStart", "sounds/ui/sfx_chain_groovr_ST.ogg", false, false);//
+	SOUNDMANAGER->addSound("grooveChainStart", "sounds/ui/sfx_chain_groove_ST.ogg", false, false);//
 	SOUNDMANAGER->addSound("grooveChainFail", "sounds/ui/sfx_chain_break_ST.ogg", false, false);//
 	SOUNDMANAGER->addSound("missBeat", "sounds/ui/sfx_missedbeat.ogg", false, false);//
 
 	// 해야할것. 
 	//보스					
-	//오른쪽 상단 골드, hp UI 등
 	//미니맵
-	//상점 -> 사운드 npc 등							//진행중
-	//함정											//진행중
-	//레이캐스트 횃불개선.							//완료 - > 씬에서 프레임만 돌게 하자.
+	//오른쪽 UI 등									
+	//상점 -> 사운드 npc 등							//완료
+	//함정											//완료
 	//아이템상자 추가해서 까면 아이템 랜덤으로 나오게.	//완료
 
 
@@ -186,16 +188,15 @@ HRESULT playGround::init()
 	//코랄리프씬
 	SCENEMANAGER->addScene("bossCoral", _bossCoral);
 
-	SCENEMANAGER->changeScene("testScene");
+	SCENEMANAGER->changeScene("testScene");                            
 	
 	return S_OK;
 }
 
 void playGround::release()
 {
-	gameNode::release();
-	
-}
+	gameNode::release();              
+}                
 
 void playGround::update()
 {

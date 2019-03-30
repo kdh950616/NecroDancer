@@ -262,7 +262,13 @@ void mapLoader::mapLoad(vvMap * vvMapAdress, vvObj * vvObjAdress, int * tileSize
 					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc1"));
 				break;
 				case IMG_ETC2:
-					(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("etc2"));
+					if ((*vvObjAdress)[i][j]->getAttribute() == ETC_SHOPKEEPER)
+					{
+						(*vvObjAdress)[i][j]->setImg(IMAGEMANAGER->findImage("shopkeeper"));
+					}
+					//else if ((*vvObjAdress)[i][j]->getAttribute() == ETC_PLAYER)
+					//{
+					//}
 					break;
 			}
 		}
