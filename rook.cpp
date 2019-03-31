@@ -18,7 +18,7 @@ HRESULT rook::init()
 	
 	_maxHp = 1;
 	_curHp = _maxHp;
-	_speed = SPEED * 2;
+	_speed = SPEED * 1.5;
 	_dmg = 2;
 	_posZ = 0;
 	_enemyType = ROOK;

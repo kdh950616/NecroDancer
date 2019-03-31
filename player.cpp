@@ -1427,6 +1427,49 @@ void player::attackFunc(POINT direction)
 					break;
 				}
 			}
+			else if (_em->getVEnemy()[i]->getEnemyType() == KING)
+			{
+				_em->getVEnemy()[i]->setDirection(_direction);
+				_em->getVEnemy()[i]->setCurHp(_em->getVEnemy()[i]->getCurHp() - _dmg);
+
+				if (_em->getVEnemy()[i]->getIsSpecialAct() == false)
+				{
+					if (_em->getVEnemy()[i]->getDestIdx().x == 1 && _em->getVEnemy()[i]->getDestIdx().y == 6)
+					{
+						_em->getVEnemy()[i]->setDestIdx({ 8,13 });
+					}
+					else if (_em->getVEnemy()[i]->getDestIdx().x == 8 && _em->getVEnemy()[i]->getDestIdx().y == 13)
+					{
+						_em->getVEnemy()[i]->setDestIdx({ 1,6 });
+					}
+					else if (_em->getVEnemy()[i]->getDestIdx().x == 8 && _em->getVEnemy()[i]->getDestIdx().y == 6)
+					{
+						_em->getVEnemy()[i]->setDestIdx({ 1,13 });
+					}
+					else if (_em->getVEnemy()[i]->getDestIdx().x == 1 && _em->getVEnemy()[i]->getDestIdx().y == 13)
+					{
+						_em->getVEnemy()[i]->setDestIdx({ 8,6 });
+					}
+				}
+
+				rnd = RND->getFromIntTo(1, 5);
+				switch (rnd)
+				{
+				case 1:
+					SOUNDMANAGER->playEff("king_Hit1");
+					break;
+				case 2:
+					SOUNDMANAGER->playEff("king_Hit2");
+					break;
+				case 3:
+					SOUNDMANAGER->playEff("king_Hit3");
+					break;
+				case 4:
+					SOUNDMANAGER->playEff("king_Hit4");
+					break;
+				}
+				break;
+			}
 			else
 			{
 				_em->getVEnemy()[i]->setCurHp(_em->getVEnemy()[i]->getCurHp() - _dmg);
@@ -1493,18 +1536,54 @@ void player::attackFunc(POINT direction)
 				case BAT_BOSS:
 					SOUNDMANAGER->playEff("bat_Boss_Hit");
 					break;
-					//case PAWN:
-					//break;
-					//case KNIGHT:
-					//break;
-					//case BISHOP:
-					//break;
-					//case ROOK:
-					//break;
-					//case QUEEN:
-					//break;
-					//case KING:
-					//break;
+					case PAWN:
+					break;
+					case KNIGHT:
+					break;
+					case BISHOP:
+					break;
+					case ROOK:
+					break;
+					case QUEEN:
+					break;
+					case KING:
+						if (_em->getVEnemy()[i]->getIsSpecialAct() == false)
+						{
+							if (_em->getVEnemy()[i]->getDestIdx().x == 1 && _em->getVEnemy()[i]->getDestIdx().y == 6)
+							{
+								_em->getVEnemy()[i]->setDestIdx({ 8,13 });
+							}
+							else if (_em->getVEnemy()[i]->getDestIdx().x == 8 && _em->getVEnemy()[i]->getDestIdx().y == 13)
+							{
+								_em->getVEnemy()[i]->setDestIdx({ 1,6 });
+							}
+							else if (_em->getVEnemy()[i]->getDestIdx().x == 8 && _em->getVEnemy()[i]->getDestIdx().y == 6)
+							{
+								_em->getVEnemy()[i]->setDestIdx({ 1,13 });
+							}
+							else if (_em->getVEnemy()[i]->getDestIdx().x == 1 && _em->getVEnemy()[i]->getDestIdx().y == 13)
+							{
+								_em->getVEnemy()[i]->setDestIdx({ 8,6 });
+							}
+						}
+							
+						rnd = RND->getFromIntTo(1, 5);
+						switch (rnd)
+						{
+						case 1:
+							SOUNDMANAGER->playEff("king_Hit1");
+							break;
+						case 2:
+							SOUNDMANAGER->playEff("king_Hit2");
+							break;
+						case 3:
+							SOUNDMANAGER->playEff("king_Hit3");
+							break;
+						case 4:
+							SOUNDMANAGER->playEff("king_Hit4");
+							break;
+						}
+						break;
 				}
 				break;
 			}

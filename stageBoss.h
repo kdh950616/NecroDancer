@@ -65,6 +65,8 @@ private:
 
 	int _pawnBeat[8];
 	int _pawnMakeCount;
+
+	bool _isBattle;
 public:
 	stageBoss();
 	~stageBoss();

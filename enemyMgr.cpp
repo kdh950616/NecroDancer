@@ -66,7 +66,7 @@ void enemyMgr::update()
 				{
 					_aStar->pathFinder2(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
 				}
-				else if (_vEnemy[i]->getEnemyType() == QUEEN || _vEnemy[i]->getEnemyType() == QUEEN)
+				else if (_vEnemy[i]->getEnemyType() == QUEEN)
 				{
 					_aStar->pathFinder8(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
 				}
@@ -95,20 +95,22 @@ void enemyMgr::update()
 				_vEnemy.back()->linkMap(_vvMap);
 				_vEnemy.back()->linkObj(_vvObj);
 				_vEnemy.back()->linkLightMap(_vvLightMap);
+				_vEnemy.back()->setIsFind(true);
 			}
 
-			if (_vEnemy[i]->getEnemyType() == KING && !_vEnemy[i]->getIsCastling())
+			if (_vEnemy[i]->getEnemyType() == KING && !_vEnemy[i]->getIsCastling() && _vEnemy[i]->getIsFind() == false)
 			{
 				if ((*_vvObj)[6][2]->getIsAvailMove() == true && (*_vvObj)[6][3]->getIsAvailMove() == true)
 				{
+					_vEnemy[i]->setIsCastling(true);
+					_vEnemy[i]->setDirection({ -2,0 });
 					for (int j = 0; j < _vEnemy.size(); j++)
 					{
 						if (_vEnemy[j]->getEnemyType() == ROOK && _vEnemy[j]->getIdx().x == 1 && _vEnemy[j]->getIdx().y == 6)
 						{
 							_vEnemy[j]->setIsCastling(true);
 							_vEnemy[j]->setDirection({ 2,0 });
-							_vEnemy[i]->setIsCastling(true);
-							_vEnemy[i]->setDirection({ -2,0 });
+
 							for (int k = 0; k < _vEnemy.size(); k++)
 							{
 								if (_vEnemy[k]->getEnemyType() == ROOK && _vEnemy[k]->getIdx().x == 8 && _vEnemy[k]->getIdx().y == 6)
@@ -124,14 +126,15 @@ void enemyMgr::update()
 				}
 				else if ((*_vvObj)[6][5]->getIsAvailMove() == true && (*_vvObj)[6][6]->getIsAvailMove() == true&& (*_vvObj)[6][7]->getIsAvailMove() == true)
 				{
+					_vEnemy[i]->setIsCastling(true);
+					_vEnemy[i]->setDirection({ 3,0 });
 					for (int j = 0; j < _vEnemy.size(); j++)
 					{
 						if (_vEnemy[j]->getEnemyType() == ROOK && _vEnemy[j]->getIdx().x == 8 && _vEnemy[j]->getIdx().y == 6)
 						{
 							_vEnemy[j]->setIsCastling(true);
 							_vEnemy[j]->setDirection({ -2,0 });
-							_vEnemy[i]->setIsCastling(true);
-							_vEnemy[i]->setDirection({ 3,0 });
+
 							for (int k = 0; k < _vEnemy.size(); k++)
 							{
 								if (_vEnemy[k]->getEnemyType() == ROOK && _vEnemy[k]->getIdx().x == 1 && _vEnemy[k]->getIdx().y == 6)
@@ -144,6 +147,17 @@ void enemyMgr::update()
 						}
 					}
 				}
+
+			}
+			if (_vEnemy.size() == 1 && _vEnemy[0]->getEnemyType() == KING && _vEnemy[0]->getIsSpecialAct() == false)
+			{
+				_vEnemy[0]->setIsSpecialAct(true);
+				SOUNDMANAGER->playEff("king_Cry");
+			}
+			else if (_vEnemy.size() == 1 && _vEnemy[0]->getEnemyType() == KING && _vEnemy[0]->getIsSpecialAct() == true)
+			{
+				_vEnemy[0]->getListPath()->clear();
+				_aStar->pathFinder8(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
 			}
 		}
 		_vEnemy[i]->update();
@@ -367,6 +381,7 @@ void enemyMgr::update()
 	KEYANIMANAGER->update("rook");
 	KEYANIMANAGER->update("bishop");
 	KEYANIMANAGER->update("knight");
+	KEYANIMANAGER->update("king");
 
 
 

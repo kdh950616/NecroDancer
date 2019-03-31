@@ -93,6 +93,22 @@ void stageBoss::update()
 	}
 
 	itemFloating();
+
+	if (!_isBattle)
+	{
+		if (_player->getIdx().y <= 12)
+		{
+			for (int i = 0; i < _em->getVEnemy().size(); i++)
+			{
+				if (_em->getVEnemy()[i]->getEnemyType() != KING && _em->getVEnemy()[i]->getEnemyType() != ROOK)
+				{
+					_em->getVEnemy()[i]->setIsFind(true);
+				}
+			}
+			//여기에 맵설정 -> 문 보스벽으로 바꾸고 보스벽 아래는 모두빈걸로..
+			// 추가로 에너미사이즈 0돼면 위에 4개 열어주자.
+		}
+	}
 }
 
 void stageBoss::render()
@@ -174,8 +190,7 @@ void stageBoss::playerInit()
 	_player = new player;
 	_player->setMapAdressLink(&_vvMap);
 	_player->setObjAdressLink(&_vvObj);
-	//시작위치 재설정
-	_player->setPosCT({ (float)(_vvMap)[10][4]->getPos().x, (float)(_vvMap)[10][4]->getPos().y });
+	_player->setPosCT({ (float)(_vvMap)[20][4]->getPos().x, (float)(_vvMap)[20][4]->getPos().y });
 	_player->init();
 }
 

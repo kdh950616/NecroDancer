@@ -97,25 +97,25 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("dragon_Walk3", "sounds/monster/miniboss/dragon/en_dragon_walk_03.ogg", false, false);//
 
 	//piece
-	SOUNDMANAGER->addSound("piece_Attack", "sounds/monster/boss/piece/en_blues_piece_attack.ogg", false, false);
-	SOUNDMANAGER->addSound("piece_death1", "sounds/monster/boss/piece/en_blues_piece_death_01.ogg", false, false);
-	SOUNDMANAGER->addSound("piece_death2", "sounds/monster/boss/piece/en_blues_piece_death_02.ogg", false, false);
-	SOUNDMANAGER->addSound("piece_death3", "sounds/monster/boss/piece/en_blues_piece_death_03.ogg", false, false);
+	SOUNDMANAGER->addSound("piece_Attack", "sounds/monster/boss/piece/en_blues_piece_attack.ogg", false, false);//
+	SOUNDMANAGER->addSound("piece_death1", "sounds/monster/boss/piece/en_blues_piece_death_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("piece_death2", "sounds/monster/boss/piece/en_blues_piece_death_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("piece_death3", "sounds/monster/boss/piece/en_blues_piece_death_03.ogg", false, false);//
 
 	//queen
-	SOUNDMANAGER->addSound("queen_Attack1", "sounds/monster/boss/queen/en_blues_queen_sing_01.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Attack2", "sounds/monster/boss/queen/en_blues_queen_sing_02.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Attack3", "sounds/monster/boss/queen/en_blues_queen_sing_03.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Attack4", "sounds/monster/boss/queen/en_blues_queen_sing_04.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Attack5", "sounds/monster/boss/queen/en_blues_queen_sing_05.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Attack6", "sounds/monster/boss/queen/en_blues_queen_sing_06.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Death1", "sounds/monster/boss/queen/en_blues_queen_death_01.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Death2", "sounds/monster/boss/queen/en_blues_queen_death_02.ogg", false, false);
-	SOUNDMANAGER->addSound("queen_Death3", "sounds/monster/boss/queen/en_blues_queen_death_03.ogg", false, false);
+	SOUNDMANAGER->addSound("queen_Attack1", "sounds/monster/boss/queen/en_blues_queen_sing_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Attack2", "sounds/monster/boss/queen/en_blues_queen_sing_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Attack3", "sounds/monster/boss/queen/en_blues_queen_sing_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Attack4", "sounds/monster/boss/queen/en_blues_queen_sing_04.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Attack5", "sounds/monster/boss/queen/en_blues_queen_sing_05.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Attack6", "sounds/monster/boss/queen/en_blues_queen_sing_06.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Death1", "sounds/monster/boss/queen/en_blues_queen_death_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Death2", "sounds/monster/boss/queen/en_blues_queen_death_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("queen_Death3", "sounds/monster/boss/queen/en_blues_queen_death_03.ogg", false, false);//
 
 	//king
 	SOUNDMANAGER->addSound("king_Cry", "sounds/monster/boss/king/en_blues_king_cry.ogg", false, false);
-	SOUNDMANAGER->addSound("king_Death", "sounds/monster/boss/king/en_blues_king_death.ogg", false, false);
+	SOUNDMANAGER->addSound("king_Death", "sounds/monster/boss/king/en_blues_king_death.ogg", false, false);//
 	SOUNDMANAGER->addSound("king_Attack1", "sounds/monster/boss/king/en_blues_king_attack_01.ogg", false, false);
 	SOUNDMANAGER->addSound("king_Attack2", "sounds/monster/boss/king/en_blues_king_attack_02.ogg", false, false);
 	SOUNDMANAGER->addSound("king_Attack3", "sounds/monster/boss/king/en_blues_king_attack_03.ogg", false, false);
@@ -123,10 +123,10 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("king_Attack5", "sounds/monster/boss/king/en_blues_king_attack_05.ogg", false, false);
 	SOUNDMANAGER->addSound("king_Attack6", "sounds/monster/boss/king/en_blues_king_attack_06.ogg", false, false);
 	SOUNDMANAGER->addSound("king_Attack7", "sounds/monster/boss/king/en_blues_king_attack_07.ogg", false, false);
-	SOUNDMANAGER->addSound("king_Hit1", "sounds/monster/boss/king/en_blues_king_hit_01.ogg", false, false);
-	SOUNDMANAGER->addSound("king_Hit2", "sounds/monster/boss/king/en_blues_king_hit_02.ogg", false, false);
-	SOUNDMANAGER->addSound("king_Hit3", "sounds/monster/boss/king/en_blues_king_hit_03.ogg", false, false);
-	SOUNDMANAGER->addSound("king_Hit4", "sounds/monster/boss/king/en_blues_king_hit_04.ogg", false, false);
+	SOUNDMANAGER->addSound("king_Hit1", "sounds/monster/boss/king/en_blues_king_hit_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("king_Hit2", "sounds/monster/boss/king/en_blues_king_hit_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("king_Hit3", "sounds/monster/boss/king/en_blues_king_hit_03.ogg", false, false);//
+	SOUNDMANAGER->addSound("king_Hit4", "sounds/monster/boss/king/en_blues_king_hit_04.ogg", false, false);//
 
 
 

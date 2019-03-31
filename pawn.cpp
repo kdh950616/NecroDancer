@@ -25,7 +25,7 @@ HRESULT pawn::init()
 	_isNeedAstar = false;
 	_savePos = _posLT;
 	_gold = 0;
-	_isFind = true;
+	_isFind = false;
 
 	return S_OK;
 }

@@ -25,7 +25,7 @@ HRESULT knight::init()
 	_isNeedAstar = false;
 	_savePos = _posLT;
 	_gold = 0;
-	_isFind = true;
+	_isFind = false;
 
 	return S_OK;
 }
@@ -54,7 +54,7 @@ void knight::update()
 
 			_savePos = _posLT;
 
-			if (tmp.x >= tmp.y)
+			if (abs(tmp.x) >= abs(tmp.y))
 			{
 				if (tmp.x >= 0)
 				{
@@ -74,7 +74,7 @@ void knight::update()
 					_direction.y = -1;
 				}
 			}
-			else if (tmp.y > tmp.x)
+			else if (abs(tmp.y) > abs(tmp.x))
 			{
 				if (tmp.y >= 0)
 				{
@@ -353,21 +353,24 @@ void knight::showAttackEffect()
 		}
 		else if (_direction.x == -1)
 		{
-			_atkDirection = { 0,0 };
+			_atkDirection = { -1,0 };
 			_atkAngle = 270;
 			_reverseImg = true;
 		}
 	}
 	else if (_direction.y == -2)
 	{
-		_atkDirection = _direction;
 		if (_direction.x == 1)
 		{
+			_atkDirection = { 0,-2 };
 			_atkAngle = 90;
+			_reverseImg = true;
 		}
 		else if (_direction.x == -1)
 		{
+			_atkDirection = { -1,-2 };
 			_atkAngle = 270;
+			_reverseImg = false;
 		}
 	}
 	else if (_direction.x == 2)
@@ -380,7 +383,7 @@ void knight::showAttackEffect()
 		}
 		else if (_direction.y == -1)
 		{
-			_atkDirection = { 0,0 };
+			_atkDirection = { 0,-1 };
 			_atkAngle = 0;
 			_reverseImg = false;
 		}
@@ -389,13 +392,13 @@ void knight::showAttackEffect()
 	{
 		if (_direction.y == 1)
 		{
-			_atkDirection = _direction;
+			_atkDirection = { -2,0 };
 			_atkAngle = 180;
 			_reverseImg = false;
 		}
 		else if (_direction.y == -1)
 		{
-			_atkDirection = _direction;
+			_atkDirection = { -2,-1 };
 			_atkAngle = 0;
 			_reverseImg = true;
 		}

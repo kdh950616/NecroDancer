@@ -215,6 +215,7 @@ public:
 	void setIsBeat(bool isBeat)					{ _isBeat = isBeat; }
 	list<POINT>* getListPath()					{ return &_listPath; }
 	bool getIsSpecialAct()						{ return _isSpecialAct; }
+	void setIsSpecialAct(bool isSpecialAct) { _isSpecialAct = isSpecialAct; }
 	int getEnemyType()							{ return _enemyType; }
 	bool getIsNeedAstar()						{ return _isNeedAstar; }
 	int getBeatCount()							{ return _beatCount; }
@@ -226,6 +227,8 @@ public:
 	virtual bool getIsStun() { return 0; }
 	virtual bool getIsCastling() { return true; }
 	virtual void setIsCastling(bool val) {;}
+	virtual POINT getDestIdx() { return { 0, 0}; }
+	virtual void setDestIdx(POINT destIdx) { ; }
 
 	int getGold() { return _gold; }
 	void setGold(int gold) { _gold = gold; }

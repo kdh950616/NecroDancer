@@ -21,5 +21,7 @@ public:
 
 	bool getIsCastling() { return _isCastling; }
 	void setIsCastling(bool isCastling) { _isCastling = isCastling; }
+	POINT getDestIdx() { return _destIdx; }
+	void setDestIdx(POINT destIdx) { _destIdx = destIdx; }
 };
 
