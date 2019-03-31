@@ -335,6 +335,10 @@ void zombie::moveCal()
 		{
 			_posLT.x = _savePos.x - TILESIZE;
 		}
+		_idx.x = (_posLT.x) / TILESIZE;
+		_idx.y = (_posLT.y) / TILESIZE;
+		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+		(*_vvObj)[_idx.y - _direction.y][_idx.x - _direction.x]->setIsAvailMove(true);
 		_vec.x = 0;
 		_savePos = _posLT;
 		_isMove = false;
@@ -352,6 +356,10 @@ void zombie::moveCal()
 		{
 			_posLT.y = _savePos.y - TILESIZE;
 		}
+		_idx.x = (_posLT.x) / TILESIZE;
+		_idx.y = (_posLT.y) / TILESIZE;
+		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+		(*_vvObj)[_idx.y - _direction.y][_idx.x - _direction.x]->setIsAvailMove(true);
 		_vec.y = 0;
 		_savePos = _posLT;
 		_isMove = false;

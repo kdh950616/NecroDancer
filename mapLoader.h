@@ -30,6 +30,7 @@ public:
 	
 	void linkenemyMgr(enemyMgr* em) { _em = em; }
 	void makeEnemy(vvObj* vvObj, int* tileSizeX, int* tileSizeY);
+	void makeBoss(vvObj* vvObj, int* tileSizeX, int* tileSizeY, int* pawnBeat);
 
 	void setNewMapTile(tile * tile, int idX, int idY, bool isTileChanged);
 	void setNewObjTile(tile * tile, int idX, int idY);

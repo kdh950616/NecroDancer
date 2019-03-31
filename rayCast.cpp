@@ -162,16 +162,21 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 			(*_vvLightMap)[playerIdx.y + i][playerIdx.x + j]->setOpacity(cost);
 			
 			//여기에다가 오브젝트[playerIdx.y + i][playerIdx.x + j]의 속성에 횟불도 있다면 rayCast를 재귀로 더돔 +추가로 i와 j가 0,0이 아니고
-			if ((*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)
+			if (playerIdx.y + i >= 0 && playerIdx.x + j >= 0									// 터짐방지
+				&& playerIdx.y <= _vvObj->size() - 1 && playerIdx.x <= _vvObj[0][0].size() - 1				// 터짐방지
+				&& (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 
+				&& (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)
 			{
 				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 3);
 			}
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
-			if (playerIdx.y + i >= 0 && playerIdx.x + i >= 0									// 터짐방지
-				&&playerIdx.y <= _vvObj->size() && playerIdx.x <= _vvObj[0][0].size()				// 터짐방지
-				&& (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
-				(*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[playerIdx.y + cal.y][playerIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)	// 속성이 벽이면
+			if (playerIdx.y + i >= 0 && playerIdx.x + j >= 0									// 터짐방지
+				&&playerIdx.y <= _vvObj->size() - 1 && playerIdx.x <= _vvObj[0][0].size() - 1				// 터짐방지
+				&&((*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= OBJ_WALL1 
+				&& (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= OBJ_DOOR_SIDE) ||
+				  ((*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 
+				&& (*_vvObj)[playerIdx.y + j][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS))	// 속성이 벽이면
 			{
 				//터짐방지
 				if (playerIdx.y + i - 1 >= 0 && playerIdx.y + i - 1 <= _vvLightMap->size())
@@ -609,8 +614,8 @@ void rayCast::rayCastingTorch(POINT torchIdx, int torchRange)
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.
 			if (torchIdx.y + i >= 0 && torchIdx.x + i >= 0									// 터짐방지
 				&& torchIdx.y <= _vvObj->size() && torchIdx.x <= _vvObj[0][0].size()				// 터짐방지
-				&& (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= OBJ_DOOR_SIDE ||
-				(*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + cal.y][torchIdx.x + cal.x]->getAttribute() <= ETC_TORCH_BOSS)	// 속성이 벽이면
+				&& (*_vvObj)[torchIdx.y + i][torchIdx.x + j]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[torchIdx.y + i][torchIdx.x + j]->getAttribute() <= OBJ_DOOR_SIDE ||
+				(*_vvObj)[torchIdx.y + i][torchIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[torchIdx.y + i][torchIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)	// 속성이 벽이면
 			{
 				//터짐방지
 				if (torchIdx.y + i - 1 >= 0 && torchIdx.y + i - 1 <= _vvLightMap->size())

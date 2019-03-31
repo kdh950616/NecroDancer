@@ -18,11 +18,17 @@
 #include "dragon.h"
 #include "bat_Boss.h"
 #include "banshee.h"
-#include "drum.h"
-#include "horn.h"
-#include "keybord.h"
-#include "violin.h"
-#include "coralriff.h"
+#include "pawn.h"
+#include "bishop.h"
+#include "knight.h"
+#include "rook.h"
+#include "queen.h"
+#include "king.h"
+//#include "drum.h"
+//#include "horn.h"
+//#include "keybord.h"
+//#include "violin.h"
+//#include "coralriff.h"
 
 class player;
 
@@ -64,6 +70,7 @@ public:
 	void render();
 
 	void createEnemy(int enemyType, POINT idx);
+	void createPawn(int enemyType, POINT idx, int pawnBeat);
 
 	void linkPlayer(player* player) { _player = player; }
 	void linkMap(vvMap* vvMap) { _vvMap = vvMap; }

@@ -106,6 +106,9 @@
     <Filter Include="PlayGround\units\enemy\boss\coralriff">
       <UniqueIdentifier>{517bdf3b-4609-447b-b42e-bc176cf28348}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\enemy\boss\deep Blues">
+      <UniqueIdentifier>{e7645469-3b35-4ea3-a831-6761f88887c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -303,6 +306,24 @@
     <ClInclude Include="keybord.h">
       <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
     </ClInclude>
+    <ClInclude Include="king.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
+    <ClInclude Include="bishop.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
+    <ClInclude Include="knight.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
+    <ClInclude Include="pawn.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
+    <ClInclude Include="queen.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
+    <ClInclude Include="rook.h">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -484,6 +505,24 @@
     </ClCompile>
     <ClCompile Include="keybord.cpp">
       <Filter>PlayGround\units\enemy\boss\coralriff</Filter>
+    </ClCompile>
+    <ClCompile Include="king.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="bishop.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="knight.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="pawn.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="queen.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="rook.cpp">
+      <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

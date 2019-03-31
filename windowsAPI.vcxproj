@@ -161,6 +161,7 @@
     <ClInclude Include="bat.h" />
     <ClInclude Include="bat_2.h" />
     <ClInclude Include="bat_Boss.h" />
+    <ClInclude Include="bishop.h" />
     <ClInclude Include="boss_Coralriff.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
@@ -184,6 +185,8 @@
     <ClInclude Include="keyAniManager.h" />
     <ClInclude Include="keybord.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="king.h" />
+    <ClInclude Include="knight.h" />
     <ClInclude Include="lightMap.h" />
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="lobbyScene.h" />
@@ -192,11 +195,14 @@
     </ClInclude>
     <ClInclude Include="mapLoader.h" />
     <ClInclude Include="minotaur.h" />
+    <ClInclude Include="pawn.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playGround.h" />
+    <ClInclude Include="queen.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="rayCast.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="rook.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="skeleton.h" />
@@ -232,6 +238,7 @@
     <ClCompile Include="bat.cpp" />
     <ClCompile Include="bat_2.cpp" />
     <ClCompile Include="bat_Boss.cpp" />
+    <ClCompile Include="bishop.cpp" />
     <ClCompile Include="boss_Coralriff.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -254,6 +261,8 @@
     <ClCompile Include="keyAniManager.cpp" />
     <ClCompile Include="keybord.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="king.cpp" />
+    <ClCompile Include="knight.cpp" />
     <ClCompile Include="lightMap.cpp" />
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="lobbyScene.cpp" />
@@ -262,9 +271,12 @@
     </ClCompile>
     <ClCompile Include="mapLoader.cpp" />
     <ClCompile Include="minotaur.cpp" />
+    <ClCompile Include="pawn.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="queen.cpp" />
     <ClCompile Include="rayCast.cpp" />
+    <ClCompile Include="rook.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="skeleton.cpp" />
     <ClCompile Include="skeleton_2.cpp" />

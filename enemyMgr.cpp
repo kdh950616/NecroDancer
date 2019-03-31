@@ -66,10 +66,10 @@ void enemyMgr::update()
 				{
 					_aStar->pathFinder2(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
 				}
-			//	else if (_vEnemy[i]->getEnemyType() == KNIGHT || _vEnemy[i]->getEnemyType() == BISHOP || _vEnemy[i]->getEnemyType() == ROOK || _vEnemy[i]->getEnemyType() == QUEEN)
-			//	{
-			//
-			//	}
+				else if (_vEnemy[i]->getEnemyType() == QUEEN || _vEnemy[i]->getEnemyType() == QUEEN)
+				{
+					_aStar->pathFinder8(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
+				}
 				else
 				{
 					_aStar->pathFinder(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
@@ -82,6 +82,68 @@ void enemyMgr::update()
 				_vEnemy[i]->setIsFind(true);
 				_vEnemy[i]->setBeatCount(0);
 				SOUNDMANAGER->playEff("wraith_Cry");
+			}
+
+			if (_vEnemy[i]->getEnemyType() == PAWN && _vEnemy[i]->getIsSpecialAct())
+			{
+				POINT tmp = _vEnemy[i]->getIdx();
+				_vEnemy.erase(_vEnemy.begin() + i);
+
+				createEnemy(ENEMY4_2_2, tmp);
+				_vEnemy.back()->init();
+				_vEnemy.back()->linkPlayer(_player);
+				_vEnemy.back()->linkMap(_vvMap);
+				_vEnemy.back()->linkObj(_vvObj);
+				_vEnemy.back()->linkLightMap(_vvLightMap);
+			}
+
+			if (_vEnemy[i]->getEnemyType() == KING && !_vEnemy[i]->getIsCastling())
+			{
+				if ((*_vvObj)[6][2]->getIsAvailMove() == true && (*_vvObj)[6][3]->getIsAvailMove() == true)
+				{
+					for (int j = 0; j < _vEnemy.size(); j++)
+					{
+						if (_vEnemy[j]->getEnemyType() == ROOK && _vEnemy[j]->getIdx().x == 1 && _vEnemy[j]->getIdx().y == 6)
+						{
+							_vEnemy[j]->setIsCastling(true);
+							_vEnemy[j]->setDirection({ 2,0 });
+							_vEnemy[i]->setIsCastling(true);
+							_vEnemy[i]->setDirection({ -2,0 });
+							for (int k = 0; k < _vEnemy.size(); k++)
+							{
+								if (_vEnemy[k]->getEnemyType() == ROOK && _vEnemy[k]->getIdx().x == 8 && _vEnemy[k]->getIdx().y == 6)
+								{
+									_vEnemy[k]->setIsFind(true);
+									break;
+								}
+							}
+							break;
+						}
+					
+					}
+				}
+				else if ((*_vvObj)[6][5]->getIsAvailMove() == true && (*_vvObj)[6][6]->getIsAvailMove() == true&& (*_vvObj)[6][7]->getIsAvailMove() == true)
+				{
+					for (int j = 0; j < _vEnemy.size(); j++)
+					{
+						if (_vEnemy[j]->getEnemyType() == ROOK && _vEnemy[j]->getIdx().x == 8 && _vEnemy[j]->getIdx().y == 6)
+						{
+							_vEnemy[j]->setIsCastling(true);
+							_vEnemy[j]->setDirection({ -2,0 });
+							_vEnemy[i]->setIsCastling(true);
+							_vEnemy[i]->setDirection({ 3,0 });
+							for (int k = 0; k < _vEnemy.size(); k++)
+							{
+								if (_vEnemy[k]->getEnemyType() == ROOK && _vEnemy[k]->getIdx().x == 1 && _vEnemy[k]->getIdx().y == 6)
+								{
+									_vEnemy[k]->setIsFind(true);
+									break;
+								}
+							}
+							break;
+						}
+					}
+				}
 			}
 		}
 		_vEnemy[i]->update();
@@ -142,16 +204,87 @@ void enemyMgr::update()
 					SOUNDMANAGER->playEff("banshee_Death");
 				break;
 				case PAWN:
+					rnd = RND->getFromIntTo(1, 4);
+
+					switch (rnd)
+					{
+					case 1:
+						SOUNDMANAGER->playEff("piece_death1");
+						break;
+					case 2:
+						SOUNDMANAGER->playEff("piece_death2");
+						break;
+					case 3:
+						SOUNDMANAGER->playEff("piece_death3");
+						break;
+					}
 				break;
-				case KNIGHT:	//드럼
+				case KNIGHT:	
+					rnd = RND->getFromIntTo(1, 4);
+
+					switch (rnd)
+					{
+					case 1:
+						SOUNDMANAGER->playEff("piece_death1");
+						break;
+					case 2:
+						SOUNDMANAGER->playEff("piece_death2");
+						break;
+					case 3:
+						SOUNDMANAGER->playEff("piece_death3");
+						break;
+					}
 				break;
-				case BISHOP:	//호른
+				case BISHOP:
+					rnd = RND->getFromIntTo(1, 4);
+
+					switch (rnd)
+					{
+					case 1:
+						SOUNDMANAGER->playEff("piece_death1");
+						break;
+					case 2:
+						SOUNDMANAGER->playEff("piece_death2");
+						break;
+					case 3:
+						SOUNDMANAGER->playEff("piece_death3");
+						break;
+					}
 				break;
-				case ROOK:		//바이올린
+				case ROOK:	
+					rnd = RND->getFromIntTo(1, 4);
+
+					switch (rnd)
+					{
+					case 1:
+						SOUNDMANAGER->playEff("piece_death1");
+						break;
+					case 2:
+						SOUNDMANAGER->playEff("piece_death2");
+						break;
+					case 3:
+						SOUNDMANAGER->playEff("piece_death3");
+						break;
+					}
 				break;
-				case QUEEN:		//키보드
+				case QUEEN:	
+					rnd = RND->getFromIntTo(1, 4);
+
+					switch (rnd)
+					{
+					case 1:
+						SOUNDMANAGER->playEff("queen_Death1");
+						break;
+					case 2:
+						SOUNDMANAGER->playEff("queen_Death2");
+						break;
+					case 3:
+						SOUNDMANAGER->playEff("queen_Death3");
+						break;
+					}
 				break;
-				case KING:		//베이스(최종)
+				case KING:		
+					SOUNDMANAGER->playEff("king_Death");
 				break;
 			}
 			_vEnemy.erase(_vEnemy.begin() + i);
@@ -230,6 +363,11 @@ void enemyMgr::update()
 	KEYANIMANAGER->update("drum");
 	KEYANIMANAGER->update("violin");
 	KEYANIMANAGER->update("coralriff");
+	KEYANIMANAGER->update("pawn");
+	KEYANIMANAGER->update("rook");
+	KEYANIMANAGER->update("bishop");
+	KEYANIMANAGER->update("knight");
+
 
 
 	KEYANIMANAGER->update("dust");
@@ -240,6 +378,10 @@ void enemyMgr::render()
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
 		if (_vEnemy[i]->getEnemyType() == ZOMBIE || _vEnemy[i]->getEnemyType() == BAT || _vEnemy[i]->getEnemyType() == BAT_BOSS || _vEnemy[i]->getEnemyType() == ARMADILLO)
+		{
+			_vEnemy[i]->render();
+		}
+		if (_vEnemy[i]->getIsMove())
 		{
 			_vEnemy[i]->render();
 		}
@@ -327,35 +469,76 @@ void enemyMgr::createEnemy(int enemyType, POINT idx)
 			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_1_1:	// 폰
-
+			enemy = new pawn;
+			enemy->makeEnemyIdx(idx);
+			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_1_2:	// 비숍		//호른
-			enemy = new horn;
+			enemy = new bishop;
 			enemy->makeEnemyIdx(idx);
 			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_1_3:	// 룩		//바이올린
-			enemy = new violin;
+			enemy = new rook;
 			enemy->makeEnemyIdx(idx);
 			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_2_1:	// 나이트	//드럼
-			enemy = new drum;
+			enemy = new knight;
 			enemy->makeEnemyIdx(idx);
 			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_2_2:	// 퀸		//키보드
-			enemy = new keybord;
+			enemy = new queen;
 			enemy->makeEnemyIdx(idx);
 			_vEnemy.push_back(enemy);
 		break;
 		case ENEMY4_2_3:	// 킹		//베이스
-			enemy = new coralriff;
+			enemy = new king;
 			enemy->makeEnemyIdx(idx);
 			_vEnemy.push_back(enemy);
 		break;
 	}
 
+}
+
+void enemyMgr::createPawn(int enemyType, POINT idx, int pawnBeat)
+{
+	enemy* enemy;
+	switch (enemyType)
+	{
+	case ENEMY4_1_1:	// 폰
+		enemy = new pawn;
+		enemy->makeEnemyIdx(idx);
+		enemy->setBeatCount(pawnBeat);
+		_vEnemy.push_back(enemy);
+		break;
+	case ENEMY4_1_2:	// 비숍		//호른
+		//enemy = new horn;
+		//enemy->makeEnemyIdx(idx);
+		//_vEnemy.push_back(enemy);
+		break;
+	case ENEMY4_1_3:	// 룩		//바이올린
+		//enemy = new violin;
+		//enemy->makeEnemyIdx(idx);
+		//_vEnemy.push_back(enemy);
+		break;
+	case ENEMY4_2_1:	// 나이트	//드럼
+		//enemy = new drum;
+		//enemy->makeEnemyIdx(idx);
+		//_vEnemy.push_back(enemy);
+		break;
+	case ENEMY4_2_2:	// 퀸		//키보드
+		//enemy = new keybord;
+		//enemy->makeEnemyIdx(idx);
+		//_vEnemy.push_back(enemy);
+		break;
+	case ENEMY4_2_3:	// 킹		//베이스
+		//enemy = new coralriff;
+		//enemy->makeEnemyIdx(idx);
+		//_vEnemy.push_back(enemy);
+		break;
+	}
 }
 
 bool enemyMgr::getIsThereEnemy(int x, int y)

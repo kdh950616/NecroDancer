@@ -88,7 +88,7 @@ void testScene::render()
 
 	_em->render();
 	
-	lightMapRender();
+	//lightMapRender();
 
 	beatRender();
 	
@@ -178,7 +178,7 @@ void testScene::rayCastInit()
 void testScene::beatInit()
 {
 	//_stageKeyName = "mapTool";
-	_stageKeyName = "testScene";
+	_stageKeyName = "stage1";
 	_beatFileName = "sounds/zone/zone1_1.txt";
 	SOUNDMANAGER->setVolume(VOLUME);
 	_pitch = 1.0f;
@@ -262,52 +262,6 @@ void testScene::tileUpdate()
 					{
 						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 0);
 					}
-
-					//if (_lShopVol.size() <= 15)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, 0);
-					//}		
-					//else if (_lShopVol.size() <= 14)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 1);
-					//}
-					//else if (_lShopVol.size() <= 13)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 2);
-					//}
-					//else if (_lShopVol.size() <= 12)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 3);
-					//}
-					//else if (_lShopVol.size() <= 11)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 4);
-					//}
-					//else if (_lShopVol.size() <= 10)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 5);
-					//}
-					//else if (_lShopVol.size() <= 9)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 6);
-					//}
-					//else if (_lShopVol.size() <= 8)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 7);
-					//}
-					//else if (_lShopVol.size() <= 7)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 8);
-					//}
-					//else if (_lShopVol.size() <= 6)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume() / 10 * 9);
-					//}
-					//else if (_lShopVol.size() <= 5)
-					//{
-					//	SOUNDMANAGER->ShopVolume(_stageKeyName, SOUNDMANAGER->getVolume());
-					//}
-
 				}
 			}
 		}
@@ -352,20 +306,6 @@ void testScene::beatUpdate()
 	{
 		_heartImg->SetFrameX(0);
 	}
-
-	//if (_vBeat.begin()->isRight == true && _time > _vBeat.begin()->beat)
-	//{
-	//	_isBeat = true;
-	//	_heartImg->SetFrameX(1);
-	//	_vBeat.erase(_vBeat.begin());
-	//}
-	//else if (_vBeat.begin()->isRight == false)
-	//{
-	//	if (_vBeat.begin()->opacity < 0.2f)
-	//	{
-	//		_vBeat.erase(_vBeat.begin());
-	//	}
-	//}
 
 	if (_time  > _vBeat.begin()->beat)
 	{
@@ -472,8 +412,10 @@ void testScene::beatUpdate()
 	else if (_vBeat.size() <= 0)
 	{
 		//비트 새로 불러오기
+		//다음스테이지 or 게임종료
 		_time = 0;
 		SOUNDMANAGER->loadBeat(_beatFileName, _stageKeyName);
+		_vBeat = SOUNDMANAGER->getVBeat();
 	}
 }
 

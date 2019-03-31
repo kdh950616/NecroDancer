@@ -224,6 +224,8 @@ public:
 	void setDirection(POINT direction) { _direction = direction; }
 	POINT getDirection() { return _direction; }
 	virtual bool getIsStun() { return 0; }
+	virtual bool getIsCastling() { return true; }
+	virtual void setIsCastling(bool val) {;}
 
 	int getGold() { return _gold; }
 	void setGold(int gold) { _gold = gold; }

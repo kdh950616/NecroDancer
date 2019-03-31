@@ -37,10 +37,6 @@ void bat_Boss::release()
 
 void bat_Boss::update()
 {
-	if (_curHp >= 0)
-	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
-	}
 
 	if (CAMERA->getPosX() - TILESIZE <= _posLT.x
 		&& CAMERA->getPosY() - TILESIZE <= _posLT.y
@@ -220,6 +216,10 @@ void bat_Boss::moveCal()
 		{
 			_posLT.x = _savePos.x - TILESIZE;
 		}
+		_idx.x = (_posLT.x) / TILESIZE;
+		_idx.y = (_posLT.y) / TILESIZE;
+		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+		(*_vvObj)[_idx.y - _direction.y][_idx.x - _direction.x]->setIsAvailMove(true);
 		_vec.x = 0;
 		_savePos = _posLT;
 		_isMove = false;
@@ -236,6 +236,10 @@ void bat_Boss::moveCal()
 		{
 			_posLT.y = _savePos.y - TILESIZE;
 		}
+		_idx.x = (_posLT.x) / TILESIZE;
+		_idx.y = (_posLT.y) / TILESIZE;
+		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+		(*_vvObj)[_idx.y - _direction.y][_idx.x - _direction.x]->setIsAvailMove(true);
 		_vec.y = 0;
 		_savePos = _posLT;
 		_isMove = false;
@@ -246,16 +250,16 @@ void bat_Boss::moveCal()
 	_posLT.y += _vec.y;
 	_posCT.x = _posLT.x + TILESIZE / 2;
 	_posCT.y = _posLT.y + TILESIZE / 2;
-	if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
-		(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
-	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
-	}
-	else
-	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
-	}
+	//if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+	//	(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
+	//{
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	//}
+	//else
+	//{
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
+	//}
 	_idx.x = (_posLT.x) / TILESIZE;
 	_idx.y = (_posLT.y) / TILESIZE;
-	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	//(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
 }

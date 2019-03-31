@@ -87,21 +87,65 @@ void enemy::showAttackEffect()
 	{
 		_atkDirection = { 0,1 };
 		_atkAngle = 90;
+
+		if (_direction.x == 1)
+		{
+			_atkDirection = { 1,1 };
+			_atkAngle = 45;
+		}
+		else if (_direction.x == -1)
+		{
+			_atkDirection = { -1,1 };
+			_atkAngle = 135;
+		}
 	}
 	else if (_direction.y == -1)
 	{
 		_atkDirection = { 0,-1 };
 		_atkAngle = 270;
+
+		if (_direction.x == 1)
+		{
+			_atkDirection = { 1,-1 };
+			_atkAngle = 315;
+		}
+		else if (_direction.x == -1)
+		{
+			_atkDirection = { -1,-1 };
+			_atkAngle = 225;
+		}
 	}
 	if (_direction.x == 1)
 	{
 		_atkDirection = { 1,0 };
 		_atkAngle = 0;
+
+		if (_direction.y == 1)
+		{
+			_atkDirection = { 1,1 };
+			_atkAngle = 45;
+		}
+		else if (_direction.y == -1)
+		{
+			_atkDirection = { 1,-1 };
+			_atkAngle = 315;
+		}
 	}
 	else if (_direction.x == -1)
 	{
 		_atkDirection = { -1,0 };
 		_atkAngle = 180;
+
+		if (_direction.y == 1)
+		{
+			_atkDirection = { -1,1 };
+			_atkAngle = 135;
+		}
+		else if (_direction.y == -1)
+		{
+			_atkDirection = { -1,-1 };
+			_atkAngle = 225;
+		}
 	}
 	_isAttack = true;
 }

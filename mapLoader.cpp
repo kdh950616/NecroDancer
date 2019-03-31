@@ -396,6 +396,53 @@ void mapLoader::makeEnemy(vvObj* vvObj, int * tileSizeX, int * tileSizeY)
 	}
 }
 
+void mapLoader::makeBoss(vvObj * vvObj, int * tileSizeX, int * tileSizeY, int* pawnBeat)
+{
+	int pawnCount = 0;
+
+	for (int i = 0; i < *tileSizeY; i++)
+	{
+		for (int j = 0; j < *tileSizeX; j++)
+		{
+			switch ((*vvObj)[i][j]->getAttribute())
+			{
+			case ENEMY4_1_1:				// Æù
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createPawn(ENEMY4_1_1, (*vvObj)[i][j]->getIdx(),pawnBeat[pawnCount]);
+				pawnCount++;
+				break;
+			case ENEMY4_1_2:				// ºñ¼ó
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createEnemy(ENEMY4_1_2, (*vvObj)[i][j]->getIdx());
+				break;
+			case ENEMY4_1_3:				// ·è
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createEnemy(ENEMY4_1_3, (*vvObj)[i][j]->getIdx());
+				break;
+			case ENEMY4_2_1:				// ³ªÀÌÆ®
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createEnemy(ENEMY4_2_1, (*vvObj)[i][j]->getIdx());
+				break;
+			case ENEMY4_2_2:				// Äý
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createEnemy(ENEMY4_2_2, (*vvObj)[i][j]->getIdx());
+				break;
+			case ENEMY4_2_3:				// Å·
+				setNewObjTile((*vvObj)[i][j], j, i);
+				(*vvObj)[i][j]->setIsAvailMove(false);
+				_em->createEnemy(ENEMY4_2_3, (*vvObj)[i][j]->getIdx());
+
+				break;
+			}
+		}
+	}
+}
+
 void mapLoader::setNewMapTile(tile * tile, int idX, int idY, bool isTileChanged)
 {
 	POINT tmpIdx = { idX,idY };

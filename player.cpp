@@ -1676,8 +1676,6 @@ void player::renderUI()
 void player::txtRender()
 {
 	WCHAR str[128];
-	swprintf_s(str, L"tileX : %d tileY : %d ", (*_vvMap)[10][10]->getPos().x, (*_vvMap)[10][10]->getPos().y);
-	D2DMANAGER->drawText(str, 0, 260, 20, 0x00ffff);
 	swprintf_s(str, L"ct X : %f ct Y : %f ", _posCT.x, _posCT.y);
 	D2DMANAGER->drawText(str, 0, 280, 20, 0x00ffff);
 	swprintf_s(str, L"idx : %d idy : %d ", _idx.x, _idx.y);

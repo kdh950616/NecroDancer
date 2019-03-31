@@ -128,7 +128,7 @@ enum tagImgNum
 
 enum tagArrow
 {
-	ARROW_X_DOWN = 500,
+	ARROW_X_DOWN,
 	ARROW_X_UP,
 	ARROW_Y_DOWN,
 	ARROW_Y_UP,

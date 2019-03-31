@@ -2297,7 +2297,7 @@ void mapEditor::mapSizeChange()
 
 					if (_delayCount >= 5)
 					{
-						switch (j)
+							switch (j)
 						{
 						case ARROW_X_DOWN:
 							if (_tileSizeX > 1)

@@ -2,7 +2,7 @@
 #include "gameNode.h"
 #include "mapEditor.h" // 나중에 로딩씬에 넣자.
 #include "testScene.h"
-#include "boss_Coralriff.h"
+#include "stageBoss.h"
 
 class playGround : public gameNode
 {
@@ -10,7 +10,7 @@ private:
 
 	mapEditor* _mapEditor;
 	testScene* _testScene;
-	boss_Coralriff* _bossCoral;
+	stageBoss* _bossScene;
 
 public:
 	playGround();

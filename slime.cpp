@@ -64,18 +64,18 @@ void slime::update()
 	_posLT.y += _vec.y;
 	_posCT.x = _posLT.x + TILESIZE / 2;
 	_posCT.y = _posLT.y + TILESIZE / 2;
-	if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
-		(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
-	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
-	}
-	else
-	{
-		(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
-	}
+	//if ((*_vvObj)[_idx.y][_idx.x]->getAttribute() >= OBJ_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= OBJ_DOOR_SIDE ||
+	//	(*_vvObj)[_idx.y][_idx.x]->getAttribute() >= ETC_TORCH_WALL1 && (*_vvObj)[_idx.y][_idx.x]->getAttribute() <= ETC_TORCH_BOSS)
+	//{
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	//}
+	//else
+	//{
+	//	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(true);
+	//}
 	_idx.x = (_posLT.x) / TILESIZE;
 	_idx.y = (_posLT.y) / TILESIZE;
-	(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
+	//(*_vvObj)[_idx.y][_idx.x]->setIsAvailMove(false);
 
 	if (_curHp <= 0)
 	{
