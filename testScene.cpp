@@ -188,9 +188,9 @@ void testScene::beatInit()
 
 	_heartImg = IMAGEMANAGER->findImage("beat_Heart");
 
-	_rc_Correct = { (float)WINSIZEX / 2 - 80,
+	_rc_Correct = { (float)WINSIZEX / 2 - 100,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 80,
+					(float)WINSIZEX / 2 + 100,
 					(float)WINSIZEY - 52 };
 	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
 					(float)WINSIZEY - 100,
@@ -206,7 +206,6 @@ void testScene::beatInit()
 
 void testScene::tileUpdate()
 {
-
 	if (_isBeat)
 	{
 		for (int i = 0; i < _tileSizeY; i++)
@@ -309,6 +308,8 @@ void testScene::beatUpdate()
 
 	if (_time  > _vBeat.begin()->beat)
 	{
+		(*_player).bounceHeart();
+
 		_isBeat = true;
 		_heartImg->SetFrameX(1);
 		_vBeat.erase(_vBeat.begin());
@@ -683,10 +684,18 @@ void testScene::beatRender()
 	{
 		if (_vBeat[i].rc_Left.left > 0 && _vBeat[i].rc_Left.left < WINSIZEX / 2)
 		{
-			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top,10,50,_vBeat[i].opacity);
-			D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
-			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top,10,50, _vBeat[i].opacity);
-			D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
+			if (_vBeat.back().beat - 30000 > _vBeat[i].beat)
+			{
+				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top,10,50,_vBeat[i].opacity);
+				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top,10,50, _vBeat[i].opacity);
+				//D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
+				//D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
+			}
+			else
+			{
+				IMAGEMANAGER->render("beat_Red", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top, 10, 50, _vBeat[i].opacity);
+				IMAGEMANAGER->render("beat_Red", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top, 10, 50, _vBeat[i].opacity);
+			}
 		}
 	}
 	_heartImg->frameRender(WINSIZEX / 2 - _heartImg->GetFrameWidth() / 2, WINSIZEY - 125,_heartImg->GetFrameX(),_heartImg->GetFrameY());

@@ -30,6 +30,17 @@ void enemy::update()
 
 void enemy::render()
 {
+	if (_isHit)
+	{
+		for (int i = _curHp; i < _maxHp; i++)
+		{
+			IMAGEMANAGER->findImage("enemy_HeartEmpty")->render((_posLT.x + 26) - (_maxHp / 2) * 24 + 24 * i - 7 - CAMERA->getPosX() - _showPos.x, _posLT.y - _showPos.y - 24 - CAMERA->getPosY());
+		}
+		for (int i = 0; i < _curHp; i++)
+		{
+			IMAGEMANAGER->findImage("enemy_Heart")->render((_posLT.x + 26) - (_maxHp / 2) * 24 + 24 * i - 7 - CAMERA->getPosX() - _showPos.x, _posLT.y - _showPos.y - 24 - CAMERA->getPosY());
+		}
+	}
 }
 
 void enemy::makeEnemyIdx(POINT mapIdx)

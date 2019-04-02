@@ -27,6 +27,8 @@ HRESULT skeleton_2::init()
 	_isNeedAstar = true;
 	_gold = 2;
 
+	_showPos = { 0,15 };
+
 	return S_OK;
 }
 
@@ -263,6 +265,8 @@ void skeleton_2::update()
 
 void skeleton_2::render()
 {
+	enemy::render();
+
 	if (_isMove)
 	{
 		_dustImg->aniRender(_savePos.x - CAMERA->getPosX(), _savePos.y - CAMERA->getPosY(), _dustAni);

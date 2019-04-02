@@ -28,6 +28,8 @@ HRESULT banshee::init()
 	_isNeedAstar = true;
 	_gold = 10;
 
+	_showPos = { 0,35 };
+
 	return S_OK;
 }
 
@@ -147,6 +149,8 @@ void banshee::update()
 
 void banshee::render()
 {
+	enemy::render();
+
 	_shadowImg->render(_posLT.x - CAMERA->getPosX(), _posLT.y - CAMERA->getPosY(), 1.0f);
 	if (_isLeft)
 	{

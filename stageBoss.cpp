@@ -96,7 +96,7 @@ void stageBoss::update()
 
 	if (!_isBattle)
 	{
-		if (_player->getIdx().y <= 12)
+		if (_player->getIdx().y <= 12 && _em->getVEnemy().size() > 0)
 		{
 			for (int i = 0; i < _em->getVEnemy().size(); i++)
 			{
@@ -105,8 +105,38 @@ void stageBoss::update()
 					_em->getVEnemy()[i]->setIsFind(true);
 				}
 			}
+
+			_vvObj[14][3]->setBossWall();
+			_vvObj[14][4]->setBossWall();
+			_vvObj[14][4]->setAttribute(ETC_TORCH_BOSS);
+			_vvObj[14][5]->setBossWall();
+
+
+			for (int i = 15; i < _tileSizeY; i++)
+			{
+				for (int j = 0; j < _tileSizeX; j++)
+				{
+					_vvMap[i][j]->eraseMap();
+					
+					_vvObj[i][j]->eraseObj();
+				}
+			}
 			//여기에 맵설정 -> 문 보스벽으로 바꾸고 보스벽 아래는 모두빈걸로..
 			// 추가로 에너미사이즈 0돼면 위에 4개 열어주자.
+			_isBattle = true;
+			SOUNDMANAGER->playEff("bossStage_Battle");
+		}
+	}
+	else if (_isBattle)
+	{
+		if (_em->getVEnemy().size() == 0)
+		{
+			_isBattle = false;
+
+			for (int i = 2; i < 7; i++)
+			{
+				_vvObj[5][i]->objSetDefault();
+			}
 		}
 	}
 }
@@ -215,9 +245,9 @@ void stageBoss::beatInit()
 
 	_heartImg = IMAGEMANAGER->findImage("beat_Heart");
 
-	_rc_Correct = { (float)WINSIZEX / 2 - 200,
+	_rc_Correct = { (float)WINSIZEX / 2 - 150,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 200,
+					(float)WINSIZEX / 2 + 150,
 					(float)WINSIZEY - 52 };
 	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
 					(float)WINSIZEY - 100,
@@ -422,6 +452,7 @@ void stageBoss::tileRender()
 		{
 			for (int j = 0; j < _tileSizeX; j++)
 			{
+				if (_isBattle && i < 5)continue;
 				if (_vvMap[i][j]->getImg() != nullptr
 					&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
 					&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
@@ -444,6 +475,7 @@ void stageBoss::tileRender()
 		{
 			for (int j = 0; j < _tileSizeX; j++)
 			{
+				if (_isBattle && i < 5)continue;
 				if (_vvMap[i][j]->getImg() != nullptr
 					&& CAMERA->getPosX() - TILESIZE <= _vvMap[i][j]->getPos().x
 					&& CAMERA->getPosY() - TILESIZE <= _vvMap[i][j]->getPos().y
@@ -483,6 +515,7 @@ void stageBoss::objRender()
 	{
 		for (int j = 0; j < _tileSizeX; j++)
 		{
+			if (_isBattle && i < 5)continue;
 			if (_vvObj[i][j]->getImg() != nullptr
 				&& CAMERA->getPosX() - TILESIZE <= _vvObj[i][j]->getPos().x
 				&& CAMERA->getPosY() - TILESIZE <= _vvObj[i][j]->getPos().y

@@ -138,6 +138,9 @@ protected:
 	int _atkEff_Frame;
 	int _atkAngle;
 
+	bool _isHit;		//맞앗니? -> 체력보여주기위해
+	POINT _showPos;
+
 public: 
 	enemy();
 	~enemy();
@@ -232,5 +235,11 @@ public:
 
 	int getGold() { return _gold; }
 	void setGold(int gold) { _gold = gold; }
+
+	void setIsHit(bool isHit) { _isHit = isHit; }
+	bool getIsHit() { return _isHit; }
+
+	void setShowPos(POINT showPos) { _showPos = showPos; }
+	POINT getShowPos() { return _showPos; }
 };
 

@@ -133,7 +133,7 @@ HRESULT playGround::init()
 	//===============================================
 	//				monster - boss
 	//===============================================
-
+	SOUNDMANAGER->addSound("bossStage_Battle", "sounds/zone/boss_zone1_walls.ogg", false, false);
 
 	//===============================================
 	//				obj
@@ -223,7 +223,7 @@ HRESULT playGround::init()
 	//º¸½º¾À
 	SCENEMANAGER->addScene("bossScene", _bossScene);
 
-	SCENEMANAGER->changeScene("bossScene");                  
+	SCENEMANAGER->changeScene("testScene");                  
 	
 	return S_OK;
 }

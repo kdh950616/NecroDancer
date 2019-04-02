@@ -126,6 +126,8 @@ public:
 
 	void playBossZone(string keyName, float volume);
 
+	unsigned int getlength(string keyName);
+
 
 
 	// ===================================

@@ -29,6 +29,8 @@ HRESULT dragon::init()
 	standAni_LightChange();
 	_gold = 10;
 
+	_showPos = { 0,70 };
+
 	return S_OK;
 }
 
@@ -156,6 +158,8 @@ void dragon::update()
 
 void dragon::render()
 {
+	enemy::render();
+
 	if (_isMove)
 	{
 		_dustImg->aniRender(_savePos.x - CAMERA->getPosX(), _savePos.y - CAMERA->getPosY(), _dustAni);

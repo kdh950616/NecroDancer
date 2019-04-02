@@ -152,6 +152,9 @@ private:
 	bool _isFast;				//패스트중이니   함정
 	POINT _trapIdx;
 
+	int _heartBeat;
+	int _heartBeatCount;
+
 public:
 	player();
 	~player();
@@ -192,6 +195,7 @@ public:
 	void renderUI();
 	void txtRender();
 	void effectRender();
+	void heartRender();
 
 	//===========================================
 	//					즉석추가 기능함수
@@ -201,6 +205,7 @@ public:
 	void brokeTorch();
 	void brokeShovel();
 	void brokeArmor();
+	void bounceHeart();
 
 	//===========================================
 	//					get

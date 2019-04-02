@@ -27,6 +27,7 @@ HRESULT king::init()
 	_gold = 0;
 	_isFind = false;
 
+	_showPos = { 0,40 };
 	return S_OK;
 }
 
@@ -242,6 +243,8 @@ void king::update()
 
 void king::render()
 {
+	enemy::render();
+
 	if (_isMove)
 	{
 		_dustImg->aniRender(_savePos.x - CAMERA->getPosX(), _savePos.y - CAMERA->getPosY(), _dustAni);

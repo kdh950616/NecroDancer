@@ -28,6 +28,8 @@ HRESULT bat_Boss::init()
 	_isNeedAstar = false;
 	_gold = 10;
 
+	_showPos = { 0,30 };
+
 	return S_OK;
 }
 
@@ -136,6 +138,8 @@ void bat_Boss::update()
 
 void bat_Boss::render()
 {
+	enemy::render();
+
 	_shadowImg->render(_posLT.x - CAMERA->getPosX() - 5, _posLT.y + 15 - CAMERA->getPosY(), 1.0f);
 	if (_isLeft)
 	{

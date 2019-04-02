@@ -247,3 +247,33 @@ void tile::openChest()
 		break;
 	}
 }
+
+void tile::eraseMap()
+{
+	setAttribute(TILE_NONE);
+	setFrameX(NULL);
+	setFrameY(NULL);
+	setImgNum(IMG_NONE);
+	setImg(nullptr);
+	setIsAvailMove(false);
+}
+
+void tile::eraseObj()
+{
+	setAttribute(OBJ_NONE);
+	setFrameX(NULL);
+	setFrameY(NULL);
+	setImgNum(IMG_NONE);
+	setImg(nullptr);
+	setIsAvailMove(false);
+}
+
+void tile::setBossWall()
+{
+	setAttribute(OBJ_WALL_BOSS);
+	setFrameX(RND->getFromIntTo(3, 5));
+	setFrameY(RND->getFromIntTo(2, 4));
+	setImgNum(IMG_WALL);
+	setImg(IMAGEMANAGER->findImage("wall"));
+	setIsAvailMove(false);
+}

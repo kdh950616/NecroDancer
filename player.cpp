@@ -37,6 +37,13 @@ HRESULT player::init()
 	_grooveChain = 1;
 	_killCombo = 0;
 
+
+
+	_maxHp = 20;
+	_curHp = _maxHp;
+	_heartBeat = 0;
+	_heartBeatCount = 0;
+	
 	return S_OK;
 }
 
@@ -46,6 +53,10 @@ void player::release()
 
 void player::update()
 {
+	if (_curHp <= 0)
+	{
+		_curHp = 1;
+	}
 	CAMERA->setPosX(_posLT.x - WINSIZEX / 2);
 	CAMERA->setPosY(_posLT.y - WINSIZEY / 2);
 
@@ -158,6 +169,8 @@ void player::render()
 	//D2DMANAGER->fillRectangle(0x00ff00, _posCT.x, _posCT.y, _posCT.x + TILESIZE, _posCT.y + TILESIZE, 1.0);
 	//D2DMANAGER->fillRectangle(0x0000ff, _savePos.x, _savePos.y, _savePos.x + TILESIZE, _savePos.y + TILESIZE, 1.0);
 
+	heartRender();
+
 	_shadowImg->render(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - CAMERA->getPosY(), 1.0f);
 	if (_isReverse)
 	{
@@ -187,6 +200,12 @@ void player::imgInit()
 	IMAGEMANAGER->addImage("slot_Armor", L"images/item/slot_Armor.png", 60, 66);
 	IMAGEMANAGER->addImage("slot_Torch", L"images/item/slot_Torch.png", 60, 66);
 	IMAGEMANAGER->addImage("slot_Hp", L"images/item/slot_Hp.png", 60, 84);
+
+	IMAGEMANAGER->addImage("ui_heart", L"images/ui/ui_heart.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_half_heart", L"images/ui/ui_heart_half.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_empty_heart", L"images/ui/ui_heart_empty.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_large_heart", L"images/ui/ui_heart_large.png", 57, 53);
+	IMAGEMANAGER->addImage("ui_large_half_heart", L"images/ui/ui_half_heart_large.png", 57, 53);
 
 	//이펙트 이미지
 	IMAGEMANAGER->addFrameImage("effect_Dagger", L"images/effect/swipe_dagger.png", 144, 48,3,1);
@@ -1394,6 +1413,7 @@ void player::attackFunc(POINT direction)
 	{
 		if (_em->getVEnemy()[i]->getIdx().x == _idx.x + direction.x && _em->getVEnemy()[i]->getIdx().y == _idx.y + direction.y)
 		{
+			_em->getVEnemy()[i]->setIsHit(true);
 			if (_em->getVEnemy()[i]->getEnemyType() == ARMADILLO && !_em->getVEnemy()[i]->getIsStun())
 			{
 				SOUNDMANAGER->playEff("armadillo_Block");
@@ -1811,6 +1831,95 @@ void player::effectRender()
 	}
 }
 
+void player::heartRender()
+{
+	WCHAR str[128];
+
+	int fullHeart = _curHp / 2;
+	int halfHeart = _curHp % 2;
+	int   emptyHeart = _maxHp - fullHeart / 2;
+
+	if (_maxHp / 2 <= 3)
+	{
+		for (int i = 0; i < _maxHp / 2; i++)
+		{
+			if (i < fullHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					IMAGEMANAGER->findImage("ui_large_heart")->render(630 + i * 53, 7);
+					_heartBeatCount--;
+				}
+				else
+					IMAGEMANAGER->findImage("ui_heart")->render(633 - i * 53, 10);
+			}
+			else if (halfHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					IMAGEMANAGER->findImage("ui_large_half_heart")->render(630 + i * 53, 7);
+					_heartBeatCount--;
+				}
+				else
+					IMAGEMANAGER->findImage("ui_half_heart")->render(633 + i * 53, 10);
+				halfHeart = 0;
+			}
+			else
+				IMAGEMANAGER->findImage("ui_empty_heart")->render(633 + i * 53, 10);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < _maxHp / 2; i++)
+		{
+			if (i < fullHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_large_heart")->render(770 + (i - 9) * 53, 57);
+					else
+						IMAGEMANAGER->findImage("ui_large_heart")->render(560 + i * 53, 7);
+					_heartBeatCount--;
+				}
+				else
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_heart")->render(773 + (i - 9) * 53, 60);
+					else
+						IMAGEMANAGER->findImage("ui_heart")->render(563 + i * 53, 10);
+				}
+			}
+			else if (halfHeart)
+			{
+				if (i == _heartBeat && _heartBeatCount > 0)
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_large_half_heart")->render(770 + (i - 9) * 53, 57);
+					else
+						IMAGEMANAGER->findImage("ui_large_half_heart")->render(560 + i * 53, 7);
+					_heartBeatCount--;
+				}
+				else
+				{
+					if (i > 4)
+						IMAGEMANAGER->findImage("ui_half_heart")->render(773 + (i - 9) * 53, 60);
+					else
+						IMAGEMANAGER->findImage("ui_half_heart")->render(563 + i * 53, 10);
+				}
+				halfHeart = 0;
+			}
+			else
+			{
+				if (i > 4)
+					IMAGEMANAGER->findImage("ui_empty_heart")->render(773 + (i - 9) * 53, 60);
+				else
+					IMAGEMANAGER->findImage("ui_empty_heart")->render(563 + i * 53, 10);
+			}
+		}
+	}
+}
+
 void player::brokeWeapon()
 {
 	_inventory[INVEN_WEAPON].img = IMAGEMANAGER->findImage("Item");
@@ -1871,6 +1980,19 @@ void player::brokeArmor()
 	_headImg->SetFrameX(0);
 	_headAni->start();
 	SOUNDMANAGER->playEff("brokeItem");
+}
+
+void player::bounceHeart()
+{
+	//살아있냐 죽었냐에 대한 불값 이프로 넣을라면 넣고
+	if (_curHp > 0)
+	{
+		_heartBeat++;
+		_heartBeatCount = _maxHp - (_maxHp - 2);
+		int fullHeart = _curHp / 2;
+		bool heartCheck = ((_curHp % 2) != 0);
+		_heartBeat = _heartBeat % (fullHeart + heartCheck);
+	}
 }
 
 

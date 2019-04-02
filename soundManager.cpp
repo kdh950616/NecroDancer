@@ -197,6 +197,24 @@ void soundManager::playBossZone(string keyName, float volume)
 	_channel[count_strings]->setVolume(volume);
 }
 
+unsigned int soundManager::getlength(string keyName)
+{
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	unsigned int length;
+
+	for (; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_sound[count]->getLength(&length, FMOD_TIMEUNIT_MS);
+			return length;
+		}
+	}
+}
+
 void soundManager::loadBeat(const char * fileName, string keyName)
 {
 	_vBeat.clear();																//ºñ¿î´Ù. ºñÆ®º¤ÅÍ. ±ò²ûÈ÷

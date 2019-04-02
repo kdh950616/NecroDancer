@@ -216,6 +216,8 @@ public:
 	void objSetDefault();
 	void setWaterTile();
 	void openChest();
-
+	void eraseMap();
+	void eraseObj();
+	void setBossWall();
 };
 

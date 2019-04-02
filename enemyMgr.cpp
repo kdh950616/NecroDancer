@@ -14,6 +14,8 @@ enemyMgr::~enemyMgr()
 HRESULT enemyMgr::init()
 {
 	IMAGEMANAGER->addFrameImage("enemy_Attack", L"images/effect/swipe_enemy.png", 270, 48, 5, 1);
+	IMAGEMANAGER->addImage("enemy_Heart", L"images/ui/TEMP_heart_small.png", 24, 24);
+	IMAGEMANAGER->addImage("enemy_HeartEmpty", L"images/ui/TEMP_heart_empty_small.png", 24, 24);
 	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	for (int i = 0; i < _vEnemy.size(); i++)

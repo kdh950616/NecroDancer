@@ -25,6 +25,7 @@ HRESULT slime::init()
 	_isNeedAstar = false;
 	_gold = 1;
 
+	_showPos = { 0,15 };
 
 	return S_OK;
 }

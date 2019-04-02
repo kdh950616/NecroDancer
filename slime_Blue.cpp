@@ -36,6 +36,8 @@ HRESULT slime_Blue::init()
 	_isNeedAstar = false;
 	_gold = 2;
 
+	_showPos = { 0,15 };
+
 	return S_OK;
 }
 
@@ -137,6 +139,8 @@ void slime_Blue::update()
 
 void slime_Blue::render()
 {
+	enemy::render();
+
 	if (_isMove)
 	{
 		_dustImg->aniRender(_savePos.x - CAMERA->getPosX(), _savePos.y - CAMERA->getPosY(), _dustAni);

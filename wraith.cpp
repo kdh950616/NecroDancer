@@ -26,6 +26,7 @@ HRESULT wraith::init()
 	_isNeedAstar = true;
 	_gold = 2;
 
+	_showPos = {0,15};
 
 	return S_OK;
 }

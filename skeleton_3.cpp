@@ -27,6 +27,7 @@ HRESULT skeleton_3::init()
 	_isNeedAstar = true;
 	_gold = 3;
 
+	_showPos = { 0,15 };
 
 	return S_OK;
 }
@@ -263,6 +264,8 @@ void skeleton_3::update()
 
 void skeleton_3::render()
 {
+	enemy::render();
+
 	if (_isMove)
 	{
 		_dustImg->aniRender(_savePos.x - CAMERA->getPosX(), _savePos.y - CAMERA->getPosY(), _dustAni);
