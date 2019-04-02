@@ -2962,6 +2962,26 @@ void mapEditor::objectTileRender()
 						_vvObj[i][j]->getImg()->GetFrameHeight(),
 						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
 				}
+				else if (_vvObj[i][j]->getImg() != nullptr &&  _vvObj[i][j]->getImgNum() == IMG_ENEMY3)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX() - TILESIZE,
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - TILESIZE * 1.5f,
+						_vvObj[i][j]->getImg()->GetFrameWidth(),
+						_vvObj[i][j]->getImg()->GetFrameHeight(),
+						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				}
+				else if (_vvObj[i][j]->getImg() != nullptr &&  _vvObj[i][j]->getImgNum() == IMG_ETC2)
+				{
+					_vvObj[i][j]->getImg()->frameRender(_vvObj[i][j]->getRc().left
+						- CAMERA->getPosX() - TILESIZE,
+						_vvObj[i][j]->getRc().top
+						- CAMERA->getPosY() - TILESIZE,
+						_vvObj[i][j]->getImg()->GetFrameWidth(),
+						_vvObj[i][j]->getImg()->GetFrameHeight(),
+						_vvObj[i][j]->getFrameX(), _vvObj[i][j]->getFrameY());
+				}
 				else if (_vvObj[i][j]->getImg() != nullptr && _vvObj[i][j]->getImgNum() != IMG_WALL)
 				{
 					if (_vvObj[i][j]->getAttribute() == ETC_TORCH)

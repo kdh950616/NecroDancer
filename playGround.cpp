@@ -17,6 +17,7 @@ HRESULT playGround::init()
 	_mapEditor = new mapEditor;
 	_testScene = new testScene;
 	_bossScene = new stageBoss;
+	_stage1 = new stage1;
 
 	SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
 	SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
@@ -223,7 +224,9 @@ HRESULT playGround::init()
 	//º¸½º¾À
 	SCENEMANAGER->addScene("bossScene", _bossScene);
 
-	SCENEMANAGER->changeScene("testScene");                  
+	SCENEMANAGER->addScene("stage1", _stage1);
+
+	SCENEMANAGER->changeScene("stage1");                  
 	
 	return S_OK;
 }
