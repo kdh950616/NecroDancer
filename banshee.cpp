@@ -39,11 +39,9 @@ void banshee::release()
 
 void banshee::update()
 {
+
 	if (!_isFind && _isBeat
-		&& CAMERA->getPosX() - TILESIZE <= _posLT.x
-		&& CAMERA->getPosY() - TILESIZE <= _posLT.y
-		&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _posLT.x
-		&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _posLT.y)
+		&& (*_vvLightMap)[_idx.y][_idx.x]->getOpacity() <= 0.649f)
 	{
 		_isFind = true;
 		_isBeat = false;
@@ -168,7 +166,6 @@ void banshee::render()
 
 void banshee::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("banshee", L"images/monster/miniboss/banshee.png", 544, 156, 8, 2);
 	_img = IMAGEMANAGER->findImage("banshee");
 
 	KEYANIMANAGER->addAnimationType("banshee");
@@ -189,7 +186,6 @@ void banshee::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("banshee_Shadow", "banshee_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
 	_dustImg = nullptr;

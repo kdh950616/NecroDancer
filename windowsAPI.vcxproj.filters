@@ -324,6 +324,9 @@
     <ClInclude Include="rook.h">
       <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
     </ClInclude>
+    <ClInclude Include="test2Scene.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -523,6 +526,9 @@
     </ClCompile>
     <ClCompile Include="rook.cpp">
       <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
+    </ClCompile>
+    <ClCompile Include="test2Scene.cpp">
+      <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

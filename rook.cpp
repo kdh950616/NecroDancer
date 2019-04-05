@@ -164,7 +164,6 @@ void rook::render()
 
 void rook::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("rook", L"images/monster/boss/rook_red.png", 114, 104, 3, 2);
 	_img = IMAGEMANAGER->findImage("rook");
 
 	KEYANIMANAGER->addAnimationType("rook");
@@ -178,10 +177,8 @@ void rook::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("rook", "rook_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

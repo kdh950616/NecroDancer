@@ -153,10 +153,7 @@ void bat::render()
 
 void bat::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("bat_Normal", L"images/monster/normal/bat.png", 192, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("bat_Normal");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("bat_Normal");
 	KEYANIMANAGER->addAnimationType("bat_Normal_Shadow");
@@ -170,7 +167,6 @@ void bat::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("bat_Normal_Shadow", "bat_Normal_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
 	_dustImg = nullptr;

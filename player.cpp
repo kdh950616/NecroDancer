@@ -162,15 +162,6 @@ void player::update()
 
 void player::render()
 {
-	
-	
-
-	//D2DMANAGER->fillRectangle(0xff0000, _posLT.x, _posLT.y, _posLT.x + TILESIZE, _posLT.y + TILESIZE, 1.0);
-	//D2DMANAGER->fillRectangle(0x00ff00, _posCT.x, _posCT.y, _posCT.x + TILESIZE, _posCT.y + TILESIZE, 1.0);
-	//D2DMANAGER->fillRectangle(0x0000ff, _savePos.x, _savePos.y, _savePos.x + TILESIZE, _savePos.y + TILESIZE, 1.0);
-
-	heartRender();
-
 	_shadowImg->render(_posLT.x - CAMERA->getPosX(), _posLT.y - 15 - CAMERA->getPosY(), 1.0f);
 	if (_isReverse)
 	{
@@ -190,28 +181,6 @@ void player::render()
 
 void player::imgInit()
 {
-	IMAGEMANAGER->addFrameImage("playerHead", L"images/player/head.png", 192, 96, 4, 2);
-	IMAGEMANAGER->addFrameImage("playerBody", L"images/player/body.png", 192, 480, 4, 10);
-	IMAGEMANAGER->addImage("playerShadow", L"images/player/shadow.png", 48, 54);
-	//아이템 & 슬롯
-	IMAGEMANAGER->addFrameImage("Item", L"images/item/item.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addImage("slot_Shovel", L"images/item/slot_Shovel.png", 60, 66);
-	IMAGEMANAGER->addImage("slot_Weapon", L"images/item/slot_Weapon.png", 60, 66);
-	IMAGEMANAGER->addImage("slot_Armor", L"images/item/slot_Armor.png", 60, 66);
-	IMAGEMANAGER->addImage("slot_Torch", L"images/item/slot_Torch.png", 60, 66);
-	IMAGEMANAGER->addImage("slot_Hp", L"images/item/slot_Hp.png", 60, 84);
-
-	IMAGEMANAGER->addImage("ui_heart", L"images/ui/ui_heart.png", 48, 44);
-	IMAGEMANAGER->addImage("ui_half_heart", L"images/ui/ui_heart_half.png", 48, 44);
-	IMAGEMANAGER->addImage("ui_empty_heart", L"images/ui/ui_heart_empty.png", 48, 44);
-	IMAGEMANAGER->addImage("ui_large_heart", L"images/ui/ui_heart_large.png", 57, 53);
-	IMAGEMANAGER->addImage("ui_large_half_heart", L"images/ui/ui_half_heart_large.png", 57, 53);
-
-	//이펙트 이미지
-	IMAGEMANAGER->addFrameImage("effect_Dagger", L"images/effect/swipe_dagger.png", 144, 48,3,1);
-	IMAGEMANAGER->addFrameImage("effect_Spear", L"images/effect/swipe_rapier.png", 384, 48,4,1);
-	IMAGEMANAGER->addFrameImage("effect_Sword", L"images/effect/swipe_broadsword.png", 144, 144, 3, 1);
-	
 	_effectImg = IMAGEMANAGER->findImage("effect_Dagger");
 	_shovelImg = IMAGEMANAGER->findImage("Item");
 

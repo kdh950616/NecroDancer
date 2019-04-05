@@ -162,7 +162,6 @@ void slime_Blue::render()
 
 void slime_Blue::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("slime_Blue", L"images/monster/normal/slime_blue.png", 416, 100, 8, 2);
 	_img = IMAGEMANAGER->findImage("slime_Blue");
 
 	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
@@ -185,10 +184,8 @@ void slime_Blue::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("slime_Blue_Shadow", "slime_Blue_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

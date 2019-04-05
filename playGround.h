@@ -5,6 +5,8 @@
 #include "stageBoss.h"
 #include "stage1.h"
 #include "stage2.h"
+#include "loadingScene.h"
+#include "lobbyScene.h"
 
 
 class playGround : public gameNode
@@ -16,6 +18,8 @@ private:
 	stageBoss* _bossScene;
 	stage1* _stage1;
 	stage2* _stage2;
+	loadingScene* _loadingScene;
+	lobbyScene* _lobbyScene;
 
 public:
 	playGround();
@@ -25,5 +29,8 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	void imageInit();
+	void soundInit();
 
 };

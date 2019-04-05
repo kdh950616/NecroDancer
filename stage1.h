@@ -81,7 +81,6 @@ public:
 	//					init
 	//===========================================
 
-	void imageInit();
 	void mapLoaderInit();
 	void lightMapInit();
 	void playerInit();

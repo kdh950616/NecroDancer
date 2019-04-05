@@ -271,10 +271,7 @@ void armadillo::render()
 
 void armadillo::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("armadillo", L"images/monster/normal/armadillo.png", 528, 96, 11, 2);
 	_img = IMAGEMANAGER->findImage("armadillo");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("armadillo");
 	KEYANIMANAGER->addAnimationType("armadillo_Shadow");
@@ -306,10 +303,8 @@ void armadillo::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("armadillo_Shadow", "armadillo_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

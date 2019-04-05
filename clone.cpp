@@ -39,7 +39,7 @@ void clone::update()
 	//플레이어가 움직이는중 + 도착하지 않았으면
 	if ((*_player).getIsMove() && !(*_player).getIsArrive())
 	{
-		//플레이어의 방향에 -를 곱한것을 클론이 가짐.
+		//플레이어의 방향에 -를 곱한것을 클론이 가짐                   
 		_direction.x = ((*_player).getDirection().x) * -1;
 		_direction.y = ((*_player).getDirection().y) * -1;
 	}
@@ -54,7 +54,7 @@ void clone::update()
 			_savePos = _posLT;
 
 			if ((*_player).getIdx().x + (*_player).getDirection().x == _idx.x + _direction.x && 
-				(*_player).getIdx().y + (*_player).getDirection().y == _idx.y + _direction.y)
+				(*_player).getIdx().y + (*_player).getDirection().y == _idx.y + _direction.y)                               
 			{
 				attackPlayer(_dmg);
 
@@ -193,6 +193,7 @@ void clone::update()
 	{
 		countAttackEffect();
 	}
+
 }
 
 void clone::render()
@@ -219,10 +220,7 @@ void clone::render()
 
 void clone::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("clone", L"images/monster/normal/clone.png", 192, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("clone");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("clone");
 	KEYANIMANAGER->addAnimationType("clone_Shadow");
@@ -236,10 +234,8 @@ void clone::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("clone_Shadow", "clone_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

@@ -179,11 +179,7 @@ void skeleton::render()
 
 void skeleton::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("skeleton_Normal", L"images/monster/normal/skeleton.png", 384, 100, 8, 2);
 	_img = IMAGEMANAGER->findImage("skeleton_Normal");
-
-	//ÀÌÆåÆ® µî·Ï
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("skeleton_Normal");
 	KEYANIMANAGER->addAnimationType("skeleton_Normal_Shadow");
@@ -203,10 +199,8 @@ void skeleton::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("skeleton_Normal_Shadow", "skeleton_Normal_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

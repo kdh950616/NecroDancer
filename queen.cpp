@@ -153,13 +153,10 @@ void queen::render()
 
 void queen::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("queen", L"images/monster/boss/queen.png", 66, 156, 1, 2);
 	_img = IMAGEMANAGER->findImage("queen");
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

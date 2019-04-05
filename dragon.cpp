@@ -41,10 +41,7 @@ void dragon::release()
 void dragon::update()
 {
 	if (!_isFind && _isBeat
-		&& CAMERA->getPosX() - TILESIZE <= _posLT.x
-		&& CAMERA->getPosY() - TILESIZE <= _posLT.y
-		&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _posLT.x
-		&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _posLT.y)
+		&& (*_vvLightMap)[_idx.y][_idx.x]->getOpacity() <= 0.649f)
 	{
 		_isFind = true;
 		_isBeat = false;
@@ -181,10 +178,7 @@ void dragon::render()
 
 void dragon::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("dragon", L"images/monster/miniboss/dragon.png", 216, 204, 2, 2);
 	_img = IMAGEMANAGER->findImage("dragon");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("dragon");
 	KEYANIMANAGER->addAnimationType("dragon_Shadow");
@@ -198,10 +192,8 @@ void dragon::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("dragon_Shadow", "dragon_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Large", L"images/monster/miniboss/large_shadow.png", 86, 28);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Large");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

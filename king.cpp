@@ -261,7 +261,6 @@ void king::render()
 
 void king::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("king", L"images/monster/boss/king.png", 200, 180, 4, 2);
 	_img = IMAGEMANAGER->findImage("king");
 
 	KEYANIMANAGER->addAnimationType("king");
@@ -271,10 +270,8 @@ void king::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("king", "king_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

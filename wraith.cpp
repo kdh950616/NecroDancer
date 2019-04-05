@@ -148,10 +148,7 @@ void wraith::render()
 
 void wraith::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("wraith", L"images/monster/normal/wraith.png", 144, 96, 3, 2);
 	_img = IMAGEMANAGER->findImage("wraith");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("wraith");
 	KEYANIMANAGER->addAnimationType("wraith_Shadow");
@@ -171,7 +168,6 @@ void wraith::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("wraith_Shadow", "wraith_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
 	_dustImg = nullptr;

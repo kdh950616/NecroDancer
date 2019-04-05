@@ -28,8 +28,6 @@ HRESULT stageBoss::init()
 		_pawnBeat[sour] = tmp;
 	}
 
-	imageInit();
-
 	mapLoaderInit();
 
 	lightMapInit();
@@ -158,36 +156,7 @@ void stageBoss::render()
 	_player->txtRender();
 	_player->effectRender();
 	_player->renderUI();
-}
-
-void stageBoss::imageInit()
-{
-	IMAGEMANAGER->addImage("black", L"images/mapTool/black.png", 48, 48);
-
-	//타일들 이미지
-	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
-	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addFrameImage("etc1", L"images/mapTool/etc1.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addFrameImage("etc2", L"images/mapTool/etc2.png", 432, 576, 3, 6);
-	IMAGEMANAGER->addFrameImage("shopkeeper", L"images/item/shopkeeper2.png", 752, 152, 8, 2);
-
-	//적 이미지
-	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addFrameImage("enemy2", L"images/mapTool/mob2.png", 432, 576, 9, 12);
-	IMAGEMANAGER->addFrameImage("enemy3", L"images/mapTool/mob3.png", 432, 576, 3, 4);
-	IMAGEMANAGER->addFrameImage("enemy4", L"images/mapTool/mob4.png", 432, 576, 3, 6);
-
-	//비트 이미지
-	IMAGEMANAGER->addFrameImage("beat_Heart", L"images/ui/beat_Heart.png", 160, 100, 2, 1);
-	IMAGEMANAGER->addImage("beat_Green", L"images/ui/beat_Green.png", 12, 64);
-	IMAGEMANAGER->addImage("beat_Red", L"images/ui/beat_Red.png", 12, 64);
-	//코인배수
-	IMAGEMANAGER->addImage("grooveChain", L"images/ui/game_coinmultiplier.png", 81, 18);
-	IMAGEMANAGER->addFrameImage("number", L"images/ui/number.png", 40, 18, 4, 1);
-
-	//아이템용 그림자
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
+	_player->heartRender();
 }
 
 void stageBoss::mapLoaderInit()

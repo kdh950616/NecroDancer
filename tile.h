@@ -179,8 +179,7 @@ public:
 	int					getFrameX()			{ return _tile.frameX; }		
 	int					getFrameY()			{ return _tile.frameY; }		
 	int					getAttribute()		{ return _tile.attribute; }		
-	//string				getImgKey()		{ return _tile.imgKey; }
-	int				getImgNum() { return _tile.imgNum; }
+	int					getImgNum() { return _tile.imgNum; }
 
 	bool				getIsAvailMove()	{ return _isAvailMove; }
 
@@ -197,7 +196,6 @@ public:
 	void setFrameX		(int frameX)		{ _tile.frameX = frameX; }
 	void setFrameY		(int frameY)		{ _tile.frameY = frameY; }
 	void setAttribute	(int attribute)		{ _tile.attribute = attribute; }
-	//void setImgKey		(string imgKey)		{ _tile.imgKey = imgKey; }
 	void setImgNum(int imageNum) { _tile.imgNum = imageNum; }
 
 	void setIsAvailMove(bool isAvailMove)	{ _isAvailMove = isAvailMove; }

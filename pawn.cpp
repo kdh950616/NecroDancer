@@ -172,7 +172,6 @@ void pawn::render()
 
 void pawn::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("pawn", L"images/monster/boss/pawn_red.png", 150, 92, 5, 2);
 	_img = IMAGEMANAGER->findImage("pawn");
 
 	KEYANIMANAGER->addAnimationType("pawn");
@@ -186,10 +185,8 @@ void pawn::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("pawn", "pawn_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

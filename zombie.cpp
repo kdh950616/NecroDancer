@@ -223,10 +223,7 @@ void zombie::render()
 
 void zombie::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("zombie", L"images/monster/normal/zombie.png", 1152, 100, 24, 2);
 	_img = IMAGEMANAGER->findImage("zombie");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.f, 10);
 
 	KEYANIMANAGER->addAnimationType("zombie");
 	KEYANIMANAGER->addAnimationType("zombie_Shadow");
@@ -252,10 +249,8 @@ void zombie::imageInit()
 
 	change_Ani_LightChange();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

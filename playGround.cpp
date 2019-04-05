@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "playGround.h"
 
+//x 27부터 에이스타 안쫓아오는거 + 사운드 일정량 이상 재생안되는거.
+
+
 playGround::playGround()
 {
 }
@@ -14,11 +17,201 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
+	imageInit();
+	soundInit();
+
 	_mapEditor = new mapEditor;
 	_testScene = new testScene;
 	_bossScene = new stageBoss;
 	_stage1 = new stage1;
+	_stage2 = new stage2;
+	_loadingScene = new loadingScene;
+	_lobbyScene = new lobbyScene;
 
+	//맵툴
+	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
+	//테스트씬
+	SCENEMANAGER->addScene("testScene", _testScene);
+	//보스씬
+	SCENEMANAGER->addScene("bossScene", _bossScene);
+	//스테이지1씬
+	SCENEMANAGER->addScene("stage1", _stage1);
+	//스테이지2씬
+	SCENEMANAGER->addScene("stage2", _stage2);
+	//로딩씬
+	SCENEMANAGER->addScene("loadingScene", _loadingScene);
+	//로비씬
+	SCENEMANAGER->addScene("lobbyScene", _lobbyScene);
+
+	SCENEMANAGER->changeScene("loadingScene");                  
+	
+	return S_OK;
+}
+
+void playGround::release()
+{
+	gameNode::release();              
+}                
+
+void playGround::update()
+{
+	gameNode::update();
+
+	SCENEMANAGER->update();
+}
+
+void playGround::render()
+{
+	// Draw 시작 - 이 코드가 빠지면 D2D 출력 X
+	D2DMANAGER->beginDraw();
+	//===========================================================================
+	//				##		여기에 코드 작성(Start)			##
+
+	SCENEMANAGER->render();
+
+	//				##			여기에 코드 작성(End)			##
+	//===========================================================================
+	//				##카메라 정보 마우스 정보 시간정보 출력	##===================
+	//WCHAR str[128];
+	//swprintf_s(str, L"cameraX : %d", CAMERA->getPosX());
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 80);
+	//D2DMANAGER->drawText(str, 0, 80,20,0xff00ff);
+	//swprintf_s(str, L"cameraY : %d", CAMERA->getPosY());
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 100);
+	//D2DMANAGER->drawText(str, 0, 100, 20, 0xff00ff);
+	//
+	//swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 140);
+	//D2DMANAGER->drawText(str, 0, 140, 20, 0xff00ff);
+	//swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
+	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
+	//D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
+
+	TIMEMANAGER->render();
+	// Draw 끝 - 이 코드가 빠지면 D2D 출력 X
+	D2DMANAGER->endDraw();
+}
+
+void playGround::imageInit()
+{
+	//==================================
+	//			플레이어관련
+	//==================================
+
+	IMAGEMANAGER->addFrameImage("playerHead", L"images/player/head.png", 192, 96, 4, 2);
+	IMAGEMANAGER->addFrameImage("playerBody", L"images/player/body.png", 192, 480, 4, 10);
+	IMAGEMANAGER->addImage("playerShadow", L"images/player/shadow.png", 48, 54);
+	//아이템 & 슬롯
+	IMAGEMANAGER->addFrameImage("Item", L"images/item/item.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addImage("slot_Shovel", L"images/item/slot_Shovel.png", 60, 66);
+	IMAGEMANAGER->addImage("slot_Weapon", L"images/item/slot_Weapon.png", 60, 66);
+	IMAGEMANAGER->addImage("slot_Armor", L"images/item/slot_Armor.png", 60, 66);
+	IMAGEMANAGER->addImage("slot_Torch", L"images/item/slot_Torch.png", 60, 66);
+	IMAGEMANAGER->addImage("slot_Hp", L"images/item/slot_Hp.png", 60, 84);
+
+	IMAGEMANAGER->addImage("ui_heart", L"images/ui/ui_heart.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_half_heart", L"images/ui/ui_heart_half.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_empty_heart", L"images/ui/ui_heart_empty.png", 48, 44);
+	IMAGEMANAGER->addImage("ui_large_heart", L"images/ui/ui_heart_large.png", 57, 53);
+	IMAGEMANAGER->addImage("ui_large_half_heart", L"images/ui/ui_half_heart_large.png", 57, 53);
+
+	//이펙트 이미지
+	IMAGEMANAGER->addFrameImage("effect_Dagger", L"images/effect/swipe_dagger.png", 144, 48, 3, 1);
+	IMAGEMANAGER->addFrameImage("effect_Spear", L"images/effect/swipe_rapier.png", 384, 48, 4, 1);
+	IMAGEMANAGER->addFrameImage("effect_Sword", L"images/effect/swipe_broadsword.png", 144, 144, 3, 1);
+
+
+	//============================
+	//			적관련
+	//============================
+	IMAGEMANAGER->addFrameImage("enemy_Attack", L"images/effect/swipe_enemy.png", 270, 48, 5, 1);
+	IMAGEMANAGER->addImage("enemy_Heart", L"images/ui/TEMP_heart_small.png", 24, 24);
+	IMAGEMANAGER->addImage("enemy_HeartEmpty", L"images/ui/TEMP_heart_empty_small.png", 24, 24);
+	
+	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
+	IMAGEMANAGER->addImage("shadow_Large", L"images/monster/miniboss/large_shadow.png", 86, 28);
+	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
+
+	IMAGEMANAGER->addFrameImage("zombie", L"images/monster/normal/zombie.png", 1152, 100, 24, 2);
+
+	IMAGEMANAGER->addFrameImage("wraith", L"images/monster/normal/wraith.png", 144, 96, 3, 2);
+
+	IMAGEMANAGER->addFrameImage("slime_Blue", L"images/monster/normal/slime_blue.png", 416, 100, 8, 2);
+
+	IMAGEMANAGER->addFrameImage("slime_Normal", L"images/monster/normal/slime_green.png", 208, 104, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("skeleton_Black", L"images/monster/normal/skeleton_black.png", 432, 100, 9, 2);
+
+	IMAGEMANAGER->addFrameImage("skeleton_Yellow", L"images/monster/normal/skeleton_yellow.png", 432, 100, 9, 2);
+
+	IMAGEMANAGER->addFrameImage("skeleton_Normal", L"images/monster/normal/skeleton.png", 384, 100, 8, 2);
+
+	IMAGEMANAGER->addFrameImage("clone", L"images/monster/normal/clone.png", 192, 96, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("bat_Red", L"images/monster/normal/bat_red.png", 192, 96, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("bat_Normal", L"images/monster/normal/bat.png", 192, 96, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("armadillo", L"images/monster/normal/armadillo.png", 528, 96, 11, 2);
+
+	IMAGEMANAGER->addFrameImage("dragon", L"images/monster/miniboss/dragon.png", 216, 204, 2, 2);
+
+	IMAGEMANAGER->addFrameImage("bat_Boss", L"images/monster/miniboss/bat_boss.png", 288, 96, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("banshee", L"images/monster/miniboss/banshee.png", 544, 156, 8, 2);
+
+	IMAGEMANAGER->addFrameImage("rook", L"images/monster/boss/rook_red.png", 114, 104, 3, 2);
+
+	IMAGEMANAGER->addFrameImage("queen", L"images/monster/boss/queen.png", 66, 156, 1, 2);
+
+	IMAGEMANAGER->addFrameImage("pawn", L"images/monster/boss/pawn_red.png", 150, 92, 5, 2);
+
+	IMAGEMANAGER->addFrameImage("knight", L"images/monster/boss/knight_red.png", 230, 114, 5, 2);
+	IMAGEMANAGER->addFrameImage("knithg_Attack", L"images/effect/swipe_knight_red.png", 144, 96, 1, 1);
+	IMAGEMANAGER->addFrameImage("knithg_Attack_R", L"images/effect/swipe_knight_red_reverse.png", 144, 96, 1, 1);
+
+	IMAGEMANAGER->addFrameImage("king", L"images/monster/boss/king.png", 200, 180, 4, 2);
+
+	IMAGEMANAGER->addFrameImage("bishop", L"images/monster/boss/bishop_red.png", 180, 128, 5, 2);
+
+	//==============================
+	//				맵관련
+	//==============================
+
+	IMAGEMANAGER->addImage("title", L"images/ui/mainmenu.png", 960, 540);
+	IMAGEMANAGER->addImage("continue", L"images/ui/continue.png", 440, 36);
+
+	IMAGEMANAGER->addImage("black", L"images/mapTool/black.png", 48, 48);
+
+	//타일들 이미지
+	IMAGEMANAGER->addFrameImage("tile", L"images/mapTool/tile.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("wall", L"images/mapTool/wall.png", 432, 576, 9, 6);
+	IMAGEMANAGER->addFrameImage("item", L"images/mapTool/item.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("etc1", L"images/mapTool/etc1.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("etc2", L"images/mapTool/etc2.png", 432, 576, 3, 6);
+	IMAGEMANAGER->addFrameImage("shopkeeper", L"images/item/shopkeeper2.png", 752, 152, 8, 2);
+
+	//적 이미지
+	IMAGEMANAGER->addFrameImage("enemy1", L"images/mapTool/mob1.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("enemy2", L"images/mapTool/mob2.png", 432, 576, 9, 12);
+	IMAGEMANAGER->addFrameImage("enemy3", L"images/mapTool/mob3.png", 432, 576, 3, 4);
+	IMAGEMANAGER->addFrameImage("enemy4", L"images/mapTool/mob4.png", 432, 576, 3, 6);
+
+	//비트 이미지
+	IMAGEMANAGER->addFrameImage("beat_Heart", L"images/ui/beat_Heart.png", 160, 100, 2, 1);
+	IMAGEMANAGER->addImage("beat_Green", L"images/ui/beat_Green.png", 12, 64);
+	IMAGEMANAGER->addImage("beat_Red", L"images/ui/beat_Red.png", 12, 64);
+	//코인배수
+	IMAGEMANAGER->addImage("grooveChain", L"images/ui/game_coinmultiplier.png", 81, 18);
+	IMAGEMANAGER->addFrameImage("number", L"images/ui/number.png", 40, 18, 4, 1);
+
+	//아이템용 그림자
+	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
+}
+
+
+void playGround::soundInit()
+{
 	SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
 	SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
 	SOUNDMANAGER->addSound("stage1", "sounds/zone/zone1_1.ogg", true, true);
@@ -26,6 +219,9 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("stage2", "sounds/zone/zone2_1.ogg", true, true);
 	SOUNDMANAGER->addSound("stage2_shopKeeper", "sounds/zone/zone2_1_shopkeeper.ogg", true, true);
 	SOUNDMANAGER->addSound("bossScene", "sounds/zone/boss_3.ogg", true, true);
+	
+	SOUNDMANAGER->addSound("loadingScene", "sounds/zone/training.ogg", true,true);
+	SOUNDMANAGER->addSound("lobbyScene", "sounds/zone/lobby.ogg", true,true);
 
 	//===============================================
 	//				monster - Normal
@@ -76,12 +272,12 @@ HRESULT playGround::init()
 	//===============================================
 	//banshee
 	SOUNDMANAGER->addSound("banshee_Loop", "sounds/monster/miniboss/banshee/en_banshee_loop.ogg", false, true);//
-	SOUNDMANAGER->addSound("banshee_Attack", "sounds/monster/miniboss/banshee/en_banshee_attack.ogg", false,false);
-	SOUNDMANAGER->addSound("banshee_Cry", "sounds/monster/miniboss/banshee/en_banshee_cry.ogg", false,false);//
-	SOUNDMANAGER->addSound("banshee_Death", "sounds/monster/miniboss/banshee/en_banshee_death.ogg", false,false);//
-	SOUNDMANAGER->addSound("banshee_Hit1", "sounds/monster/miniboss/banshee/en_banshee_hit_01.ogg", false,false);//
-	SOUNDMANAGER->addSound("banshee_Hit2", "sounds/monster/miniboss/banshee/en_banshee_hit_02.ogg", false,false);//
-	SOUNDMANAGER->addSound("banshee_Hit3", "sounds/monster/miniboss/banshee/en_banshee_hit_03.ogg", false,false);//
+	SOUNDMANAGER->addSound("banshee_Attack", "sounds/monster/miniboss/banshee/en_banshee_attack.ogg", false, false);
+	SOUNDMANAGER->addSound("banshee_Cry", "sounds/monster/miniboss/banshee/en_banshee_cry.ogg", false, false);//
+	SOUNDMANAGER->addSound("banshee_Death", "sounds/monster/miniboss/banshee/en_banshee_death.ogg", false, false);//
+	SOUNDMANAGER->addSound("banshee_Hit1", "sounds/monster/miniboss/banshee/en_banshee_hit_01.ogg", false, false);//
+	SOUNDMANAGER->addSound("banshee_Hit2", "sounds/monster/miniboss/banshee/en_banshee_hit_02.ogg", false, false);//
+	SOUNDMANAGER->addSound("banshee_Hit3", "sounds/monster/miniboss/banshee/en_banshee_hit_03.ogg", false, false);//
 	//bat_Boss
 	SOUNDMANAGER->addSound("bat_Boss_Attack", "sounds/monster/miniboss/bat/en_bat_miniboss_attack.ogg", false, false);//
 	SOUNDMANAGER->addSound("bat_Boss_Death", "sounds/monster/miniboss/bat/en_bat_miniboss_death.ogg", false, false);//
@@ -200,84 +396,4 @@ HRESULT playGround::init()
 	SOUNDMANAGER->addSound("grooveChainStart", "sounds/ui/sfx_chain_groove_ST.ogg", false, false);//
 	SOUNDMANAGER->addSound("grooveChainFail", "sounds/ui/sfx_chain_break_ST.ogg", false, false);//
 	SOUNDMANAGER->addSound("missBeat", "sounds/ui/sfx_missedbeat.ogg", false, false);//
-
-	// 해야할것. 
-	//보스											//1
-	//미니맵											//3
-	//오른쪽 UI 등									//2		
-	//상점 -> 사운드 npc 등							//완료
-	//함정											//완료
-	//아이템상자 추가해서 까면 아이템 랜덤으로 나오게.	//완료
-
-
-
-
-
-	//테스트씬 == 0 , 스테이지 1 == 1, 스테이지 2 == 2, 보스스테이지 == 3
-
-
-
-	//맵툴
-	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
-	//테스트씬
-	SCENEMANAGER->addScene("testScene", _testScene);
-	//보스씬
-	SCENEMANAGER->addScene("bossScene", _bossScene);
-
-	SCENEMANAGER->addScene("stage1", _stage1);
-
-	SCENEMANAGER->changeScene("stage1");                  
-	
-	return S_OK;
-}
-
-void playGround::release()
-{
-	gameNode::release();              
-}                
-
-void playGround::update()
-{
-	gameNode::update();
-
-	SCENEMANAGER->update();
-	//EFFECTMANAGER->update();
-
-}
-
-void playGround::render()
-{
-	// Draw 시작 - 이 코드가 빠지면 D2D 출력 X
-	D2DMANAGER->beginDraw();
-	//===========================================================================
-	//				##		여기에 코드 작성(Start)			##
-
-
-
-	SCENEMANAGER->render();
-	//EFFECTMANAGER->render();
-
-
-
-	//				##			여기에 코드 작성(End)			##
-	//===========================================================================
-	//				##카메라 정보 마우스 정보 시간정보 출력	##===================
-	//WCHAR str[128];
-	//swprintf_s(str, L"cameraX : %d", CAMERA->getPosX());
-	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 80);
-	//D2DMANAGER->drawText(str, 0, 80,20,0xff00ff);
-	//swprintf_s(str, L"cameraY : %d", CAMERA->getPosY());
-	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 100);
-	//D2DMANAGER->drawText(str, 0, 100, 20, 0xff00ff);
-	//
-	//swprintf_s(str, L"mouseX : %.2f", _ptMouse.x);
-	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 140);
-	//D2DMANAGER->drawText(str, 0, 140, 20, 0xff00ff);
-	//swprintf_s(str, L"mouseY : %.2f", _ptMouse.y);
-	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
-	//D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
-
-	TIMEMANAGER->render();
-	// Draw 끝 - 이 코드가 빠지면 D2D 출력 X
-	D2DMANAGER->endDraw();
 }

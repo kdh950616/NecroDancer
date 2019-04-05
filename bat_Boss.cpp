@@ -40,10 +40,10 @@ void bat_Boss::release()
 void bat_Boss::update()
 {
 
-	if (CAMERA->getPosX() - TILESIZE <= _posLT.x
-		&& CAMERA->getPosY() - TILESIZE <= _posLT.y
-		&& CAMERA->getPosX() + TILESIZE + WINSIZEX >= _posLT.x
-		&& CAMERA->getPosY() + TILESIZE + WINSIZEY >= _posLT.y)
+	if	  ((CAMERA->getPosX() - TILESIZE) / 2 <= _posLT.x
+		&& (CAMERA->getPosY() - TILESIZE) / 2 <= _posLT.y
+		&& (CAMERA->getPosX() + TILESIZE) / 2 + WINSIZEX >= _posLT.x
+		&& (CAMERA->getPosY() + TILESIZE) / 2 + WINSIZEY >= _posLT.y)
 	{
 		if (_isBeat)
 		{
@@ -157,10 +157,7 @@ void bat_Boss::render()
 
 void bat_Boss::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("bat_Boss", L"images/monster/miniboss/bat_boss.png", 288, 96, 4, 2);
 	_img = IMAGEMANAGER->findImage("bat_Boss");
-
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
 
 	KEYANIMANAGER->addAnimationType("bat_Boss");
 	KEYANIMANAGER->addAnimationType("bat_Boss_Shadow");
@@ -174,7 +171,6 @@ void bat_Boss::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("bat_Boss_Shadow", "bat_Boss_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Large", L"images/monster/miniboss/large_shadow.png", 86, 28);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Large");
 
 	_dustImg = nullptr;

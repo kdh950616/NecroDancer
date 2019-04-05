@@ -182,7 +182,6 @@ void bishop::render()
 
 void bishop::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("bishop", L"images/monster/boss/bishop_red.png", 180, 128, 5, 2);
 	_img = IMAGEMANAGER->findImage("bishop");
 
 	KEYANIMANAGER->addAnimationType("bishop");
@@ -196,10 +195,8 @@ void bishop::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("bishop", "bishop_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");

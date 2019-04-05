@@ -216,7 +216,6 @@ void knight::render()
 
 void knight::imageInit()
 {
-	IMAGEMANAGER->addFrameImage("knight", L"images/monster/boss/knight_red.png", 230, 114, 5, 2);
 	_img = IMAGEMANAGER->findImage("knight");
 
 	KEYANIMANAGER->addAnimationType("knight");
@@ -230,10 +229,8 @@ void knight::imageInit()
 	_ani = KEYANIMANAGER->findAnimation("knight", "knight_Stand");
 	_ani->start();
 
-	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
 	_shadowImg = IMAGEMANAGER->findImage("shadow_Standard");
 
-	IMAGEMANAGER->addFrameImage("dust", L"images/monster/normal/dust.png", 240, 48, 5, 1);
 	_dustImg = IMAGEMANAGER->findImage("dust");
 
 	KEYANIMANAGER->addAnimationType("dust");
@@ -242,10 +239,6 @@ void knight::imageInit()
 	KEYANIMANAGER->addArrayFrameAnimation("dust", "dust_Ani", "dust", dust, 5, 10, false);
 
 	_dustAni = KEYANIMANAGER->findAnimation("dust", "dust_Ani");
-
-	IMAGEMANAGER->addFrameImage("knithg_Attack", L"images/effect/swipe_knight_red.png", 144, 96,1,1);
-	IMAGEMANAGER->addFrameImage("knithg_Attack_R", L"images/effect/swipe_knight_red_reverse.png", 144, 96,1,1);
-
 }
 
 void knight::moveCal()

@@ -13,10 +13,7 @@ enemyMgr::~enemyMgr()
 
 HRESULT enemyMgr::init()
 {
-	IMAGEMANAGER->addFrameImage("enemy_Attack", L"images/effect/swipe_enemy.png", 270, 48, 5, 1);
-	IMAGEMANAGER->addImage("enemy_Heart", L"images/ui/TEMP_heart_small.png", 24, 24);
-	IMAGEMANAGER->addImage("enemy_HeartEmpty", L"images/ui/TEMP_heart_empty_small.png", 24, 24);
-	//EFFECTMANAGER->addEffect("enemy_attack", "images/effect/swipe_enemy.png", 270, 48, 54, 48, 5, 0.1f, 10);
+
 
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
@@ -58,7 +55,9 @@ void enemyMgr::update()
 {
 	for (int i = 0; i < _vEnemy.size();)
 	{
-		if (_isBeat)
+		if (_isBeat && 
+			_vEnemy[i]->getPosLT().x >= CAMERA->getPosX() && _vEnemy[i]->getPosLT().x < CAMERA->getPosX() + WINSIZEX &&
+			_vEnemy[i]->getPosLT().y >= CAMERA->getPosY() && _vEnemy[i]->getPosLT().y < CAMERA->getPosY() + WINSIZEY)
 		{
 			_vEnemy[i]->setIsBeat(_isBeat);
 			if (_vEnemy[i]->getIsSpecialAct() == false && _vEnemy[i]->getIsNeedAstar() == true)
@@ -74,6 +73,10 @@ void enemyMgr::update()
 				}
 				else
 				{
+					if (i == 4)
+					{
+						int abc = 0;
+					}
 					_aStar->pathFinder(_vEnemy[i]->getIdx(), _player->getIdx(), _vEnemy[i]->getIdx(), *(_vEnemy[i]->getListPath()));
 				}
 
