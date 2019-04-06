@@ -13,6 +13,7 @@ loadingScene::~loadingScene()
 
 HRESULT loadingScene::init()
 {
+	
 	SOUNDMANAGER->play("loadingScene", SOUNDMANAGER->getVolume());
 
 	return S_OK;

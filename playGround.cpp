@@ -27,21 +27,25 @@ HRESULT playGround::init()
 	_stage2 = new stage2;
 	_loadingScene = new loadingScene;
 	_lobbyScene = new lobbyScene;
+	_test2Scene = new test2Scene;
 
 	//¸ÊÅø
 	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
-	//Å×½ºÆ®¾À
+	//none aStar¸÷ ¾À
 	SCENEMANAGER->addScene("testScene", _testScene);
 	//º¸½º¾À
 	SCENEMANAGER->addScene("bossScene", _bossScene);
-	//½ºÅ×ÀÌÁö1¾À
+	//use aStar¸÷ ¾À
 	SCENEMANAGER->addScene("stage1", _stage1);
-	//½ºÅ×ÀÌÁö2¾À
+	//¹Ì´Ï º¸½º¾À
 	SCENEMANAGER->addScene("stage2", _stage2);
 	//·Îµù¾À
 	SCENEMANAGER->addScene("loadingScene", _loadingScene);
 	//·Îºñ¾À
 	SCENEMANAGER->addScene("lobbyScene", _lobbyScene);
+	//¾ÆÀÌÅÛ¾À
+	SCENEMANAGER->addScene("test2Scene", _test2Scene);
+
 
 	SCENEMANAGER->changeScene("loadingScene");                  
 	
@@ -87,7 +91,7 @@ void playGround::render()
 	////D2DMANAGER->drawText(str, CAMERA->getPosX(), CAMERA->getPosY() + 160);
 	//D2DMANAGER->drawText(str, 0, 160, 20, 0xff00ff);
 
-	TIMEMANAGER->render();
+	//TIMEMANAGER->render();
 	// Draw ³¡ - ÀÌ ÄÚµå°¡ ºüÁö¸é D2D Ãâ·Â X
 	D2DMANAGER->endDraw();
 }

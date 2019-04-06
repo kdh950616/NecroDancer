@@ -75,7 +75,32 @@ void lobbyScene::update()
 	if (_player->getIdx().x == 4 && _player->getIdx().y == 5 && _player->getIsMove() == false)
 	{
 		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("mapToolScene");
+	}
+	if (_player->getIdx().x == 10 && _player->getIdx().y == 5 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
 		SCENEMANAGER->changeScene("testScene");
+	}
+	if (_player->getIdx().x == 4 && _player->getIdx().y == 8 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("stage1");
+	}
+	if (_player->getIdx().x == 10 && _player->getIdx().y == 8 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("stage2");
+	}
+	if (_player->getIdx().x == 4 && _player->getIdx().y == 11 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("bossScene");
+	}
+	if (_player->getIdx().x == 10 && _player->getIdx().y == 11 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("bossScene");
 	}
 }
 
@@ -159,9 +184,9 @@ void lobbyScene::beatInit()
 					(float)WINSIZEY - 100,
 					(float)WINSIZEX / 2 + 100,
 					(float)WINSIZEY - 52 };
-	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
+	_rc_Wrong = { (float)WINSIZEX / 2 - 170,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 120,
+					(float)WINSIZEX / 2 + 170,
 					(float)WINSIZEY - 52 };
 
 	SOUNDMANAGER->setEffectVol(VOLUME_EFF);

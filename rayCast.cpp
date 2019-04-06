@@ -167,7 +167,7 @@ void rayCast::rayCasting(POINT playerIdx, int torchRange)
 				&& (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() >= ETC_TORCH_WALL1 
 				&& (*_vvObj)[playerIdx.y + i][playerIdx.x + j]->getAttribute() <= ETC_TORCH_BOSS)
 			{
-				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 3);
+				rayCastingTorch({ playerIdx.x + j , playerIdx.y + i }, 2);
 			}
 
 			//벽이 아랫기준이라 위로 더 칠해줘야되서 추가한것.

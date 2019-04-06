@@ -77,6 +77,13 @@ void stage2::update()
 	}
 
 	itemFloating();
+
+	if (_player->getIdx().x == 29 && _player->getIdx().y == 4 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("lobbyScene");
+		//SCENEMANAGER->changeScene("bossScene");
+	}
 }
 
 void stage2::render()
@@ -129,7 +136,7 @@ void stage2::playerInit()
 	_player = new player;
 	_player->setMapAdressLink(&_vvMap);
 	_player->setObjAdressLink(&_vvObj);
-	_player->setPosCT({ (float)(_vvMap)[10][10]->getPos().x, (float)(_vvMap)[10][10]->getPos().y });
+	_player->setPosCT({ (float)(_vvMap)[2][2]->getPos().x, (float)(_vvMap)[2][2]->getPos().y });
 	_player->init();
 }
 
@@ -153,13 +160,13 @@ void stage2::beatInit()
 
 	_heartImg = IMAGEMANAGER->findImage("beat_Heart");
 
-	_rc_Correct = { (float)WINSIZEX / 2 - 100,
+	_rc_Correct = { (float)WINSIZEX / 2 - 150,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 100,
+					(float)WINSIZEX / 2 + 150,
 					(float)WINSIZEY - 52 };
-	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
+	_rc_Wrong = { (float)WINSIZEX / 2 - 170,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 120,
+					(float)WINSIZEX / 2 + 170,
 					(float)WINSIZEY - 52 };
 
 	SOUNDMANAGER->setEffectVol(VOLUME_EFF);

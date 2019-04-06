@@ -1743,21 +1743,21 @@ void player::renderUI()
 
 void player::txtRender()
 {
-	WCHAR str[128];
-	swprintf_s(str, L"ct X : %f ct Y : %f ", _posCT.x, _posCT.y);
-	D2DMANAGER->drawText(str, 0, 280, 20, 0x00ffff);
-	swprintf_s(str, L"idx : %d idy : %d ", _idx.x, _idx.y);
-	D2DMANAGER->drawText(str, 0, 300, 20, 0x00ffff);
-	swprintf_s(str, L"HP : %d ", _curHp);
-	D2DMANAGER->drawText(str, 0, 320, 20, 0x00ffff);
-	swprintf_s(str, L"dmg : %d ", _dmg);
-	D2DMANAGER->drawText(str, 0, 340, 20, 0x00ffff);
-	swprintf_s(str, L"def : %d ", _def);
-	D2DMANAGER->drawText(str, 0, 360, 20, 0x00ffff);
-	swprintf_s(str, L"grooveChain : %d ", _grooveChain);
-	D2DMANAGER->drawText(str, 0, 380, 20, 0x00ffff);
-	swprintf_s(str, L"killCombo : %d ", _killCombo);
-	D2DMANAGER->drawText(str, 0, 400, 20, 0x00ffff);
+	//WCHAR str[128];
+	//swprintf_s(str, L"ct X : %f ct Y : %f ", _posCT.x, _posCT.y);
+	//D2DMANAGER->drawText(str, 0, 280, 20, 0x00ffff);
+	//swprintf_s(str, L"idx : %d idy : %d ", _idx.x, _idx.y);
+	//D2DMANAGER->drawText(str, 0, 300, 20, 0x00ffff);
+	//swprintf_s(str, L"HP : %d ", _curHp);
+	//D2DMANAGER->drawText(str, 0, 320, 20, 0x00ffff);
+	//swprintf_s(str, L"dmg : %d ", _dmg);
+	//D2DMANAGER->drawText(str, 0, 340, 20, 0x00ffff);
+	//swprintf_s(str, L"def : %d ", _def);
+	//D2DMANAGER->drawText(str, 0, 360, 20, 0x00ffff);
+	//swprintf_s(str, L"grooveChain : %d ", _grooveChain);
+	//D2DMANAGER->drawText(str, 0, 380, 20, 0x00ffff);
+	//swprintf_s(str, L"killCombo : %d ", _killCombo);
+	//D2DMANAGER->drawText(str, 0, 400, 20, 0x00ffff);
 }
 
 void player::effectRender()

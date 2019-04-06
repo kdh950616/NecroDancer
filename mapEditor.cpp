@@ -52,6 +52,7 @@ void mapEditor::release()
 
 void mapEditor::update()
 {
+	
 	blinkMapTileFunc();
 	corsorMapIdxCal();
 
@@ -82,6 +83,10 @@ void mapEditor::update()
 			_torchFrameY = 0;
 		}
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+	{
+		SCENEMANAGER->changeScene("lobbyScene");
+	}
 }
 
 
@@ -100,7 +105,7 @@ void mapEditor::render()
 
 	linePreview();
 
-	testText();
+	//testText();
 }
 
 //init----------------------------------------------------------------------------------------------------------------------

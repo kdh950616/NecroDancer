@@ -218,9 +218,9 @@ void stageBoss::beatInit()
 					(float)WINSIZEY - 100,
 					(float)WINSIZEX / 2 + 150,
 					(float)WINSIZEY - 52 };
-	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
+	_rc_Wrong = { (float)WINSIZEX / 2 - 170,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 120,
+					(float)WINSIZEX / 2 + 170,
 					(float)WINSIZEY - 52 };
 
 	SOUNDMANAGER->setEffectVol(VOLUME_EFF);
@@ -385,10 +385,17 @@ void stageBoss::beatUpdate()
 	else if (_vBeat.size() <= 0)
 	{
 		//비트 새로 불러오기
-		//보스는 무한반복 필요
-		_time = 0;
+		//다음스테이지 or 게임종료
+		//_time = 0;
+		//SOUNDMANAGER->loadBeat(_beatFileName, _stageKeyName);
+		//_vBeat = SOUNDMANAGER->getVBeat();
+
 		SOUNDMANAGER->loadBeat(_beatFileName, _stageKeyName);
-		_vBeat = SOUNDMANAGER->getVBeat();
+
+		SOUNDMANAGER->stop(_stageKeyName);
+		SOUNDMANAGER->play(_stageKeyName, SOUNDMANAGER->getVolume());
+
+		_vBeat = SOUNDMANAGER->getVBeat();                  //매니저님 비트주세요 
 	}
 }
 

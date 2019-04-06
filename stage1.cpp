@@ -77,6 +77,13 @@ void stage1::update()
 	}
 
 	itemFloating();
+
+	if (_player->getIdx().x == 51 && _player->getIdx().y == 5 && _player->getIsMove() == false)
+	{
+		SOUNDMANAGER->stop(_stageKeyName);
+		SCENEMANAGER->changeScene("lobbyScene");
+		//SCENEMANAGER->changeScene("stage2");
+	}
 }
 
 void stage1::render()
@@ -129,7 +136,7 @@ void stage1::playerInit()
 	_player = new player;
 	_player->setMapAdressLink(&_vvMap);
 	_player->setObjAdressLink(&_vvObj);
-	_player->setPosCT({ (float)(_vvMap)[5][19]->getPos().x, (float)(_vvMap)[5][19]->getPos().y });
+	_player->setPosCT({ (float)(_vvMap)[2][2]->getPos().x, (float)(_vvMap)[2][2]->getPos().y });
 	_player->init();
 }
 
@@ -152,13 +159,13 @@ void stage1::beatInit()
 
 	_heartImg = IMAGEMANAGER->findImage("beat_Heart");
 
-	_rc_Correct = { (float)WINSIZEX / 2 - 100,
+	_rc_Correct = { (float)WINSIZEX / 2 - 150,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 100,
+					(float)WINSIZEX / 2 + 150,
 					(float)WINSIZEY - 52 };
-	_rc_Wrong = { (float)WINSIZEX / 2 - 120,
+	_rc_Wrong = { (float)WINSIZEX / 2 - 170,
 					(float)WINSIZEY - 100,
-					(float)WINSIZEX / 2 + 120,
+					(float)WINSIZEX / 2 + 170,
 					(float)WINSIZEY - 52 };
 
 	SOUNDMANAGER->setEffectVol(VOLUME_EFF);
@@ -177,7 +184,10 @@ void stage1::tileUpdate()
 				{
 					_aStar->pathFinderShopkeeper({ j,i }, { _player->getIdx().x, _player->getIdx().y }, { j,i }, *(getShopVol()));
 
-					if (_lShopVol.size() <= 5)
+					if (_lShopVol.size() == 1)
+					{
+					}
+					else if (_lShopVol.size() <= 5)
 					{
 						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 10);
 					}

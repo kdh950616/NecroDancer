@@ -17,8 +17,8 @@ private:
 	typedef vector<vLightLine> vvLightMap;
 
 
-	const float VOLUME = 0.02f;
-	const float VOLUME_EFF = 0.5f;
+	const float VOLUME = 0.3f;
+	const float VOLUME_EFF = 1;
 private:
 	mapLoader*					_mapLoader;
 
