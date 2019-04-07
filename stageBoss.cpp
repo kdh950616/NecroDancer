@@ -663,14 +663,14 @@ void stageBoss::beatRender()
 		if (_vBeat[i].rc_Left.left > 0 && _vBeat[i].rc_Left.left < WINSIZEX / 2)
 		{
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top, 10, 50, _vBeat[i].opacity);
-			D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
+			//D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
 			IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top, 10, 50, _vBeat[i].opacity);
-			D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
+			//D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
 		}
 	}
 	_heartImg->frameRender(WINSIZEX / 2 - _heartImg->GetFrameWidth() / 2, WINSIZEY - 125, _heartImg->GetFrameX(), _heartImg->GetFrameY());
-	D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
-	D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
+	//D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
+	//D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
 	//IMAGEMANAGER->frameRender("beat_Heart", WINSIZEX / 2 - IMAGEMANAGER->findImage("beat_Heart")->GetFrameWidth() / 2, WINSIZEY - 125, 0, 0);
 
 	 //코인배수
@@ -690,25 +690,25 @@ void stageBoss::beatRender()
 
 void stageBoss::textRender()
 {
-	WCHAR str[128];
-	swprintf_s(str, L"isChanged : %d", _vBeat.size());
-	D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
-	swprintf_s(str, L"time : %d", _time);
-	D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
-	if (_showText)
-	{
-		for (int i = 0; i < _tileSizeY; i++)
-		{
-			for (int j = 0; j < _tileSizeX; j++)
-			{
-				if (!_vvObj[i][j]->getIsAvailMove())
-				{
-					swprintf_s(str, L"X");
-					D2DMANAGER->drawText(str, (int)_vvObj[i][j]->getPos().x - CAMERA->getPosX(), (int)_vvObj[i][j]->getPos().y - CAMERA->getPosY(), 20, 0xff00ff);
-				}
-
-
-			}
-		}
-	}
+	//WCHAR str[128];
+	//swprintf_s(str, L"isChanged : %d", _vBeat.size());
+	//D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
+	//swprintf_s(str, L"time : %d", _time);
+	//D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
+	//if (_showText)
+	//{
+	//	for (int i = 0; i < _tileSizeY; i++)
+	//	{
+	//		for (int j = 0; j < _tileSizeX; j++)
+	//		{
+	//			if (!_vvObj[i][j]->getIsAvailMove())
+	//			{
+	//				swprintf_s(str, L"X");
+	//				D2DMANAGER->drawText(str, (int)_vvObj[i][j]->getPos().x - CAMERA->getPosX(), (int)_vvObj[i][j]->getPos().y - CAMERA->getPosY(), 20, 0xff00ff);
+	//			}
+	//
+	//
+	//		}
+	//	}
+	//}
 }

@@ -28,6 +28,7 @@ HRESULT playGround::init()
 	_loadingScene = new loadingScene;
 	_lobbyScene = new lobbyScene;
 	_test2Scene = new test2Scene;
+	_bossIntroScene = new bossIntroScene;
 
 	//맵툴
 	SCENEMANAGER->addScene("mapToolScene",_mapEditor);
@@ -45,6 +46,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("lobbyScene", _lobbyScene);
 	//아이템씬
 	SCENEMANAGER->addScene("test2Scene", _test2Scene);
+	//보스인트로씬
+	SCENEMANAGER->addScene("bossIntroScene", _bossIntroScene);
 
 
 	SCENEMANAGER->changeScene("loadingScene");                  
@@ -211,6 +214,14 @@ void playGround::imageInit()
 
 	//아이템용 그림자
 	IMAGEMANAGER->addImage("shadow_Standard", L"images/monster/normal/shadow_Standard.png", 48, 54);
+
+	//보스인트로
+	IMAGEMANAGER->addImage("boss_top", L"images/bossIntro/bg_topblade.png", 602, 68);
+	IMAGEMANAGER->addImage("boss_bottom", L"images/bossIntro/bg_bottomblade.png", 728,96);
+	IMAGEMANAGER->addImage("boss_background", L"images/bossIntro/bg_topblade.png", 1902,296);
+	IMAGEMANAGER->addImage("boss_face", L"images/bossIntro/bosscreen_deepblues.png", 960,424);
+	IMAGEMANAGER->addImage("boss_name", L"images/bossIntro/boss_deepbluessplash.png", 200,48);
+
 }
 
 
@@ -218,14 +229,17 @@ void playGround::soundInit()
 {
 	SOUNDMANAGER->addSound("mapTool", "sounds/mapTool/boss_9.ogg", true, true);
 	SOUNDMANAGER->addSound("mapTool_shopkeeper", "sounds/mapTool/boss_9_vocal.ogg", true, true);
-	SOUNDMANAGER->addSound("stage1", "sounds/zone/zone1_1.ogg", true, true);
-	SOUNDMANAGER->addSound("stage1_shopkeeper", "sounds/zone/zone1_1_shopkeeper.ogg", true, true);
+	SOUNDMANAGER->addSound("stage1", "sounds/zone/zone2_2.ogg", true, true);
+	SOUNDMANAGER->addSound("stage1_shopkeeper", "sounds/zone/zone5_2_shopkeeper.ogg", true, true);
 	SOUNDMANAGER->addSound("stage2", "sounds/zone/zone2_1.ogg", true, true);
 	SOUNDMANAGER->addSound("stage2_shopKeeper", "sounds/zone/zone2_1_shopkeeper.ogg", true, true);
 	SOUNDMANAGER->addSound("bossScene", "sounds/zone/boss_3.ogg", true, true);
 	
 	SOUNDMANAGER->addSound("loadingScene", "sounds/zone/training.ogg", true,true);
 	SOUNDMANAGER->addSound("lobbyScene", "sounds/zone/lobby.ogg", true,true);
+
+	SOUNDMANAGER->addSound("sound_boss_intro", "sounds/zone/vo_announcer_deepblues.ogg", false, false);
+
 
 	//===============================================
 	//				monster - Normal

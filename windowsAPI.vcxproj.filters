@@ -327,6 +327,9 @@
     <ClInclude Include="test2Scene.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="bossIntroScene.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -528,6 +531,9 @@
       <Filter>PlayGround\units\enemy\boss\deep Blues</Filter>
     </ClCompile>
     <ClCompile Include="test2Scene.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="bossIntroScene.cpp">
       <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>

@@ -79,14 +79,15 @@ void dragon::update()
 				SOUNDMANAGER->playEff("dragon_Attack");
 			}
 			else if ((*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL1 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL2 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL3 ||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= OBJ_WALL_GOLD||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL1||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL2||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_WALL3||
-				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() >= ETC_TORCH_GOLD)
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL2 ||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL3 ||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == OBJ_WALL_GOLD||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL1||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL2||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_WALL3||
+				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->getAttribute() == ETC_TORCH_GOLD)
 			{
+				SOUNDMANAGER->playEff("dragon_Attack");
 				(*_vvObj)[_idx.y + _direction.y][_idx.x + _direction.x]->objSetDefault();
 			}
 			else if (_direction.x == 0)

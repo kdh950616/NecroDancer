@@ -156,7 +156,7 @@ void testScene::beatInit()
 {
 	//_stageKeyName = "mapTool";
 	_stageKeyName = "stage1";
-	_beatFileName = "sounds/zone/zone1_1.txt";
+	_beatFileName = "sounds/zone/zone2_2.txt";
 	SOUNDMANAGER->setVolume(VOLUME);
 	_pitch = 1.0f;
 	
@@ -238,6 +238,8 @@ void testScene::tileUpdate()
 					{
 						SOUNDMANAGER->ShopVolume(_stageKeyName, VOLUME / 10 * 0);
 					}
+					//영상촬영용으로 0만듬
+					SOUNDMANAGER->ShopVolume(_stageKeyName, 0);
 				}
 			}
 		}
@@ -663,8 +665,8 @@ void testScene::beatRender()
 		{
 			if (_vBeat.back().beat - 30000 > _vBeat[i].beat)
 			{
-				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top,10,50,_vBeat[i].opacity);
-				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top,10,50, _vBeat[i].opacity);
+				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Left.left, _vBeat[i].rc_Left.top, 10, 50, _vBeat[i].opacity);
+				IMAGEMANAGER->render("beat_Green", _vBeat[i].rc_Right.left, _vBeat[i].rc_Right.top, 10, 50, _vBeat[i].opacity);
 				//D2DMANAGER->drawRectangle(0x0000ff, _vBeat[i].rc_Left);
 				//D2DMANAGER->drawRectangle(0xff0000, _vBeat[i].rc_Right);
 			}
@@ -675,49 +677,49 @@ void testScene::beatRender()
 			}
 		}
 	}
-	_heartImg->frameRender(WINSIZEX / 2 - _heartImg->GetFrameWidth() / 2, WINSIZEY - 125,_heartImg->GetFrameX(),_heartImg->GetFrameY());
-	 D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
-	 D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
+	_heartImg->frameRender(WINSIZEX / 2 - _heartImg->GetFrameWidth() / 2, WINSIZEY - 125, _heartImg->GetFrameX(), _heartImg->GetFrameY());
+	//D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
+	//D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
 	//IMAGEMANAGER->frameRender("beat_Heart", WINSIZEX / 2 - IMAGEMANAGER->findImage("beat_Heart")->GetFrameWidth() / 2, WINSIZEY - 125, 0, 0);
 
 	 //코인배수
-	 IMAGEMANAGER->render("grooveChain", WINSIZEX / 2 - 40, WINSIZEY - 20);
-	 //코인배수 숫자
-	 WCHAR str[128];
-	 swprintf_s(str, L"%d", (*_player).getGrooveChain());
-	 if ((*_player).getGrooveChain() > 2)
-	 {
-		 D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xff0000);
-	 }
-	 else
-	 {
-		 D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xffffff);
-	 }
+	IMAGEMANAGER->render("grooveChain", WINSIZEX / 2 - 40, WINSIZEY - 20);
+	//코인배수 숫자
+	WCHAR str[128];
+	swprintf_s(str, L"%d", (*_player).getGrooveChain());
+	if ((*_player).getGrooveChain() > 2)
+	{
+		D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xff0000);
+	}
+	else
+	{
+		D2DMANAGER->drawText(str, WINSIZEX / 2 + 45, WINSIZEY - 20, 15, 0xffffff);
+	}
 }
 
 void testScene::textRender()
 {
-	WCHAR str[128];
-	swprintf_s(str, L"isChanged : %d", _vBeat.size());
-	D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
-	swprintf_s(str, L"time : %d", _time);
-	D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
-	if (_showText)
-	{
-		for (int i = 0; i < _tileSizeY; i++)
-		{
-			for (int j = 0; j < _tileSizeX; j++)
-			{
-				if (!_vvObj[i][j]->getIsAvailMove())
-				{
-					swprintf_s(str, L"X");
-					D2DMANAGER->drawText(str, (int)_vvObj[i][j]->getPos().x - CAMERA->getPosX(), (int)_vvObj[i][j]->getPos().y - CAMERA->getPosY(), 20, 0xff00ff);
-				}
-
-
-			}
-		}
-	}
+	//WCHAR str[128];
+	//swprintf_s(str, L"isChanged : %d", _vBeat.size());
+	//D2DMANAGER->drawText(str, 300, 260, 20, 0x00ffff);
+	//swprintf_s(str, L"time : %d", _time);
+	//D2DMANAGER->drawText(str, 300, 800, 20, 0x00ffff);
+	//if (_showText)
+	//{
+	//	for (int i = 0; i < _tileSizeY; i++)
+	//	{
+	//		for (int j = 0; j < _tileSizeX; j++)
+	//		{
+	//			if (!_vvObj[i][j]->getIsAvailMove())
+	//			{
+	//				swprintf_s(str, L"X");
+	//				D2DMANAGER->drawText(str, (int)_vvObj[i][j]->getPos().x - CAMERA->getPosX(), (int)_vvObj[i][j]->getPos().y - CAMERA->getPosY(), 20, 0xff00ff);
+	//			}
+	//
+	//
+	//		}
+	//	}
+	//}
 }
 
 //===========================================

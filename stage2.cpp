@@ -663,8 +663,8 @@ void stage2::beatRender()
 		}
 	}
 	_heartImg->frameRender(WINSIZEX / 2 - _heartImg->GetFrameWidth() / 2, WINSIZEY - 125, _heartImg->GetFrameX(), _heartImg->GetFrameY());
-	D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
-	D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
+	//D2DMANAGER->drawRectangle(0xff0000, _rc_Correct);
+	//D2DMANAGER->drawRectangle(0x0000ff, _rc_Wrong);
 	//IMAGEMANAGER->frameRender("beat_Heart", WINSIZEX / 2 - IMAGEMANAGER->findImage("beat_Heart")->GetFrameWidth() / 2, WINSIZEY - 125, 0, 0);
 
 	 //코인배수

@@ -99,8 +99,8 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			if (abs(i) == abs(j)) continue;
 
 			//벡터 크기 넘어가는거 예외처리
-			if (curIdxX + i < 0 || curIdxX + i > (_vTotalList[0]).size() - 1
-				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
+			if (curIdxX + j < 0 || curIdxX + j >(_vTotalList[0][0]).size() - 1
+				|| curIdxY + i < 0 || curIdxY + i >(*_vTotalList).size() - 1)	continue;
 			
 			//일단 타일 만들어놓고
 			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];
@@ -324,14 +324,22 @@ void aStar::pathFinder2(POINT startPos, POINT endPos, POINT currentPos, list<POI
 			if (abs(i) == abs(j)) continue;
 
 			//벡터 크기 넘어가는거 예외처리
-			if (curIdxX + i < 0 || curIdxX + i >(_vTotalList[0]).size() - 1
-				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
+			if (curIdxX + j < 0 || curIdxX + j >(_vTotalList[0][0]).size() - 1
+				|| curIdxY + i < 0 || curIdxY + i >(*_vTotalList).size() - 1)	continue;
 
 			//일단 타일 만들어놓고
 			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];
 
 			// 갈수 없는곳이면 건너뜀 -> 오브젝트랑 연동해서 해야할듯
-			if (!openTile->getIsAvailMove())continue;
+			if (!openTile->getIsAvailMove() && 
+				(openTile->getAttribute() != OBJ_WALL1 && 
+					openTile->getAttribute() != OBJ_WALL2 && 
+					openTile->getAttribute() != OBJ_WALL3 && 
+					openTile->getAttribute() != ETC_TORCH_WALL1 &&
+					openTile->getAttribute() != ETC_TORCH_WALL2 &&
+					openTile->getAttribute() != ETC_TORCH_WALL3 &&
+					openTile->getAttribute() != ETC_TORCH_GOLD &&
+					openTile->getAttribute() != OBJ_WALL_GOLD))continue;
 			if (openTile->getAttribute() == OBJ_WALL_BOSS || openTile->getAttribute() == OBJ_WALL_END) continue;
 				
 			//클로즈 리스트에 있는것도 건너뜀
@@ -775,8 +783,8 @@ void aStar::pathFinderShopkeeper(POINT startPos, POINT endPos, POINT currentPos,
 			if (abs(i) == abs(j)) continue;
 
 			//벡터 크기 넘어가는거 예외처리
-			if (curIdxX + i < 0 || curIdxX + i >(_vTotalList[0]).size() - 1
-				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
+			if (curIdxX + j < 0 || curIdxX + j >(_vTotalList[0][0]).size() - 1
+				|| curIdxY + i < 0 || curIdxY + i >(*_vTotalList).size() - 1)	continue;
 
 			//일단 타일 만들어놓고
 			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];
@@ -1000,8 +1008,8 @@ void aStar::pathFinder8(POINT startPos, POINT endPos, POINT currentPos, list<POI
 		{
 
 			//벡터 크기 넘어가는거 예외처리
-			if (curIdxX + i < 0 || curIdxX + i >(_vTotalList[0]).size() - 1
-				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
+			if (curIdxX + j < 0 || curIdxX + j >(_vTotalList[0][0]).size() - 1
+				|| curIdxY + i < 0 || curIdxY + i >(*_vTotalList).size() - 1)	continue;
 
 			//일단 타일 만들어놓고
 			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];

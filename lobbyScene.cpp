@@ -95,7 +95,7 @@ void lobbyScene::update()
 	if (_player->getIdx().x == 4 && _player->getIdx().y == 11 && _player->getIsMove() == false)
 	{
 		SOUNDMANAGER->stop(_stageKeyName);
-		SCENEMANAGER->changeScene("bossScene");
+		SCENEMANAGER->changeScene("bossIntroScene");
 	}
 	if (_player->getIdx().x == 10 && _player->getIdx().y == 11 && _player->getIsMove() == false)
 	{

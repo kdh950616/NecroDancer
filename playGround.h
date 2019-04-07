@@ -8,6 +8,7 @@
 #include "loadingScene.h"
 #include "lobbyScene.h"
 #include "test2Scene.h"
+#include "bossIntroScene.h"
 
 
 class playGround : public gameNode
@@ -22,6 +23,7 @@ private:
 	loadingScene* _loadingScene;
 	lobbyScene* _lobbyScene;
 	test2Scene* _test2Scene;
+	bossIntroScene* _bossIntroScene;
 
 public:
 	playGround();
